@@ -22,8 +22,14 @@ test('截图：地图轮播 + 底部导航', async ({ page }) => {
   await page.waitForTimeout(500);
   await page.screenshot({ path: 'test-results/ui-unit3.png' });
 
-  // 徽章墙
-  await page.goto(BASE + 'badges/');
+  // 通过底部导航“软跳转”（视图过渡），验证 tab 高亮同步 + 顶栏/底栏持久
+  await page.getByRole('link', { name: /我的档案/ }).click();
+  await expect(page).toHaveURL(/profile/);
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: 'test-results/ui-profile.png' });
+
+  await page.getByRole('link', { name: /徽章墙/ }).click();
+  await expect(page).toHaveURL(/badges/);
   await page.waitForTimeout(500);
   await page.screenshot({ path: 'test-results/ui-badges.png' });
 });

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import { withBase } from '../lib/url';
 import CatalogData from '../components/CatalogData.astro';
 import BottomNav from '../components/BottomNav.astro';
@@ -22,9 +23,10 @@ const fullTitle = title ? `${title} · CodeBlox` : 'CodeBlox · 做出你自己�
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
     <CatalogData />
+    <ClientRouter />
   </head>
   <body class="min-h-screen">
-    <header class="sticky top-0 z-20 border-b border-slate-100 bg-white/90 backdrop-blur">
+    <header transition:persist="site-header" class="sticky top-0 z-20 border-b border-slate-100 bg-white/90 backdrop-blur">
       <div class="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-2">
         <a href={withBase('/')} class="flex items-center gap-2 text-lg font-black text-slate-800">
           <span>🎮</span><span>CodeBlox</span>

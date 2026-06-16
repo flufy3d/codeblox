@@ -117,9 +117,9 @@
         <button
           type="button"
           class={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base transition ${
-            i === current ? 'scale-110 ring-2 ring-offset-2' : unitDone(u) ? 'bg-emerald-100' : 'bg-slate-100 opacity-70 hover:opacity-100'
+            i === current ? 'text-white shadow-sm' : unitDone(u) ? 'bg-emerald-100' : 'bg-slate-100 opacity-60 hover:opacity-100'
           }`}
-          style={i === current ? `background:${u.color}33; --tw-ring-color:${u.color}` : ''}
+          style={i === current ? `background:${u.color}` : ''}
           onclick={() => goTo(i)}
           aria-label={u.title}
           title={u.title}
