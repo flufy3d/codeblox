@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { withBase } from '../lib/url';
 import CatalogData from '../components/CatalogData.astro';
+import BottomNav from '../components/BottomNav.astro';
 import ProfileSwitcher from '../components/islands/ProfileSwitcher.svelte';
 import XPBar from '../components/islands/XPBar.svelte';
 
@@ -35,16 +36,10 @@ const fullTitle = title ? `${title} · CodeBlox` : 'CodeBlox · 做出你自己�
       </div>
     </header>
 
-    <main>
+    <main class="pb-24">
       <slot />
     </main>
 
-    <footer class="mx-auto max-w-2xl px-4 py-10 text-center text-xs text-slate-400">
-      <a href={withBase('/')} class="hover:text-slate-600">关卡地图</a>
-      <span class="mx-1">·</span>
-      <a href={withBase('/badges')} class="hover:text-slate-600">徽章墙</a>
-      <span class="mx-1">·</span>
-      <a href={withBase('/profile')} class="hover:text-slate-600">我的档案</a>
-    </footer>
+    <BottomNav />
   </body>
 </html>
