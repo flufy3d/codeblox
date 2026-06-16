@@ -1,0 +1,36 @@
+---
+import { withBase } from '../lib/url';
+
+const norm = (p: string) => (p.length > 1 && p.endsWith('/') ? p.slice(0, -1) : p);
+const path = norm(Astro.url.pathname);
+
+const items = [
+  { href: withBase('/'), emoji: '🗺️', label: '关卡地图' },
+  { href: withBase('/badges'), emoji: '🏅', label: '徽章墙' },
+  { href: withBase('/profile'), emoji: '👤', label: '我的档案' },
+];
+---
+
+<nav
+  class="fixed inset-x-0 bottom-0 z-30 rounded-t-3xl border-t border-slate-100 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-6px_24px_rgba(0,0,0,0.06)] backdrop-blur"
+>
+  <div class="mx-auto grid max-w-md grid-cols-3 gap-1 px-3 py-1.5">
+    {
+      items.map((it) => {
+        const active = path === norm(it.href);
+        return (
+          <a
+            href={it.href}
+            class={`flex flex-col items-center gap-0.5 rounded-2xl py-1.5 transition ${active ? 'bg-indigo-50' : 'hover:bg-slate-50'}`}
+            aria-current={active ? 'page' : undefined}
+          >
+            <span class={`text-2xl transition-transform ${active ? '-translate-y-0.5 scale-110' : 'opacity-50'}`}>
+              {it.emoji}
+            </span>
+            <span class={`text-xs font-black ${active ? 'text-indigo-600' : 'text-slate-400'}`}>{it.label}</span>
+          </a>
+        );
+      })
+    }
+  </div>
+</nav>
