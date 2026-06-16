@@ -12,25 +12,56 @@ const items = [
 ---
 
 <nav
-  class="fixed inset-x-0 bottom-0 z-30 rounded-t-3xl border-t border-slate-100 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-6px_24px_rgba(0,0,0,0.06)] backdrop-blur"
+  transition:persist="bottomnav"
+  class="cb-bottomnav fixed inset-x-0 bottom-0 z-30 rounded-t-3xl border-t border-slate-100 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-6px_24px_rgba(0,0,0,0.06)] backdrop-blur"
 >
   <div class="mx-auto grid max-w-md grid-cols-3 gap-1 px-3 py-1.5">
     {
-      items.map((it) => {
-        const active = path === norm(it.href);
-        return (
-          <a
-            href={it.href}
-            class={`flex flex-col items-center gap-0.5 rounded-2xl py-1.5 transition ${active ? 'bg-indigo-50' : 'hover:bg-slate-50'}`}
-            aria-current={active ? 'page' : undefined}
-          >
-            <span class={`text-2xl transition-transform ${active ? '-translate-y-0.5 scale-110' : 'opacity-50'}`}>
-              {it.emoji}
-            </span>
-            <span class={`text-xs font-black ${active ? 'text-indigo-600' : 'text-slate-400'}`}>{it.label}</span>
-          </a>
-        );
-      })
+      items.map((it) => (
+        <a
+          href={it.href}
+          data-path={norm(it.href)}
+          aria-current={path === norm(it.href) ? 'page' : undefined}
+          class="cb-tab flex flex-col items-center gap-0.5 rounded-2xl py-1.5 transition-colors"
+        >
+          <span class="cb-emoji text-2xl">{it.emoji}</span>
+          <span class="cb-label text-xs font-black">{it.label}</span>
+        </a>
+      ))
     }
   </div>
 </nav>
+
+<style>
+  .cb-tab .cb-emoji {
+    opacity: 0.5;
+    transition: transform 0.15s ease;
+  }
+  .cb-tab .cb-label {
+    color: #94a3b8;
+  }
+  .cb-tab[aria-current='page'] {
+    background: #eef2ff;
+  }
+  .cb-tab[aria-current='page'] .cb-emoji {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.1);
+  }
+  .cb-tab[aria-current='page'] .cb-label {
+    color: #4f46e5;
+  }
+</style>
+
+<script>
+  // 底部栏跨页面持久化（transition:persist）后，靠这段在每次导航后同步高亮
+  function syncTabs() {
+    const norm = (p: string) => (p.length > 1 && p.endsWith('/') ? p.slice(0, -1) : p);
+    const here = norm(location.pathname);
+    document.querySelectorAll<HTMLElement>('.cb-bottomnav .cb-tab').forEach((a) => {
+      if (a.dataset.path === here) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  syncTabs();
+  document.addEventListener('astro:page-load', syncTabs);
+</script>
