@@ -1,0 +1,21 @@
+---
+import '../styles/global.css';
+import { withBase } from '../lib/url';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>找不到页面 · CodeBlox</title>
+	</head>
+	<body class="min-h-screen bg-slate-50 text-slate-800">
+		<main class="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-4 p-6 text-center">
+			<h1 class="text-4xl font-black">🚧 找不到这个页面</h1>
+			<p class="text-slate-600">也许它被传送到别的世界去了。</p>
+			<a class="rounded-full bg-indigo-500 px-5 py-2 font-bold text-white hover:bg-indigo-600" href={withBase('/')}>← 回到首页</a>
+		</main>
+	</body>
+</html>

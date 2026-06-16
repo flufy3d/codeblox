@@ -1,0 +1,24 @@
+---
+import '../styles/global.css';
+import { withBase } from '../lib/url';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<title>CodeBlox · 做出你自己的 Roblox 游戏</title>
+	</head>
+	<body class="min-h-screen bg-slate-50 text-slate-800">
+		<main class="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-4 p-6 text-center">
+			<h1 class="text-4xl font-black">🎮 CodeBlox</h1>
+			<p class="text-lg text-slate-600">
+				跟着关卡地图，一步一步用 Roblox Studio 做出你自己的游戏！
+			</p>
+			<p class="text-sm text-slate-400">（站点正在建设中…）</p>
+		</main>
+	</body>
+</html>
