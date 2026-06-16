@@ -1,0 +1,33 @@
+---
+// 显示用代码块（不执行），带“复制整段”按钮。
+// 想提示“只改这里”，在 MDX 里用 <mark>…</mark> 包住要改的部分即可（会高亮成黄色）。
+interface Props {
+  title?: string;
+}
+const { title = 'Luau 代码' } = Astro.props;
+---
+
+<div class="codeblock my-4 overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 text-slate-100">
+  <div class="flex items-center justify-between bg-slate-800 px-4 py-2 text-xs">
+    <span class="font-mono text-slate-300">{title}</span>
+    <button
+      type="button"
+      class="copy-btn rounded-lg bg-indigo-500 px-3 py-1 font-bold text-white transition hover:bg-indigo-400"
+      >复制</button
+    >
+  </div>
+  <pre class="overflow-x-auto px-4 py-3 text-sm leading-relaxed"><code class="code-body [&_mark]:rounded [&_mark]:bg-yellow-300 [&_mark]:px-1 [&_mark]:text-slate-900"><slot /></code></pre>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.codeblock').forEach((box) => {
+    const btn = box.querySelector<HTMLButtonElement>('.copy-btn');
+    const code = box.querySelector<HTMLElement>('.code-body');
+    btn?.addEventListener('click', () => {
+      navigator.clipboard?.writeText((code?.textContent ?? '').trim());
+      const old = btn.textContent;
+      btn.textContent = '已复制 ✓';
+      setTimeout(() => (btn.textContent = old), 1200);
+    });
+  });
+</script>

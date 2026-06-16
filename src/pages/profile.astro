@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProfileManager from '../components/islands/ProfileManager.svelte';
+import ExportImportProgress from '../components/islands/ExportImportProgress.svelte';
+---
+
+<BaseLayout title="我的档案">
+  <div class="mx-auto max-w-2xl space-y-8 px-4 py-6">
+    <section>
+      <h1 class="text-2xl font-black text-slate-800">👤 学习者档案</h1>
+      <p class="mt-1 text-slate-500">每个孩子一个档案，进度分开记录；可设 4 位密码防止互相覆盖。</p>
+      <div class="mt-4"><ProfileManager client:load /></div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-black text-slate-800">💾 备份与恢复</h2>
+      <p class="mt-1 text-slate-500">进度存在本设备浏览器里。换设备或清缓存前先导出，到新设备再导入。</p>
+      <div class="mt-4"><ExportImportProgress client:load /></div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,18 @@
+---
+interface Props {
+  type?: 'tip' | 'warning' | 'info';
+}
+const { type = 'tip' } = Astro.props;
+
+const styles: Record<string, string> = {
+  tip: 'border-emerald-300 bg-emerald-50 text-emerald-900',
+  warning: 'border-amber-300 bg-amber-50 text-amber-900',
+  info: 'border-sky-300 bg-sky-50 text-sky-900',
+};
+const icon: Record<string, string> = { tip: '💡', warning: '⚠️', info: 'ℹ️' };
+---
+
+<aside class={`my-4 flex gap-3 rounded-2xl border-2 px-4 py-3 ${styles[type]}`}>
+  <span class="text-xl leading-7">{icon[type]}</span>
+  <div class="leading-relaxed [&>:first-child]:mt-0 [&>:last-child]:mb-0"><slot /></div>
+</aside>

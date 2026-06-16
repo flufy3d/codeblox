@@ -1,0 +1,9 @@
+---
+// 构建期生成课程目录，嵌入页面给客户端 store 读取（孩子端不重复请求）。
+import { CATALOG_SCRIPT_ID } from '../lib/catalog';
+import { buildCatalog } from '../lib/server-catalog';
+
+const catalog = await buildCatalog(import.meta.env.DEV);
+---
+
+<script type="application/json" id={CATALOG_SCRIPT_ID} is:inline set:html={JSON.stringify(catalog)} />
