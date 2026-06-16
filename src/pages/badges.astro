@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BadgeShelf from '../components/islands/BadgeShelf.svelte';
+import { buildCatalog } from '../lib/server-catalog';
+
+const catalog = await buildCatalog(import.meta.env.DEV);
+---
+
+<BaseLayout title="徽章墙">
+  <div class="mx-auto max-w-2xl px-4 pb-4 pt-5 text-center">
+    <h1 class="text-2xl font-black text-slate-800">🏅 我的徽章墙</h1>
+    <p class="mt-1 text-slate-500">完成课程、连续打卡、通关单元，都能拿到徽章！</p>
+  </div>
+  <BadgeShelf client:load catalog={catalog} />
+</BaseLayout>

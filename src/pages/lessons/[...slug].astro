@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LessonLayout from '../../layouts/LessonLayout.astro';
+import { buildCatalog } from '../../lib/server-catalog';
+import StudioStep from '../../components/astro/StudioStep.astro';
+import CodeBlock from '../../components/astro/CodeBlock.astro';
+import Callout from '../../components/astro/Callout.astro';
+
+export async function getStaticPaths() {
+  const lessons = await getCollection('lessons');
+  return lessons
+    .filter((l) => import.meta.env.DEV || !l.data.draft)
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// 上一课 / 下一课（按全局线性顺序）
+const catalog = await buildCatalog(import.meta.env.DEV);
+const idx = catalog.lessons.findIndex((l) => l.slug === entry.id);
+const prev = idx > 0 ? catalog.lessons[idx - 1] : null;
+const next = idx >= 0 && idx < catalog.lessons.length - 1 ? catalog.lessons[idx + 1] : null;
+---
+
+<BaseLayout title={entry.data.title}>
+  <LessonLayout entry={entry} prev={prev} next={next}>
+    <Content components={{ StudioStep, CodeBlock, Callout }} />
+  </LessonLayout>
+</BaseLayout>
