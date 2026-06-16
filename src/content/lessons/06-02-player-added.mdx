@@ -1,0 +1,73 @@
+---
+id: "6.2"
+unit: unit-06
+order: 2
+title: "PlayerAdded：有人加入就触发"
+emoji: "🚪"
+estMinutes: 17
+xp: 100
+objectives:
+  - 理解 PlayerAdded 是“有玩家加入就触发”的事件
+  - 在玩家进来时用 print(player.Name) 打印他的名字
+tasks:
+  - id: t1
+    label: 在 ServerScriptService 的 Script 里拿到 Players 服务
+  - id: t2
+    label: 连接 Players.PlayerAdded 事件
+  - id: t3
+    label: 在事件里写 print(player.Name)，Play 看自己的名字
+quiz:
+  - q: PlayerAdded 事件在什么时候触发？
+    type: single
+    options: ["有玩家加入游戏时", "方块变色时", "游戏关闭时"]
+    answer: 0
+    explain: PlayerAdded 就是“有人进门”的门铃，玩家一加入就会触发。
+  - q: 括号里的 player 代表什么？
+    type: single
+    options: ["刚刚加入的那个玩家", "一个方块", "游戏的名字"]
+    answer: 0
+    explain: 事件会把“刚加入的玩家”交给我们，名字习惯叫 player。
+  - q: 想打印玩家的名字，应该写？
+    type: single
+    options: ["print(player.Name)", "print(Color)", "player.Jump()"]
+    answer: 0
+challenge: 在打印名字的下面再加一行 print("欢迎你！")，让每个进来的人都收到欢迎。
+---
+
+## 🎯 今天要做什么
+
+让游戏“知道有人进来了”！只要有玩家加入，就在 Output 里打印出他的名字——这是做计分板的关键一步。
+
+## ✨ 新知识：PlayerAdded 是“进门的门铃”
+
+上节课我们拿到了 **Players 服务**。它身上有一个**事件（Event）**叫 **PlayerAdded**，意思是“**有玩家加入就触发**”——就像门口的**门铃**，有人进门就“叮咚”一声。
+
+我们用 `Connect` 把门铃和“要做的事”连起来。事件会把**刚加入的那个玩家**交给我们，习惯把它叫 `player`：
+
+```lua
+local Players = game:GetService("Players")
+
+Players.PlayerAdded:Connect(function(player)
+	print(player.Name)
+end)
+```
+
+<StudioStep n={1} title="打开服务器脚本">
+  还是在 **ServerScriptService** 里的那个 Script（没有就 **右键 → Insert Object → Script**）。
+</StudioStep>
+
+<StudioStep n={2} title="连接 PlayerAdded">
+  把上面那段代码整段写进去。`player.Name` 就是玩家的名字。
+</StudioStep>
+
+<StudioStep n={3} title="试运行">
+  按 **▶️ Play**，看 **Output**——你自己的玩家名字会被打印出来！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+每次有人加入，Output 里就冒出一个名字。门铃通了！下一节，我们就给每个进来的玩家发一张“计分卡”。
+
+<Callout type="warning">
+  没打印出名字？确认 **PlayerAdded** 拼写正确（注意大小写），还有 `function(player)` 和最后的 `end)` 都别漏。
+</Callout>

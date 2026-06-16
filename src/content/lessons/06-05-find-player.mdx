@@ -1,0 +1,87 @@
+---
+id: "6.5"
+unit: unit-06
+order: 5
+title: 找到“碰到我的那个玩家”
+emoji: "🔎"
+estMinutes: 18
+xp: 100
+objectives:
+  - 理解 Touched 给的 hit 是“碰到的身体部件”，不是玩家本人
+  - 用 GetPlayerFromCharacter 找到碰撞背后的玩家
+tasks:
+  - id: t1
+    label: 在一个 Part（当作 Pad）里插入一个 Script
+  - id: t2
+    label: 连接 pad.Touched，拿到 hit
+  - id: t3
+    label: 用 game.Players:GetPlayerFromCharacter(hit.Parent) 找玩家并 print
+quiz:
+  - q: Touched 事件给我们的 hit 是什么？
+    type: single
+    options: ["玩家本人", "碰到 Pad 的某个身体部件", "Pad 自己"]
+    answer: 1
+    explain: hit 只是碰上来的一个零件（比如脚），要再去找它背后的玩家。
+  - q: 把“角色”换成“玩家”的方法是哪个？
+    type: single
+    options: ["GetPlayerFromCharacter(hit.Parent)", "BrickColor.Random()", "Instance.new(\"Folder\")"]
+    answer: 0
+    explain: GetPlayerFromCharacter 能从角色模型找到对应的玩家。
+  - q: 为什么要写 if player then 再做事？
+    type: single
+    options: ["碰上来的可能不是玩家（比如别的方块）", "让代码更长", "为了改颜色"]
+    answer: 0
+    explain: 万一碰上来的不是玩家，player 会是空的，先判断一下更安全。
+challenge: 把 print 改成 print(player.Name .. " 碰到了我！")，让它打印出名字。
+---
+
+## 🎯 今天要做什么
+
+学会一个超重要的小魔法：当有东西碰到方块时，找出**到底是哪个玩家**碰的。认出玩家，下一节才能给他**加分**。
+
+## ✨ 新知识：hit 不是玩家，是“碰上来的零件”
+
+还记得 **Touched（碰到）** 事件吗？它会给我们一个 `hit`。但要小心——`hit` **不是玩家本人**，它只是碰上来的**一个身体部件**（可能是脚、手、身子）。
+
+玩家的身体部件，都装在他的**角色模型（Character）**里，也就是 `hit.Parent`。我们用 **Players 服务**的一个本领，把角色换成玩家：
+
+```lua
+local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+```
+
+如果碰上来的真是个玩家，`player` 就有值；如果是别的方块碰过来，`player` 会是空的，所以我们用 `if player then` 先确认一下：
+
+```lua
+local pad = script.Parent
+
+pad.Touched:Connect(function(hit)
+	local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+	if player then
+		print(player.Name)
+	end
+end)
+```
+
+<Callout type="info">
+  这个脚本放在 **Pad 这个 Part 里面**（`script.Parent` 就是 Pad 自己），因为它只管这一块垫子被碰到的事。
+</Callout>
+
+<StudioStep n={1} title="准备一块 Pad">
+  在 **Workspace** 里放一个 **Part**，当作得分垫。**右键这个 Part → Insert Object → Script**。
+</StudioStep>
+
+<StudioStep n={2} title="写找玩家的代码">
+  把上面那段代码写进去。`script.Parent` 指的就是这块 Pad。
+</StudioStep>
+
+<StudioStep n={3} title="试运行">
+  按 **▶️ Play**，走上去踩这块 Pad，**Output** 里会打印出你的名字！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+踩一下，名字就被打印出来——说明游戏认出了“碰到垫子的那个人”是谁。下一节，我们就把“认出玩家”和“**加 1 分**”连起来！
+
+<Callout type="warning">
+  没反应？确认脚本放在 **Pad 里面**（不是 ServerScriptService），还有 **GetPlayerFromCharacter** 的大小写要对。
+</Callout>

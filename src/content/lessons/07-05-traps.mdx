@@ -1,0 +1,94 @@
+---
+# 👪 家长提示：本课沿用 Roblox 跑酷里最常见、最安全的“踩到熔岩就原地重来”机制——
+# 角色血量归零后立刻在最近的检查点复活，没有任何暴力或可怕画面，就是把小人送回去再试一次，
+# 和滑梯滑下来再爬上去一样。孩子可以放心练习。
+id: "7.5"
+unit: unit-07
+order: 5
+title: 熔岩与陷阱
+emoji: "🌋"
+estMinutes: 22
+xp: 100
+objectives:
+  - 复用熔岩判定：碰到红色危险区就让角色血量归零、原地重来
+  - 在 Obby 路上布置 1-2 处熔岩陷阱，增加挑战
+tasks:
+  - id: t1
+    label: 放一块又宽又扁的红色 Part 当熔岩，摆在路上当陷阱
+  - id: t2
+    label: 在这块熔岩 Part 里 Insert Object → Script
+  - id: t3
+    label: 整段抄入熔岩判定代码
+  - id: t4
+    label: Play 试着躲开熔岩；故意踩一脚，看会不会从检查点重来
+quiz:
+  - q: hit.Parent:FindFirstChild("Humanoid") 是在判断什么？
+    type: single
+    options: ["碰到的是不是一个角色（有没有 Humanoid）", "熔岩是什么颜色", "现在几点"]
+    answer: 0
+    explain: 只有玩家/角色身上才有 Humanoid。找到它，就说明踩上来的是个“人”。
+  - q: humanoid.Health = 0 会发生什么？
+    type: single
+    options: ["角色变大", "角色血量归零，从最近的检查点重来", "游戏关闭"]
+    answer: 1
+    explain: 血量归零后，Roblox 会把角色送回它的重生点（也就是上节课设的检查点）重新开始。
+  - q: 上节课的检查点，在这里起什么作用？
+    type: single
+    options: ["没用", "踩到熔岩后，从最近的检查点重来，不用从头走", "让熔岩更红"]
+    answer: 1
+    explain: 检查点和熔岩配合得天衣无缝：摔进熔岩也只回到最近的存档点，继续闯关。
+challenge: 在让血量归零前，加一行 print("有人掉进熔岩啦！")，这样 Output 里能看到每次触发。
+---
+
+## 🎯 今天要做什么
+
+给 Obby 布置**熔岩危险区**！🌋 谁踩到红色熔岩，谁就**从最近的检查点重来**。配上上节课的检查点，闯关变得既紧张又不会让人“从头再来”。
+
+<Callout type="info">
+  **给爸爸妈妈的话**：这里的“失败”只是把小人送回最近的检查点重新试，就像滑梯滑下来再爬上去，没有任何吓人的画面。这是 Roblox 里最常见也最安全的玩法，孩子可以放心练习。
+</Callout>
+
+## ✨ 新知识：把学过的熔岩搬进 Obby
+
+今天**没有新语法**——我们直接复用第 5 单元做过的**熔岩判定**。它的逻辑你已经很熟了：
+
+> 有东西碰到熔岩时，**先看它身上有没有 Humanoid**（认一认是不是“人”）；**如果**是，**就**把它的 `Health`（血量）设成 0，让它重来。
+
+因为上节课已经放好了**检查点**，所以这次“重来”会回到**最近的检查点**，不是最起点——这就是一个完整 Obby 的感觉！
+
+```lua
+local lava = script.Parent
+
+local function onTouch(hit)
+	local humanoid = hit.Parent:FindFirstChild("Humanoid")
+	if humanoid then
+		humanoid.Health = 0
+	end
+end
+
+lava.Touched:Connect(onTouch)
+```
+
+<StudioStep n={1} title="做一块熔岩陷阱">
+  放一个又宽又扁的 **Part**，**Color** 染**红色**、**Material** 选 **Neon** 更像岩浆，**Anchored** 打勾。把它摆在路上当陷阱（比如移动桥下面，或两块台阶之间）。
+</StudioStep>
+
+<StudioStep n={2} title="给熔岩加判定脚本">
+  在 Explorer 里右键这块熔岩 → **Insert Object → Script**，整段抄入上面的熔岩判定代码。
+</StudioStep>
+
+<StudioStep n={3} title="试玩，先躲再踩">
+  点 ▶️ **Play**，先小心**躲开**熔岩走过去；然后**故意踩一脚**——小人会**从最近的检查点重来**！🌋
+</StudioStep>
+
+<StudioStep n={4} title="多布置几处">
+  ⏹️ Stop，**复制**这块熔岩，在路上再摆 1-2 处危险区。注意：**别让玩家完全无路可走**，总得留出能跳过去的安全落脚点。
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+一条**有熔岩陷阱**的路：踩到就回检查点重来。重生点、检查点、移动桥、熔岩——你的 Obby 已经有了一个真正关卡的全部要素！下一节，我们给它装上**终点**和**通关大庆祝**。
+
+<Callout type="warning">
+  踩上去没反应？检查熔岩里有没有 **Script**、`Touched:Connect(onTouch)` 的大小写对不对。注意把熔岩的 **CanCollide** 留着勾（这样玩家是“踩在上面”被判定，而不是直接掉穿过去）。
+</Callout>

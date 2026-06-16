@@ -1,0 +1,88 @@
+---
+id: "5.3"
+unit: unit-05
+order: 3
+title: while 循环：一直重复
+emoji: "🔁"
+estMinutes: 20
+xp: 100
+objectives:
+  - 知道 while 循环会“一直重复”里面的动作
+  - 用 while 加 task.wait(1)，让方块每秒闪一下颜色
+tasks:
+  - id: t1
+    label: 放一个 Part，在它里面右键 Insert Object → Script
+  - id: t2
+    label: 整段抄入 while 循环的范例代码
+  - id: t3
+    label: 点 ▶️ Play，看方块每秒换一次颜色
+  - id: t4
+    label: 把 task.wait(1) 改成 task.wait(0.2)，看它闪得更快
+quiz:
+  - q: while 循环是做什么的？
+    type: single
+    options: ["只做一次", "条件成立时，一直重复里面的代码", "删除方块"]
+    answer: 1
+    explain: while（当……的时候）只要条件还成立，就会一遍又一遍地重复里面的动作。
+  - q: task.wait(1) 的作用是？
+    type: single
+    options: ["等待 1 秒再继续", "等 1 分钟", "立刻停止游戏"]
+    answer: 0
+    explain: task.wait(1) 让代码“暂停 1 秒”，这样我们才看得清每次变化。
+  - q: 想让方块闪得更快，应该怎么改 task.wait？
+    type: single
+    options: ["把 1 改成更大的数", "把 1 改成更小的数，比如 0.2", "把它删掉"]
+    answer: 1
+challenge: 把 task.wait(1) 改成 task.wait(0.5)，让方块半秒闪一次，做出“蹦迪灯”的感觉。
+---
+
+## 🎯 今天要做什么
+
+让一个方块**自己一直换颜色**，每秒闪一下，像舞台上的彩灯！这就要用到**会重复的循环**——也是后面做彩虹跑道的关键。
+
+## ✨ 新知识：while 是“一直重复”
+
+`if` 只判断一次。`while`（当……的时候）不一样——只要条件还成立，它就**一遍又一遍**地重复里面的动作，停不下来。
+
+我们让条件永远成立（`while true do`，意思是“一直”），再配一个 `task.wait(1)`（等 1 秒），方块就会**每秒换一次颜色**。
+
+> `task.wait(1)` = “停 1 秒再继续”。没有它，电脑会快到我们根本看不见。
+
+<StudioStep n={1} title="放一个方块，给它一个脚本">
+  放一个 **Part**，在 Explorer 里右键这个 Part → **Insert Object → Script**。
+</StudioStep>
+
+<StudioStep n={2} title="整段抄入循环代码">
+  把脚本内容整段换成下面这些。先原样跑：
+
+```lua
+local part = script.Parent
+
+while true do
+	part.BrickColor = BrickColor.Random()
+	task.wait(1)
+end
+```
+
+  意思是：**一直**重复——给方块换一个随机颜色，然后等 1 秒，再换……
+</StudioStep>
+
+<StudioStep n={3} title="试玩，看它闪起来">
+  点 ▶️ **Play**。方块开始**每秒换一次颜色**，像彩灯一样！
+</StudioStep>
+
+<StudioStep n={4} title="让它闪得更快">
+  把 `task.wait(1)` 里的 `1` 改成 `0.2`（**只改这个数字**），再 Play。现在它闪得飞快！
+</StudioStep>
+
+<Callout type="tip">
+  `BrickColor.Random()` 会随机挑一个颜色。配上 while 循环，方块就会不停换色——这正是“彩虹”效果的雏形。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一个**自己不停换颜色**的方块。你没碰它，它却一直在动——因为循环在替你重复！🔁
+
+<Callout type="warning">
+  千万别删掉 `task.wait(1)` 这一行！没有“等一等”的循环会转得太快、把游戏卡住。下面第 7 课我们专门讲这个坑。
+</Callout>

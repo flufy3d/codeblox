@@ -1,0 +1,73 @@
+---
+id: "2.1"
+unit: unit-02
+order: 1
+title: 材质大变身
+emoji: "🧱"
+estMinutes: 18
+xp: 100
+objectives:
+  - 知道 Material（材质）决定一个方块的“质感”
+  - 用 Material 把方块变成木头、砖、金属、冰，做出不同质感的地砖
+tasks:
+  - id: t1
+    label: 打开 Properties 面板（View 选项卡 → Properties）
+  - id: t2
+    label: 放 4 个方块，排成一排当地砖
+  - id: t3
+    label: 选中第 1 个，把 Material 改成 Wood（木头）
+  - id: t4
+    label: 把另外 3 个分别改成 Brick（砖）、Metal（金属）、Ice（冰）
+quiz:
+  - q: Material（材质）是用来决定什么的？
+    type: single
+    options: ["方块的位置", "方块的“质感”（看起来是木头还是金属）", "方块的名字"]
+    answer: 1
+    explain: Material 决定方块看起来是什么做的——木头、砖、金属还是冰。
+  - q: 想让一块地砖看起来像“砖头”，Material 选哪个？
+    type: single
+    options: ["Brick（砖）", "Ice（冰）", "Wood（木头）"]
+    answer: 0
+  - q: 改 Material 要在哪个面板？
+    type: single
+    options: ["Output", "Properties（属性）", "Explorer"]
+    answer: 1
+    explain: 颜色、材质、大小这些设置都在 Properties 面板里改。
+challenge: 给同一个方块先换成 Wood，再换成 Metal，看看光照在上面有什么不一样。
+---
+
+## 🎯 今天要做什么
+
+给方块换上不同的**材质**，把一排普通方块变成木头地砖、砖头地砖、金属地砖和冰块地砖——一眼就能看出“是什么做的”！
+
+## ✨ 新知识：Material 决定“质感”
+
+颜色管的是“什么颜色”，**Material（材质）** 管的是“什么做的”。
+
+同样一个方块，换上不同 Material 就会有完全不同的**质感**：木头有纹路、金属会反光、冰块看起来凉凉的、砖头粗粗的。
+
+就像同样的形状，用木头做和用玻璃做，摸起来、看起来完全不一样。🧱
+
+<StudioStep n={1} title="打开属性面板">
+  顶部 **View（视图）选项卡 → Properties**，把属性面板调出来。
+</StudioStep>
+
+<StudioStep n={2} title="排一排地砖">
+  放 **4 个方块**，挨着排成一排，当作 4 块地砖。
+</StudioStep>
+
+<StudioStep n={3} title="第一块：木头">
+  点中第 1 个方块，在 Properties 里找到 **Material**，下拉选 **Wood（木头）**。看，出现木纹了！
+</StudioStep>
+
+<StudioStep n={4} title="其余三块：砖、金属、冰">
+  分别选中另外 3 个方块，把 Material 依次改成 **Brick（砖）**、**Metal（金属）**、**Ice（冰）**。
+</StudioStep>
+
+<Callout type="tip">
+  Home（主页）选项卡上也有一个 **Material** 小按钮，点一下能更快地换材质，效果和在 Properties 里改一样。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一排 4 种质感的地砖：木头、砖、金属、冰。转一转镜头（按住鼠标右键拖动），看看金属和冰块在光下的反光——是不是比单色方块高级多了？

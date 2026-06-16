@@ -1,0 +1,9 @@
+order: 6
+title: 玩家与分数：做一个真正的得分游戏
+subtitle: Players、PlayerAdded、leaderstats、加分
+emoji: 🏆
+color: "#E4B84C"
+badge:
+  id: unit-06-clear
+  name: 计分大师
+  emoji: 🏆

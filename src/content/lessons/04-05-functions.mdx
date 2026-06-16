@@ -1,0 +1,89 @@
+---
+id: "4.5"
+unit: unit-04
+order: 5
+title: 函数：把要做的事打包
+emoji: "🎁"
+estMinutes: 18
+xp: 100
+objectives:
+  - 理解函数就是“把要做的事打包成一个包裹，给它起个名字”
+  - 看懂 local function onTouch(hit) … end，并用 Connect 把它接到事件上
+tasks:
+  - id: t1
+    label: 在地板的脚本里找到 local function onTouch(hit) … end 这段
+  - id: t2
+    label: 在函数里再加一行 print("脚步声～")
+  - id: t3
+    label: 确认 part.Touched:Connect(onTouch) 还在最后一行
+  - id: t4
+    label: 试玩走上去，看 Output 一次跳出两句话
+quiz:
+  - q: 函数最像下面哪个？
+    type: single
+    options: ["把要做的几件事打包，贴上名字的包裹", "一个数字", "一种材质"]
+    answer: 0
+    explain: 函数把动作打包起来、起个名字，之后喊名字就能一次做完里面所有事。
+  - q: local function onTouch(hit) 和 end 之间放的是什么？
+    type: single
+    options: ["碰到时要做的所有动作", "方块的颜色名", "玩家的名字"]
+    answer: 0
+  - q: Connect(onTouch) 后面为什么不写括号 onTouch()？
+    type: single
+    options: ["写错了，应该加括号", "我们是把“这个包裹”交给事件，等碰到了它再自己打开", "括号会让游戏崩溃"]
+    answer: 1
+    explain: 给事件的是函数本身（onTouch），等 Touched 发生时它才会被调用。
+challenge: 在 onTouch 里再加一行 print(hit.Name)，试玩看看 Output 显示碰到你的是什么部件。
+---
+
+## 🎯 今天要做什么
+
+上一课你已经偷偷用过**函数**了（就是那段 `onTouch`）。今天我们把它彻底搞懂——函数就是“**把要做的事打包**”，这样代码又整齐又好用。
+
+## ✨ 新知识：函数是“打包好的包裹”
+
+想象你把“碰到地板要做的事”全部装进一个包裹，给包裹贴上名字 `onTouch`。以后只要把这个包裹交给事件，碰到时它就会**自动打开、把里面的事全做一遍**。
+
+```lua
+local part = script.Parent
+
+local function onTouch(hit)
+	print("有人碰到我啦！")
+	print("脚步声～")
+end
+
+part.Touched:Connect(onTouch)
+```
+
+- `local function onTouch(hit)` … `end`：这中间就是“包裹里的东西”——想做几件事就写几行，这里写了两句 `print`。
+- `part.Touched:Connect(onTouch)`：把这个**包裹**交给 Touched 事件。注意是 `onTouch`，**不加括号**——因为我们是把包裹交出去，等碰到了它自己会打开。
+
+<Callout type="tip">
+  函数的好处：要做的事很多时，全打包进 `onTouch` 里，最后那行 `Connect` 永远只写一次，特别清楚。
+</Callout>
+
+<StudioStep n={1} title="打开脚本，找到函数">
+  打开 `MagicFloor` 里的 Script，找到 `local function onTouch(hit)` 那段。
+</StudioStep>
+
+<StudioStep n={2} title="往包裹里多放一件事">
+  在 `end` **上面**，再加一行：
+
+```lua
+	print("脚步声～")
+```
+
+  让它和上面那句 `print` 对齐（前面留一个 Tab）。
+</StudioStep>
+
+<StudioStep n={3} title="试玩验证">
+  打开 **Output**，点 ▶️ **Play**，走上地板。这次 Output 会**一次跳出两句话**——包裹里的两件事都做了！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+碰一下，函数这个“包裹”就把里面的两句话全打印出来。你已经会**把动作打包再接到事件上**了——这是写游戏最重要的本领之一。🎁 下一课，我们往包裹里放真正的魔法：变色！
+
+<Callout type="warning">
+  报错或只打印一句？检查新加的 `print` 是不是写在了 `end` **下面**（要在 `end` 上面、函数里面才算数）。
+</Callout>

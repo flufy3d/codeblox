@@ -1,0 +1,133 @@
+---
+id: "5.8"
+unit: unit-05
+order: 8
+title: "单元成果：彩虹跑道 + 熔岩"
+emoji: "🏆"
+estMinutes: 30
+xp: 150
+objectives:
+  - 综合运用 for、while、math.random、task.wait，做一条会不停换色的彩虹跑道
+  - 综合运用 Touched 与 if 判断，加上踩到就重来的熔岩，组成一个小关卡
+tasks:
+  - id: t1
+    label: 在 ServerScriptService 里新建 Script，整段抄入“会变色的跑道”代码
+  - id: t2
+    label: 点 ▶️ Play，确认一排格子在不停地循环换色
+  - id: t3
+    label: 放一块红色熔岩 Part，在它里面新建 Script 抄入熔岩判定代码
+  - id: t4
+    label: 完整试玩：在彩虹跑道上走，故意踩熔岩，看是否重来
+  - id: t5
+    label: 录一段或截一张图，发给家人朋友炫耀你的关卡
+quiz:
+  - q: 这条彩虹跑道用到了哪些本单元学的本领？
+    type: multi
+    options: ["for 循环生成一排格子", "math.random 随机颜色", "while + task.wait 不停刷新", "只用了改颜色，没用循环"]
+    answer: [0, 1, 2]
+    explain: 它把 for（排格子）、math.random（随机色）、while + task.wait（不停刷新）全用上了——这就是“综合”。
+  - q: 熔岩判定里，为什么先用 if 找 Humanoid 再让血量归零？
+    type: single
+    options: ["免得碰到的不是角色时出错", "为了让熔岩更红", "为了省电"]
+    answer: 0
+    explain: 先确认踩上来的是个“人”（有 Humanoid），再动它的血量，代码才稳当。
+  - q: 跑道的 while 循环里如果忘了 task.wait()，会怎样？
+    type: single
+    options: ["颜色更好看", "游戏会卡死", "熔岩失效"]
+    answer: 1
+    explain: 没有 task.wait() 的 while 会把游戏卡死——这是第 7 课的重要提醒。
+challenge: 把跑道格子数从 10 改成 20，再把刷新的 task.wait 调快一点，做出一条更长、闪得更欢的超级彩虹跑道，然后再去炫耀一次！
+---
+
+## 🎯 今天要做什么
+
+把这一单元学的全用上，做一个**真正能玩的小关卡**：一条**不停换色的彩虹跑道**🌈，加上一块**踩到就重来的熔岩**🌋。做完，去炫耀！
+
+## ✨ 新知识：把本领“拼”起来
+
+今天**没有新语法**，全是把学过的拼起来：
+
+- `for` 排出一排跑道格子（第 4 课）
+- `math.random` 给每格随机颜色（第 5 课）
+- `while` + `task.wait` 让颜色**不停刷新**（第 3、7 课）
+- `Touched` + `if` 判断做熔岩重来（第 6 课）
+
+会编程的人，做大东西就是这样——**把小本领一块块拼起来**。
+
+<StudioStep n={1} title="第一段：会变色的彩虹跑道">
+  在 **ServerScriptService** 里新建 **Script**，整段抄入：
+
+```lua
+local blocks = {}
+
+for i = 1, 10 do
+	local block = Instance.new("Part")
+	block.Size = Vector3.new(4, 1, 4)
+	block.Position = Vector3.new(i * 5, 5, 0)
+	block.Anchored = true
+	block.Material = Enum.Material.Neon
+	block.Parent = workspace
+	blocks[i] = block
+end
+
+while true do
+	for i = 1, 10 do
+		blocks[i].Color = Color3.fromRGB(math.random(1, 255), math.random(1, 255), math.random(1, 255))
+	end
+	task.wait(0.5)
+end
+```
+
+  先用 `for` 排出 10 个发光格子并记住它们；再用 `while` **一直**重复——每半秒给每个格子换一次随机色。跑道就**活**起来了！
+</StudioStep>
+
+<StudioStep n={2} title="试玩跑道">
+  点 ▶️ **Play**，看那排格子**不停地变换颜色**，像流动的彩虹。🌈
+</StudioStep>
+
+<StudioStep n={3} title="第二段：放一块熔岩">
+  ⏹️ Stop。放一个又宽又扁的 **Part**，**Color** 染红、**Anchored** 打勾，摆在跑道旁边当熔岩。
+</StudioStep>
+
+<StudioStep n={4} title="给熔岩加判定脚本">
+  在 Explorer 里右键这块熔岩 → **Insert Object → Script**，整段抄入：
+
+```lua
+local lava = script.Parent
+
+local function onTouch(hit)
+	local humanoid = hit.Parent:FindFirstChild("Humanoid")
+	if humanoid then
+		humanoid.Health = 0
+	end
+end
+
+lava.Touched:Connect(onTouch)
+```
+
+  踩到熔岩的**如果**是个角色（有 Humanoid），**就**让它血量归零、回起点重来。
+</StudioStep>
+
+<StudioStep n={5} title="完整试玩你的关卡">
+  点 ▶️ **Play**。在闪动的彩虹跑道上走一走，再故意踩一下红色熔岩——小人“重来”了！你的第一个**有跑道、有机关**的小关卡完成啦！🏆
+</StudioStep>
+
+<Callout type="tip">
+  想要更稳：确认跑道格子和熔岩的 **Anchored** 都打了勾，免得一试玩就掉下去。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一条**会流光溢彩的彩虹跑道** + 一块**踩到就重来的熔岩**，合在一起就是一个能真正玩的小关卡。你用循环、随机、判断**亲手让游戏会思考、会循环**了！
+
+## 🎉 炫耀时间
+
+你太厉害了，一定要让别人看看：
+
+1. 在游戏里把镜头转到跑道最漂亮的角度，**截一张图**或**录一小段**屏幕。
+2. 发给爸爸妈妈、好朋友，告诉他们：“**这条会变色的跑道和熔岩，是我自己写代码做的！**”
+3. 说说看：哪一块本领（for、while、随机、判断）是你觉得最酷的？
+
+<Callout type="info">
+  你已经完成了**第 5 单元**，解锁徽章 **🧠 逻辑小子**！会判断、会循环——你离做出一个完整小游戏，又近了一大步。
+</Callout>

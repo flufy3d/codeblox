@@ -1,0 +1,71 @@
+---
+id: "1.5"
+unit: unit-01
+order: 5
+title: 起名字、收进盒子里
+emoji: "🏷️"
+estMinutes: 18
+xp: 100
+objectives:
+  - 给方块改一个好记的名字
+  - 把几个方块打包成一个 Model（模型组）方便管理
+tasks:
+  - id: t1
+    label: 把一个方块改名为“地板”
+  - id: t2
+    label: 再放两三个方块，分别命名“台阶1”“台阶2”
+  - id: t3
+    label: 框选这些台阶，按 Ctrl + G 打组成一个 Model
+  - id: t4
+    label: 把这个 Model 改名为“台阶组”
+quiz:
+  - q: 为什么要给方块改名字？
+    type: single
+    options: ["只是好看", "以后写代码要按名字找它", "没有用"]
+    answer: 1
+    explain: 一堆同名的 Part 很难找；起名“地板”“台阶1”，写代码时一叫就到。
+  - q: 把多个方块打包成一组，用什么？
+    type: single
+    options: ["Model（打组）", "Script（脚本）", "Color（颜色）"]
+    answer: 0
+  - q: 打组的快捷键是？
+    type: single
+    options: ["Ctrl + S", "Ctrl + G", "Ctrl + C"]
+    answer: 1
+    explain: Ctrl + G = Group（打组）；Ctrl + S 是保存。
+challenge: 选中“台阶组”整体复制粘贴（Ctrl+C / Ctrl+V），做出第二段楼梯。
+---
+
+## 🎯 今天要做什么
+
+给方块起好记的名字，再把一组台阶**打包成一个收纳盒**，搬动、复制都超方便。
+
+## ✨ 新知识：名字 + 收纳盒
+
+- **名字很重要**：以后写代码要“叫”某个方块的名字。`Part`、`Part`、`Part` 一堆同名根本分不清，起名 `地板`、`台阶1` 一目了然。
+- **Model（模型组）= 收纳盒**：把一组方块打组，就能整体移动、整体复制。
+
+<StudioStep n={1} title="改名字">
+  在 Explorer 里**双击**方块的名字（或在 Properties 改 **Name**），改成 `地板`。
+</StudioStep>
+
+<StudioStep n={2} title="多放几级台阶">
+  再放两三个方块当台阶，分别命名 `台阶1`、`台阶2`。
+</StudioStep>
+
+<StudioStep n={3} title="打包成一组">
+  框选这些台阶（按住鼠标左键拖一个框，或在 Explorer 里按住 Ctrl 多选），
+  然后 **右键 → Group**（快捷键 **Ctrl + G**），生成一个 `Model`。
+</StudioStep>
+
+<StudioStep n={4} title="给收纳盒命名">
+  把这个 `Model` 改名为 `台阶组`。以后点它就能整体搬动。
+</StudioStep>
+
+<Callout type="tip">
+  Explorer 里名字清清楚楚（`地板`、`台阶组`），就像整理好的玩具箱，找东西超快！
+</Callout>
+
+## 🕹️ 看看你的成果
+
+Explorer 里一眼就能看懂你的世界：哪个是地板、哪组是台阶。整洁的项目，做大游戏才不会乱。

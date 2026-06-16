@@ -1,0 +1,93 @@
+---
+id: "6.7"
+unit: unit-06
+order: 7
+title: 防止狂加分（Debounce 去抖）
+emoji: "🛑"
+estMinutes: 19
+xp: 100
+objectives:
+  - 理解为什么站着不动会让分数狂涨
+  - 用一个 debounce 冷却开关，让每次只加一分
+tasks:
+  - id: t1
+    label: 在 Pad 脚本顶部加 local debounce = false
+  - id: t2
+    label: 用 if player and not debounce then 包住加分
+  - id: t3
+    label: 加分后 task.wait(1) 再把 debounce 关掉，Play 验证
+quiz:
+  - q: debounce（去抖）是用来解决什么问题的？
+    type: single
+    options: ["站着不动分数狂涨", "方块不会变色", "玩家进不来"]
+    answer: 0
+    explain: debounce 像一个冷却开关，加完一分先“锁”一会儿，避免分数疯涨。
+  - q: task.wait(1) 在这里的作用是？
+    type: single
+    options: ["等 1 秒再打开开关", "加 1 分", "删除玩家"]
+    answer: 0
+    explain: 加分后等 1 秒，这 1 秒内不会重复加分，过后再恢复。
+  - q: not debounce 是什么意思？
+    type: single
+    options: ["开关没被锁住的时候", "玩家没进来", "分数是 0"]
+    answer: 0
+    explain: not debounce 为真，表示“现在没在冷却”，可以加分。
+challenge: 把 task.wait(1) 改成 task.wait(3)，感受一下冷却变长后加分变慢。
+---
+
+## 🎯 今天要做什么
+
+修好上节课那个“站着不动分数狂涨”的毛病！我们给得分垫装一个**冷却开关（debounce）**，让它**每次只加一分**，公平又好玩。
+
+## ✨ 新知识：debounce 是一个“冷却开关”
+
+上节课你应该发现了：只要身体一直贴着 Pad，`Touched` 就一直触发，分数就**疯狂往上涨**。
+
+解决办法叫 **debounce（去抖）**——其实就是一个**开关变量**：
+
+- 一开始开关是 `false`（没锁住）。
+- 加完一分，立刻把开关设成 `true`（锁住），这段时间内不再加分。
+- 等 1 秒（`task.wait(1)`）后，再把开关设回 `false`（解锁）。
+
+就像游乐场的旋转门：进去一个人，门先锁一下，过一会儿才放下一个。
+
+这就是带 debounce 的**完整得分垫**代码：
+
+```lua
+local pad = script.Parent
+local debounce = false
+
+pad.Touched:Connect(function(hit)
+	local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+	if player and not debounce then
+		debounce = true
+		player.leaderstats.Points.Value += 1
+		task.wait(1)
+		debounce = false
+	end
+end)
+```
+
+<Callout type="info">
+  这个脚本放在 **Pad 这个 Part 里**。`if player and not debounce then` 表示：**是玩家**、并且**开关没锁住**，才加分。
+</Callout>
+
+<StudioStep n={1} title="加一个开关变量">
+  在 Pad 脚本最上面、`pad` 那行下面，加一行 `local debounce = false`。
+</StudioStep>
+
+<StudioStep n={2} title="用开关包住加分">
+  把判断改成 `if player and not debounce then`，并按上面的顺序：先 `debounce = true`，加分，`task.wait(1)`，再 `debounce = false`。
+</StudioStep>
+
+<StudioStep n={3} title="试运行">
+  按 **▶️ Play**，站在 Pad 上不动——现在分数**每 1 秒才加一次**，不会再狂涨啦！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+站着不动，分数不再爆表；走开再回来，又能加分。你的得分垫现在又稳又公平。下一节就是**单元大成果**——做一个有好几块得分垫的小游戏！
+
+<Callout type="warning">
+  分数还在狂涨？检查 `debounce = true` 是不是写在加分**之前**，`debounce = false` 是不是在 `task.wait(1)` **之后**。顺序很关键。
+</Callout>

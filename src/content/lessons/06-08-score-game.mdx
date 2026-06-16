@@ -1,0 +1,117 @@
+---
+id: "6.8"
+unit: unit-06
+order: 8
+title: "单元成果：得分垫 + 计分板"
+emoji: "🏆"
+estMinutes: 24
+xp: 150
+objectives:
+  - 把计分板和带 debounce 的得分垫组合成一个小游戏
+  - 复制出多个得分垫，做一个能收集分数的关卡
+tasks:
+  - id: t1
+    label: 确认 ServerScriptService 里有 leaderstats 脚本（含 Points）
+  - id: t2
+    label: 做一块带 debounce 的得分垫 Pad，验证能加分
+  - id: t3
+    label: 复制出好几块 Pad，摆成一条收集路线
+  - id: t4
+    label: Play 跑一圈，看分数一路上涨；把成绩截图炫耀给朋友
+quiz:
+  - q: 计分板脚本（leaderstats + Points）应该放在哪里？
+    type: single
+    options: ["每块 Pad 里", "ServerScriptService", "StarterGui"]
+    answer: 1
+    explain: 计分板对所有玩家生效，放在 ServerScriptService 里只需要一份。
+  - q: 多块得分垫，每块都需要什么？
+    type: single
+    options: ["各自一份带 debounce 的加分脚本", "共用一个 leaderstats", "什么都不用"]
+    answer: 0
+    explain: 复制 Pad 时脚本会一起被复制，所以每块都有自己的 debounce，互不影响。
+  - q: 复制一块已经写好脚本的 Pad，新 Pad 会怎样？
+    type: single
+    options: ["脚本也跟着复制过去，直接能用", "需要重写脚本", "会报错"]
+    answer: 0
+    explain: 复制 Part 时里面的 Script 会一起复制，所以新 Pad 也能加分。
+challenge: 把其中一块 Pad 的 += 1 改成 += 5，做成一块“金色奖励垫”，再 Play 比一比。
+---
+
+## 🎯 今天要做什么
+
+把这个单元学的全拼起来，做一个**真正能玩的得分小游戏**：左上角有**计分板**，地图上有**好几块得分垫**，跑一圈分数蹭蹭涨！做完别忘了**炫耀**给朋友看。🏆
+
+## ✨ 新知识：把两份脚本组合成一个游戏
+
+我们这个单元做了两样东西，现在把它们拼起来：
+
+1. **计分板**（放在 **ServerScriptService**，给每个玩家发 `leaderstats` 和 `Points`）
+2. **得分垫**（放在每块 **Pad** 里，碰到就加分，还带 debounce 防狂涨）
+
+这就是完整的**计分板脚本**（在 ServerScriptService）：
+
+```lua
+local Players = game:GetService("Players")
+
+Players.PlayerAdded:Connect(function(player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"   -- 名字必须正好是 leaderstats（全小写）
+	leaderstats.Parent = player
+
+	local points = Instance.new("IntValue")
+	points.Name = "Points"
+	points.Value = 0
+	points.Parent = leaderstats
+end)
+```
+
+这是放在**每一块 Pad 里**的**得分垫脚本**（带 debounce）：
+
+```lua
+local pad = script.Parent
+local debounce = false
+
+pad.Touched:Connect(function(hit)
+	local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+	if player and not debounce then
+		debounce = true
+		player.leaderstats.Points.Value += 1
+		task.wait(1)
+		debounce = false
+	end
+end)
+```
+
+<Callout type="tip">
+  好消息：**复制 Pad 的时候，里面的脚本会一起被复制！** 所以你做好一块 Pad，复制几份摆开，就有了一整排得分垫，每块都能加分。
+</Callout>
+
+<StudioStep n={1} title="先放好计分板">
+  确认 **ServerScriptService** 里有那段计分板脚本（上面第一段）。它管左上角的 Points。
+</StudioStep>
+
+<StudioStep n={2} title="做第一块得分垫">
+  在 **Workspace** 放一个 **Part**，里面 **Insert Object → Script**，写上第二段得分垫代码。Play 踩一下，确认能加分。
+</StudioStep>
+
+<StudioStep n={3} title="复制成一条收集路线">
+  在 Explorer 里**右键这块 Pad → Duplicate（复制）**，复制 4-5 份，在地图上摆成一条路或一圈。脚本会跟着复制，每块都能加分。
+</StudioStep>
+
+<StudioStep n={4} title="开玩！">
+  按 **▶️ Play**，沿着路线一块块踩过去——分数一路往上涨！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+一个左上角带计分板、地图上有好几块得分垫的**得分小游戏**就完成了！你已经会用 **Players**、**PlayerAdded**、**leaderstats**、**加分**和 **debounce** 了——这些是几乎每个 Roblox 游戏都要用的核心本领。
+
+## 🎉 炫耀一下
+
+- 跑一圈把分数刷高，**截一张左上角的高分图**，发给爸妈或朋友看看你做的游戏！
+- 跟朋友比一比：谁能用更短的时间踩满所有得分垫、拿到更高分？
+- 想想看：把得分垫换个形状、加块“金色奖励垫”（`+= 5`），你的游戏就更有花样啦。
+
+<Callout type="warning">
+  某块 Pad 不加分？点开它确认**里面有 Script**（复制时漏了就再复制一块）。左上角没分数？回去检查 **ServerScriptService** 里的 `leaderstats`（全小写）那段。
+</Callout>

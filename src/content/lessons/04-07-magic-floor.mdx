@@ -1,0 +1,108 @@
+---
+id: "4.7"
+unit: unit-04
+order: 7
+title: 单元成果 ——《魔法地板》
+emoji: "✨"
+estMinutes: 22
+xp: 150
+objectives:
+  - 综合用上变量、Touched 事件、函数，做出一块会反应的魔法地板
+  - 让地板被踩到后变色，并选择让它“消失”
+  - 把成果试玩给家人或朋友炫耀一下
+tasks:
+  - id: t1
+    label: 检查：有一块叫 MagicFloor 的 Part，里面有一个 Script
+  - id: t2
+    label: 写好经典 Touched 结构：local part / local function onTouch(hit) / Connect
+  - id: t3
+    label: 在 onTouch 里让它变色，再加上“消失”那两行
+  - id: t4
+    label: 点 ▶️ 试玩，走上去看它变色又消失（人能穿过去）
+  - id: t5
+    label: 截图或叫家人来看你踩魔法地板（炫耀环节！），然后 Ctrl + S 保存
+quiz:
+  - q: 一块“碰到就有反应”的地板，至少要用上这单元的哪几样？
+    type: multi
+    options: ["变量（存方块）", "Touched 事件", "函数（打包动作）", "Robux"]
+    answer: [0, 1, 2]
+    explain: 变量存住方块、Touched 负责“碰到”、函数把动作打包——三样合起来才有魔法。
+  - q: part.Transparency = 1 会让方块怎么样？
+    type: single
+    options: ["完全看不见（透明）", "变大一倍", "变红"]
+    answer: 0
+    explain: Transparency 是透明度，1 = 全透明、完全看不见。
+  - q: 想让玩家能“穿过”消失的地板，要改哪个？
+    type: single
+    options: ["part.CanCollide = false", "part.Name = false", "part.Color = false"]
+    answer: 0
+    explain: CanCollide = false 表示“不再挡人”，玩家就能直接穿过去。
+challenge: 让地板消失 2 秒后又自己回来——在动作最后加 task.wait(2) 再把 Transparency 改回 0、CanCollide 改回 true（下个单元会更系统地学“等待”）。
+---
+
+## 🎯 今天要做什么
+
+把这一单元学的**全部用上**，做出本单元的大成果：一块**踩上去就变色、还能消失让人穿过去**的《魔法地板》！做完——**叫家人来踩一脚秀一秀！** ✨
+
+## ✨ 复习：三样法宝合体
+
+今天不学新概念，把学过的串成一条龙：
+
+> **变量**（存住方块）→ **Touched 事件**（碰到）→ **函数**（把要做的事打包）
+
+我们就在 AUTHORING 那段经典结构上，往函数里多放几件事。
+
+<StudioStep n={1} title="先搭好经典结构">
+  打开 `MagicFloor` 里的 Script，确认（没有就补上）这段：
+
+```lua
+local part = script.Parent
+
+local function onTouch(hit)
+	part.BrickColor = BrickColor.Random()
+end
+
+part.Touched:Connect(onTouch)
+```
+</StudioStep>
+
+<StudioStep n={2} title="往包裹里加“消失”">
+  在 `onTouch` 里，变色那行**下面**再加两行，让它被踩到后消失、还能被穿过：
+
+```lua
+local part = script.Parent
+
+local function onTouch(hit)
+	part.BrickColor = BrickColor.Random()
+	part.Transparency = 1
+	part.CanCollide = false
+end
+
+part.Touched:Connect(onTouch)
+```
+
+  - `part.Transparency = 1`：变全透明，看不见了。
+  - `part.CanCollide = false`：不再挡人，玩家能直接穿过去。
+</StudioStep>
+
+<StudioStep n={3} title="试玩验收">
+  打开 **Output**，点 ▶️ **Play**，走上地板：它**先变色、再消失**，你的小人就掉/穿过去了——魔法地板成功！
+</StudioStep>
+
+<StudioStep n={4} title="炫耀环节 🎉">
+  按截图键拍下变色的瞬间，或者直接叫爸爸妈妈、朋友来，让他们用你的小人去踩一脚，亲眼看地板消失！
+</StudioStep>
+
+<Callout type="tip">
+  给它起个名字（比如“消失陷阱”“彩虹机关”），它就真正属于你了。这是你第一个**会对玩家做出反应**的机关！
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一块**踩一下就变色、然后消失让人穿过**的魔法地板——背后是**变量 + Touched + 函数**三样法宝合体。完成这一课，你将拿到本单元徽章 **⚡ 事件触发者**！
+
+下个单元，我们会学**逻辑和重复**，做出彩虹跑道和会烫人的熔岩——让机关更聪明～
+
+<Callout type="warning">
+  踩了没消失？检查 `Transparency` 和 `CanCollide` 两行是不是写在了 `onTouch` 函数**里面**（在 `end` 上方），还有 `CanCollide` 的大小写要正确。
+</Callout>

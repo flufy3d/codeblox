@@ -1,0 +1,98 @@
+---
+id: "3.7"
+unit: unit-03
+order: 7
+title: 单元成果 ——《会变色的霓虹方块》
+emoji: "🌈"
+estMinutes: 22
+xp: 150
+objectives:
+  - 把这单元学的全部用上，写出一段完整的脚本
+  - 让方块自己变色、变发光（Neon）
+  - 能用自己的话说出每一行代码在干嘛
+tasks:
+  - id: t1
+    label: 放一个 Part 叫 NeonBlock，把 Script 放进它里面
+  - id: t2
+    label: 整段写上成果脚本（找方块 → 改颜色 → 改材质 → 打印一句话）
+  - id: t3
+    label: 给每行加上 -- 注释，说出它在干嘛
+  - id: t4
+    label: 点 ▶️ 试玩，确认方块变色 + 发光，Output 有提示
+  - id: t5
+    label: 截图或叫家人来看（炫耀环节！），然后 Ctrl + S 保存
+quiz:
+  - q: 这段脚本里，哪一行负责“找到方块”？
+    type: single
+    options:
+      - local part = script.Parent
+      - part.Material = Enum.Material.Neon
+      - print("方块准备好啦！")
+    answer: 0
+    explain: script.Parent 找到“装着脚本的方块”，是后面所有命令的基础。
+  - q: 想让方块发光，靠的是哪一行？
+    type: single
+    options:
+      - part.BrickColor = BrickColor.new("Lime green")
+      - part.Material = Enum.Material.Neon
+      - local part = script.Parent
+    answer: 1
+    explain: Material 设成 Neon（霓虹），方块就会像灯一样发光。
+  - q: 这一单元里，你学会了用什么来“指挥”方块？
+    type: single
+    options: ["鼠标乱点", "代码（脚本）", "Robux"]
+    answer: 1
+    explain: 你已经能用一段脚本，让方块按你写的命令变色、发光啦！
+challenge: 给脚本再加一行，把方块的大小也用代码改掉（part.Size = Vector3.new(6, 6, 6)），做一个又大又亮的霓虹方块！
+---
+
+## 🎯 今天要做什么
+
+把这一单元学的**全用上**，写出你的成果作品：一段脚本，让方块**自己变色、自己发光**，还会在 Output 里跟你打招呼。然后——**给家人秀一秀！** 🌈
+
+## ✨ 复习：把命令串成一段脚本
+
+今天不学新东西，把学过的连成一条龙：
+
+> 找到方块 → 改颜色 → 改材质（发光）→ 打印一句话报告
+
+<StudioStep n={1} title="准备方块和脚本">
+  在 Explorer 里**右键 Workspace → Insert Object → Part**，改名叫 **NeonBlock**。再**右键 NeonBlock → Insert Object → Script**，把脚本放进它里面。
+</StudioStep>
+
+<StudioStep n={2} title="整段写上成果脚本">
+  双击脚本，把下面这段**整段抄上去**。注释（`--` 后面的字）帮你记住每行在干嘛：
+
+```lua
+local part = script.Parent                       -- 找到我住的那个方块（NeonBlock）
+part.BrickColor = BrickColor.new("Lime green")   -- 把颜色改成青柠绿
+part.Material = Enum.Material.Neon               -- 改成霓虹材质，让它发光
+print("方块准备好啦！")                            -- 在 Output 里报个信
+```
+</StudioStep>
+
+<StudioStep n={3} title="试玩验收">
+  点 ▶️ Play。NeonBlock 应该**变成发光的青柠绿**，同时 Output 里打出 **方块准备好啦！** 全中啦就成功！
+</StudioStep>
+
+<StudioStep n={4} title="换成你的专属颜色">
+  把 `"Lime green"` 换成你最喜欢的颜色名（如 `"Hot pink"`、`"Bright blue"`），做一个**只属于你**的霓虹方块。
+</StudioStep>
+
+<StudioStep n={5} title="炫耀环节 🎉">
+  按截图键拍下你发光的方块，或者直接叫爸爸妈妈来——告诉他们：“**这是我用代码做出来的！**”再指着脚本，用自己的话讲讲每一行在干嘛。讲得出来，你就真的懂了。
+</StudioStep>
+
+<Callout type="tip">
+  完成后别忘了 **Ctrl + S** 保存。给你的作品起个名字吧，比如“我的第一颗发光宝石”——它就正式属于你了。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一颗**用代码控制的、会发光的霓虹方块**！你不仅做出来了，还能讲清楚每行代码的作用。完成这一课，你将拿到本单元的徽章 **💬 脚本初鸣**！
+
+下个单元，我们要学**变量和事件**，让方块「碰一下就有反应」，做出会变魔法的地板～
+
+<Callout type="warning">
+  没成功？回想这单元学的修 bug 三件套：① 颜色名 / 材质名是不是**完全照抄**（大小写、空格都要对）；② 引号是不是**英文** `" "`；③ 脚本是不是真的放在 **NeonBlock 里面**。对照红字提示的行号，逐字检查就能修好。
+</Callout>

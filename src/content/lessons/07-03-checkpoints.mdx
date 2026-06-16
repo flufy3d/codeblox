@@ -1,0 +1,96 @@
+---
+id: "7.3"
+unit: unit-07
+order: 3
+title: "检查点：过关存档"
+emoji: "🏳️"
+estMinutes: 22
+xp: 100
+objectives:
+  - 理解检查点：碰到它，重来时就从这里出生，不用从头走
+  - 用 Touched 找到玩家，把检查点设成他的 RespawnLocation
+tasks:
+  - id: t1
+    label: 放一个 Part 当检查点，摆在第一段路的中间
+  - id: t2
+    label: 在这个检查点 Part 里 Insert Object → Script
+  - id: t3
+    label: 整段抄入检查点代码
+  - id: t4
+    label: Play 走到检查点后，故意掉下去，看会不会从检查点重来
+quiz:
+  - q: 检查点（checkpoint）的作用是什么？
+    type: single
+    options: ["碰到后，重来时从这里出生，不用从头走", "加 10 分", "让游戏变快"]
+    answer: 0
+    explain: 碰过的检查点会成为你新的出生点。摔下去也只回到最近的检查点，不必从头再来。
+  - q: player.RespawnLocation = checkpoint 这行做了什么？
+    type: single
+    options: ["把这个玩家的重生点改成这个检查点", "删除检查点", "给玩家加分"]
+    answer: 0
+    explain: RespawnLocation 就是“这个玩家下次出生的地方”。把它设成 checkpoint，重来就从这里开始。
+  - q: 代码里为什么要先 if player then？
+    type: single
+    options: ["碰到检查点的可能不是玩家", "让代码更长", "为了好看"]
+    answer: 0
+    explain: 万一碰上来的不是玩家（比如别的方块），player 会是空的，先确认一下更安全。
+challenge: 把检查点的 Color 改成蓝色、Material 改成 Neon，让玩家一眼认出“这是存档点”。
+---
+
+## 🎯 今天要做什么
+
+给 Obby 加上**检查点**：玩家走到这里，就**存了一次档**——后面就算摔下去，也只**从这个检查点重来**，不用从头再爬一遍！🏳️ 这是跑酷游戏里最贴心的设计。
+
+## ✨ 新知识：碰到检查点，就换出生点
+
+上节课我们学了 SpawnLocation 是出生点。其实**每个玩家**身上都记着一个“我下次从哪出生”，叫做 **RespawnLocation（重生位置）**。
+
+检查点的魔法很简单：当玩家**碰到**一块检查点 Part，我们就把他的 RespawnLocation **改成这块检查点**：
+
+```lua
+player.RespawnLocation = checkpoint
+```
+
+这样，他下次重来就**从这里开始**，不必回到最远的起点。
+
+怎么知道是“哪个玩家”碰到的？还记得第 6 单元学的吗——用 **Touched** 拿到 `hit`，再用 **GetPlayerFromCharacter** 找出玩家：
+
+```lua
+local checkpoint = script.Parent
+
+checkpoint.Touched:Connect(function(hit)
+	local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+	if player then
+		player.RespawnLocation = checkpoint
+		print(player.Name .. " 到达检查点！")
+	end
+end)
+```
+
+<Callout type="info">
+  这段脚本放在**检查点这块 Part 里面**（`script.Parent` 就是检查点自己）。复制这块检查点时，脚本会一起被复制——所以一块做好，就能复制出好几个检查点！
+</Callout>
+
+<StudioStep n={1} title="放一块检查点">
+  在第一段路的中间放一个 **Part**，**Anchored** 打勾，当作检查点（CheckPoint）。
+</StudioStep>
+
+<StudioStep n={2} title="给检查点加脚本">
+  在 Explorer 里右键这块 Part → **Insert Object → Script**，整段抄入上面的检查点代码。
+</StudioStep>
+
+<StudioStep n={3} title="试玩，故意摔一次">
+  点 ▶️ **Play**，走过检查点（**Output** 会打印“到达检查点”），然后**故意从平台上掉下去**——小人会**从检查点重来**，而不是回最起点！🏳️
+</StudioStep>
+
+<StudioStep n={4} title="多放几个检查点">
+  ⏹️ Stop，**右键检查点 → Duplicate（复制）**，在路上每隔一段放一个。每过一个，存档点就往前移。
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+一条**带存档点**的路：走得越远，重来的起点越靠前。玩家再也不怕摔一次就前功尽弃了！下一节，我们给路上加一个**会动的障碍**，让闯关更刺激。
+
+<Callout type="warning">
+  摔下去还是回到最起点？检查脚本是不是放在**检查点 Part 里面**，还有 **RespawnLocation** 和 **GetPlayerFromCharacter** 的大小写有没有写对。
+</Callout>

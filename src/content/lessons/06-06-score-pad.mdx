@@ -1,0 +1,87 @@
+---
+id: "6.6"
+unit: unit-06
+order: 6
+title: 碰到 Pad 就 +1 分
+emoji: "➕"
+estMinutes: 18
+xp: 100
+objectives:
+  - 把找到的玩家和加分连起来
+  - 用 player.leaderstats.Points.Value += 1 给玩家加分
+tasks:
+  - id: t1
+    label: 在 Pad 的 Script 里找到碰到的玩家
+  - id: t2
+    label: 给 player.leaderstats.Points.Value 加 1
+  - id: t3
+    label: Play，踩 Pad，看左上角分数往上涨
+quiz:
+  - q: 给玩家加 1 分的写法是？
+    type: single
+    options: ["player.leaderstats.Points.Value += 1", "player.Points = 1 分", "Points.Color += 1"]
+    answer: 0
+    explain: += 1 就是“在原来的基础上加 1”，分数就涨上去了。
+  - q: 为什么能写 player.leaderstats.Points？
+    type: single
+    options: ["前几节我们给玩家做了 leaderstats 和 Points", "Roblox 自带的", "随便写的"]
+    answer: 0
+    explain: 这条路径能走通，正是因为我们之前亲手建好了 leaderstats 文件夹和 Points。
+  - q: 这一节我们故意还没加什么？
+    type: single
+    options: ["颜色", "防止狂加分的开关（debounce）", "玩家名字"]
+    answer: 1
+    explain: 这节先体验加分，下节再加 debounce 解决“站着不动分数狂涨”的问题。
+challenge: 把 += 1 改成 += 5，踩一下看看是不是一次涨 5 分。
+---
+
+## 🎯 今天要做什么
+
+把前面学的全连起来——**踩上得分垫，分数 +1！** 左上角的数字真的会往上跳，这就是一个能玩的得分游戏雏形了。
+
+## ✨ 新知识：用 += 1 给分数加分
+
+上节课我们已经能认出“碰到 Pad 的玩家”。现在只差最后一步：给他**加分**。
+
+分数存在哪？就在我们前几节亲手做的 `leaderstats` 里的 `Points`。从玩家出发，一路找过去就是：
+
+```lua
+player.leaderstats.Points.Value += 1
+```
+
+`+= 1` 的意思是“**在原来的分数上再加 1**”。把它接到上节课找玩家的代码里：
+
+```lua
+local pad = script.Parent
+
+pad.Touched:Connect(function(hit)
+	local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+	if player then
+		player.leaderstats.Points.Value += 1
+	end
+end)
+```
+
+<Callout type="info">
+  这个脚本放在 **Pad 这个 Part 里**。它能找到 `player.leaderstats.Points`，全靠我们前几节在 **ServerScriptService** 里建好的计分板。
+</Callout>
+
+<StudioStep n={1} title="打开 Pad 的脚本">
+  在你的得分垫 **Pad** 里的那个 Script（上节课那个）。
+</StudioStep>
+
+<StudioStep n={2} title="把加分接上">
+  把 `print(player.Name)` 换成 `player.leaderstats.Points.Value += 1`，整段如上。
+</StudioStep>
+
+<StudioStep n={3} title="踩上去试试">
+  按 **▶️ Play**，走上 Pad——左上角的 **Points** 开始往上涨啦！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+踩一下，分数 +1，再踩再加——你做出了一个真正会计分的得分垫！
+
+<Callout type="warning">
+  你可能发现：**站在 Pad 上不动，分数会疯狂往上涨**！因为身体一直在“碰到”它。别急——下一节我们就用一个“冷却开关”来管住它。
+</Callout>

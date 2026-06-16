@@ -1,0 +1,78 @@
+---
+id: "6.1"
+unit: unit-06
+order: 1
+title: 认识玩家服务 Players
+emoji: "🧑‍🤝‍🧑"
+estMinutes: 16
+xp: 100
+objectives:
+  - 知道 Players 服务管理着“谁在玩这个游戏”
+  - 学会用 game:GetService("Players") 拿到这个服务
+tasks:
+  - id: t1
+    label: 在 ServerScriptService 里插入一个 Script
+  - id: t2
+    label: 写 local Players = game:GetService("Players")
+  - id: t3
+    label: 加一行 print(Players)，按 ▶️ Play 看 Output
+quiz:
+  - q: Players 服务是用来管理什么的？
+    type: single
+    options: ["地图里的方块", "正在玩游戏的玩家", "背景音乐"]
+    answer: 1
+    explain: Players 服务就像一份“在场名单”，记录着所有正在玩的人。
+  - q: 让所有玩家都生效的脚本，应该放在哪里？
+    type: single
+    options: ["Workspace 里的某个 Part", "ServerScriptService", "StarterGui"]
+    answer: 1
+    explain: 服务器脚本放在 ServerScriptService，它对所有玩家都生效。
+  - q: 拿到 Players 服务的写法是？
+    type: single
+    options: ['game:GetService("Players")', 'game.Color', 'print("Players")']
+    answer: 0
+challenge: 把 print(Players) 改成 print("游戏里有玩家服务啦")，再 Play 一次看看。
+---
+
+## 🎯 今天要做什么
+
+我们要开始做一个**真正的得分游戏**啦！第一步：认识管理玩家的 **Players（玩家服务）**——它知道“现在谁在玩”。
+
+## ✨ 新知识：Players 是一份“在场名单”
+
+Roblox 里有很多**服务（Service）**，每个服务管一件大事。**Players 服务**专门管**玩家**——谁进来了、谁走了，它都记着，就像幼儿园老师手里那份“今天来了哪些小朋友”的名单。
+
+要拿到这份名单，写一句话就行：
+
+```lua
+local Players = game:GetService("Players")
+```
+
+<Callout type="info">
+  让**所有玩家都生效**的脚本，要放在 **ServerScriptService**（服务器脚本服务）里。它在后台运行，对每个进来的玩家都管用。
+</Callout>
+
+<StudioStep n={1} title="新建一个服务器脚本">
+  在 Explorer 里找到 **ServerScriptService**，**右键 → Insert Object → Script**。
+</StudioStep>
+
+<StudioStep n={2} title="拿到 Players 服务">
+  把脚本里的内容全删掉，写上这一句：
+
+  ```lua
+  local Players = game:GetService("Players")
+  print(Players)
+  ```
+</StudioStep>
+
+<StudioStep n={3} title="试运行">
+  按顶部 **▶️ Play**，打开 **Output（输出）** 窗口，应该能看到打印出 `Players`。
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+Output 里出现了 `Players`，说明你成功拿到了这份“在场名单”。下一节课，我们就让“有人加入”时触发一些动作！
+
+<Callout type="warning">
+  没看到输出？检查 **GetService** 的大小写（G 和 S 都是大写），还有 `"Players"` 的引号别漏了。
+</Callout>

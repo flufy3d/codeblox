@@ -1,0 +1,91 @@
+---
+id: "3.3"
+unit: unit-03
+order: 3
+title: 找到一个方块
+emoji: "🔍"
+estMinutes: 18
+xp: 100
+objectives:
+  - 明白脚本要先“找到”方块，才能指挥它
+  - 学会用 script.Parent 找到“装着脚本的那个方块”
+  - 知道每个东西都有自己的“名字”和“位置”
+tasks:
+  - id: t1
+    label: 在 Workspace 里插入一个 Part，重命名为 MyPart
+  - id: t2
+    label: 右键这个 Part → Insert Object → Script（把脚本放进方块里）
+  - id: t3
+    label: 写上 local part = script.Parent 和一行 print 检查
+  - id: t4
+    label: 点 ▶️ 试玩，在 Output 看到方块的名字
+quiz:
+  - q: script.Parent 指的是什么？
+    type: single
+    options:
+      - 装着这个脚本的那个东西（它的“爸爸”）
+      - 屏幕最上面的菜单
+      - 一个新方块
+    answer: 0
+    explain: Parent 是“父级”的意思。脚本放在哪个东西里面，script.Parent 就指那个东西。
+  - q: 'local part = script.Parent 这一行在做什么？'
+    type: single
+    options:
+      - 删除方块
+      - 给“装脚本的方块”起个简单名字叫 part，方便后面用
+      - 让方块跳起来
+    answer: 1
+    explain: 这行把方块“记”到一个叫 part 的名字上，后面写 part 就等于在说那个方块。
+  - q: 想让脚本指挥某个方块，第一步要先做什么？
+    type: single
+    options: ["先找到那个方块", "先改颜色", "先关掉 Output"]
+    answer: 0
+challenge: 把那行 print 改成 print(part.Name)，试玩看看 Output 里打出来的是不是 MyPart。
+---
+
+## 🎯 今天要做什么
+
+脚本想指挥方块，得先**找到**那个方块才行！今天学一句超有用的代码 `script.Parent`，让脚本认出“我住在哪个方块里”。🔍
+
+## ✨ 新知识：每个东西都有“名字”和“家”
+
+在 Roblox 里，每个方块都有自己的**名字**（比如 `MyPart`），也都住在某个“**家**”里。
+
+我们可以把脚本**放进一个方块里面**。这样脚本就有了一个“爸爸”，在代码里它叫 **`script.Parent`**（Parent 就是“父级、爸爸”的意思）。
+
+> 脚本住在哪个方块里，`script.Parent` 就指那个方块。
+
+<StudioStep n={1} title="放一个方块并改名">
+  在 Explorer 里**右键 Workspace → Insert Object → Part**。点中它，按 **F2** 或双击名字，改名叫 **MyPart**。
+</StudioStep>
+
+<StudioStep n={2} title="把脚本放进方块里">
+  这次右键的不是 Workspace，而是 **MyPart** 这个方块：**右键 MyPart → Insert Object → Script**。脚本就躲进方块里啦！
+</StudioStep>
+
+<StudioStep n={3} title="找到方块并检查">
+  双击脚本，整段写上下面的代码：
+
+```lua
+local part = script.Parent
+print(part.Name)
+```
+
+第一行的意思是：“把我爸爸（也就是 MyPart）记下来，给它起个简单名字叫 `part`。”第二行打印出它的名字检查一下。
+</StudioStep>
+
+<StudioStep n={4} title="试玩验证">
+  点 ▶️ Play，看 **Output** 窗口，应该打出：**MyPart**。说明脚本成功找到方块啦！
+</StudioStep>
+
+<Callout type="tip">
+  为什么要 `local part = ...`？因为 `script.Parent` 写起来长，记成短短的 `part` 后，下节课我们写 `part.颜色`、`part.大小` 就方便多了。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+Output 里打出了方块的名字 **MyPart**——这代表脚本已经**牢牢抓住**了这个方块。下一课，我们就要用代码命令它变色！
+
+<Callout type="warning">
+  打出来的不是 MyPart？检查脚本是不是真的放在了 **MyPart 里面**（在 Explorer 里，Script 应该缩在 MyPart 下面一格）。如果脚本放错地方，`script.Parent` 找到的就是别的东西。
+</Callout>

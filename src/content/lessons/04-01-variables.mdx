@@ -1,0 +1,89 @@
+---
+id: "4.1"
+unit: unit-04
+order: 1
+title: 变量是“贴标签的盒子”
+emoji: "📦"
+estMinutes: 16
+xp: 100
+objectives:
+  - 知道变量就是“贴了标签、能装东西的盒子”
+  - 用 local 存一个数字或一句话，再用 print 把它拿出来
+tasks:
+  - id: t1
+    label: 在 Workspace 里插入一个 Script（右键 Workspace → Insert Object → Script）
+  - id: t2
+    label: 写下 local score = 0
+  - id: t3
+    label: 再写一行 print(score)，点 ▶️ 看 Output 里出现 0
+  - id: t4
+    label: 把 0 改成你今天的幸运数字，再试玩看 Output
+quiz:
+  - q: 变量最像下面哪个东西？
+    type: single
+    options: ["一个贴了标签、能装东西的盒子", "一个删除键", "一种颜色"]
+    answer: 0
+    explain: 变量就是“贴标签的盒子”——标签是名字（如 score），盒子里装着值（如 0）。
+  - q: 写一个新变量，前面要加哪个词？
+    type: single
+    options: ["new", "local", "box"]
+    answer: 1
+    explain: 在 Luau 里，新建一个自己用的变量前面写 local，意思是“这是我这段代码里的盒子”。
+  - q: local score = 0 这行做了什么？
+    type: single
+    options: ["打印 0", "做了一个叫 score 的盒子，里面装了 0", "删除 score"]
+    answer: 1
+challenge: 再做一个盒子 local name = "小明"（把名字换成你的），然后 print(name)。
+---
+
+## 🎯 今天要做什么
+
+学会用一个**盒子**把数字或文字“装起来”，需要的时候随时拿出来用。今天我们装一个分数，再用 `print` 把它显示出来！
+
+## ✨ 新知识：变量是“贴标签的盒子”
+
+想象你有很多小盒子，每个盒子贴一张标签写上名字，盒子里可以装东西。
+
+在代码里，这种盒子叫**变量（variable）**：
+
+- **标签** = 名字，比如 `score`（分数）
+- **盒子里装的** = 值，比如 `0`
+
+要做一个新盒子，前面写 `local`（意思是“我自己的盒子”）：
+
+```lua
+local score = 0
+print(score)
+```
+
+第一行：做一个叫 `score` 的盒子，里面装 `0`。
+第二行：把盒子里的东西拿出来 `print` 到 Output。
+
+<Callout type="info">
+  变量名只能用**英文**字母、数字、下划线（像 `score`、`my_points`），不能用中文。中文我们写在注释或讲解里就好。
+</Callout>
+
+<StudioStep n={1} title="插入一个脚本">
+  在 Explorer 里**右键 Workspace → Insert Object → Script**。会出现一个写代码的窗口。
+</StudioStep>
+
+<StudioStep n={2} title="清空，写上这两行">
+  把里面原来的字删掉，照着写：
+
+```lua
+local score = 0
+print(score)
+```
+</StudioStep>
+
+<StudioStep n={3} title="试玩看结果">
+  打开 **View 选项卡 → Output**，点顶部 ▶️ **Play**。Output 里会出现一个 **0**——那就是盒子里的东西被拿出来了！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+Output 窗口里出现了 `0`，说明你的“盒子”成功装上了数字，还被拿了出来。试试把 `0` 改成 `100`，再玩一次，看看 Output 变成什么。✨
+
+<Callout type="warning">
+  如果 Output 里没东西：检查是不是忘了写 `print(score)` 这一行，或者 `score` 拼错了（大小写也要一样）。
+</Callout>

@@ -1,0 +1,89 @@
+---
+id: "5.4"
+unit: unit-05
+order: 4
+title: for 循环：重复固定次数
+emoji: "🪜"
+estMinutes: 20
+xp: 100
+objectives:
+  - 知道 for 循环会“重复固定的次数”
+  - 用 for i = 1, 5 do ... end 一次生成一排台阶/跑道格子
+tasks:
+  - id: t1
+    label: 在 ServerScriptService 里新建一个 Script
+  - id: t2
+    label: 整段抄入 for 循环的范例代码
+  - id: t3
+    label: 点 ▶️ Play，看一排 5 个格子被自动生成出来
+  - id: t4
+    label: 把 5 改成 10，看格子变成 10 个
+quiz:
+  - q: for i = 1, 5 do ... end 会重复几次？
+    type: single
+    options: ["1 次", "5 次", "一直重复"]
+    answer: 1
+    explain: for i = 1, 5 表示 i 从 1 数到 5，里面的代码正好重复 5 次。
+  - q: for 循环和 while 循环最大的不同是？
+    type: single
+    options: ["for 重复固定的次数，数完就停", "for 永远停不下来", "for 不能放代码"]
+    answer: 0
+    explain: while 看条件、可能一直转；for 数着次数来，数完就自动结束。
+  - q: 想一次生成 10 个格子，应该把 5 改成几？
+    type: single
+    options: ["10", "1", "0"]
+    answer: 0
+challenge: 把 5 改成 8，并把每个格子之间的距离数字调大一点，做出更长、间隔更宽的一排跑道。
+---
+
+## 🎯 今天要做什么
+
+不用一个一个手放方块——让代码**一次自动生成一排格子**！这排格子，下一课就会变成**彩虹跑道**。
+
+## ✨ 新知识：for 是“数着次数重复”
+
+上节的 `while` 可能一直转。今天的 `for`（循环）不一样——它**数着次数**来：
+
+> `for i = 1, 5 do ... end` = “让 i 从 1 数到 5”，里面的代码正好重复 **5 次**，数完就**自动停**。
+
+每转一圈，`i` 就 +1（第一圈 i=1，第二圈 i=2……）。我们用这个 `i` 来决定每个格子摆在哪。
+
+<StudioStep n={1} title="新建一个服务器脚本">
+  在 Explorer 里右键 **ServerScriptService → Insert Object → Script**。
+</StudioStep>
+
+<StudioStep n={2} title="整段抄入生成代码">
+  整段换成下面这些。先原样跑一次：
+
+```lua
+for i = 1, 5 do
+	local block = Instance.new("Part")
+	block.Size = Vector3.new(4, 1, 4)
+	block.Position = Vector3.new(i * 5, 5, 0)
+	block.Anchored = true
+	block.Parent = workspace
+end
+```
+
+  这段是说：**重复 5 次**，每次造一个方块；第 `i` 个方块放在 `i * 5` 的位置，所以它们会一个挨一个排成一排。`Anchored = true` 让它们不会掉下去。
+</StudioStep>
+
+<StudioStep n={3} title="试玩，看一排格子冒出来">
+  点 ▶️ **Play**。一排 **5 个格子**自动出现，整整齐齐！
+</StudioStep>
+
+<StudioStep n={4} title="改一个数字，生成更多">
+  把第一行的 `5` 改成 `10`（**只改这个数字**），再 Play。这次一口气生成 **10 个**格子——一条跑道出来了！
+</StudioStep>
+
+<Callout type="tip">
+  `i * 5` 让每个格子隔开 5 格距离。如果格子叠在一起，就是这里的数字太小了，调大一点它们就分开。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+只写一小段代码，就**自动排出一长排格子**。手放 10 个方块要好久，循环一眨眼就搞定！🪜
+
+<Callout type="warning">
+  如果格子全堆在一个点上：检查 `Position` 里是不是用了 `i * 5`，而不是写死的同一个数字——要靠 `i` 每次变大，格子才会一个一个往前排。
+</Callout>
