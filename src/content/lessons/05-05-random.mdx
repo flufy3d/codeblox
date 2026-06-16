@@ -1,0 +1,91 @@
+---
+id: "5.5"
+unit: unit-05
+order: 5
+title: 随机数 math.random
+emoji: "🌈"
+estMinutes: 20
+xp: 100
+objectives:
+  - 知道 math.random 会“随机抽一个数”，让游戏每次都不一样
+  - 用 math.random 给一排格子刷上随机颜色，做出彩虹跑道
+tasks:
+  - id: t1
+    label: 在 ServerScriptService 里新建一个 Script
+  - id: t2
+    label: 整段抄入“生成一排彩色格子”的范例代码
+  - id: t3
+    label: 点 ▶️ Play，看一排格子变成五颜六色的彩虹跑道
+  - id: t4
+    label: 多 Play 几次，发现每次颜色组合都不一样
+quiz:
+  - q: math.random(1, 255) 会得到什么？
+    type: single
+    options: ["永远是 1", "1 到 255 之间随机的一个整数", "一句文字"]
+    answer: 1
+    explain: math.random(1, 255) 会在 1 和 255 之间随便抽一个整数，所以每次都可能不同。
+  - q: 用了 math.random 之后，每次试玩颜色为什么会变？
+    type: single
+    options: ["代码坏了", "因为颜色是随机抽的，每次抽的都可能不同", "因为方块在动"]
+    answer: 1
+  - q: 颜色用 Color3.fromRGB(r, g, b)，里面的 r/g/b 一般填多少范围？
+    type: single
+    options: ["0 到 255", "0 到 1", "随便几位数"]
+    answer: 0
+    explain: fromRGB 用 0~255 表示红、绿、蓝三种光的多少，混在一起就成了各种颜色。
+challenge: 把 math.random(1, 255) 的下限从 1 改成 150，让颜色整体更“亮”一些，看看彩虹跑道有什么变化。
+---
+
+## 🎯 今天要做什么
+
+把上节那排格子，刷成**五颜六色的彩虹跑道**！而且每次试玩颜色都不一样——这就靠**随机数**。
+
+## ✨ 新知识：math.random 是“随机抽一个”
+
+`math.random`（随机数）就像**掷骰子**：每次都给你一个说不准的数。
+
+> `math.random(1, 255)` = “在 1 和 255 之间，随便抽一个整数。”
+
+颜色用 `Color3.fromRGB(红, 绿, 蓝)` 表示，三个数都在 **0~255**。我们让红、绿、蓝都随机抽——混出来就是**随机的颜色**，每个格子都不一样！
+
+<StudioStep n={1} title="新建一个服务器脚本">
+  在 Explorer 里右键 **ServerScriptService → Insert Object → Script**。
+</StudioStep>
+
+<StudioStep n={2} title="整段抄入彩虹跑道代码">
+  整段换成下面这些。先原样跑：
+
+```lua
+for i = 1, 10 do
+	local block = Instance.new("Part")
+	block.Size = Vector3.new(4, 1, 4)
+	block.Position = Vector3.new(i * 5, 5, 0)
+	block.Anchored = true
+	block.Material = Enum.Material.Neon
+	block.Color = Color3.fromRGB(math.random(1, 255), math.random(1, 255), math.random(1, 255))
+	block.Parent = workspace
+end
+```
+
+  和上节一样生成 10 个格子，但这次每个格子的 **Color** 是随机抽的，还把 **Material** 设成 **Neon（霓虹）** 让它发光。
+</StudioStep>
+
+<StudioStep n={3} title="试玩，看彩虹亮起来">
+  点 ▶️ **Play**。一排**发光的彩色格子**出现了——你的彩虹跑道！🌈
+</StudioStep>
+
+<StudioStep n={4} title="再玩几次，每次都不同">
+  ⏹️ **Stop**，再 ▶️ **Play**。注意看：颜色组合**和上次不一样**！因为每次都是随机抽的。
+</StudioStep>
+
+<Callout type="tip">
+  三个 `math.random(1, 255)` 分别管红、绿、蓝三种光。它们各自随机，混在一起，就成了千变万化的颜色。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一条**会发光、每次都不同**的彩虹跑道！这就是本单元的核心成果之一，最后一课我们会让它动起来。🌈
+
+<Callout type="warning">
+  如果格子全是黑的：检查 `Color3.fromRGB(...)` 里有没有写三个 `math.random(1, 255)`，三个数都要在 0~255 之间。
+</Callout>

@@ -1,0 +1,96 @@
+---
+id: "3.4"
+unit: unit-03
+order: 4
+title: 用代码改颜色
+emoji: "🎨"
+estMinutes: 18
+xp: 100
+objectives:
+  - 用脚本（而不是手点）把方块的颜色改掉
+  - 学会 part.BrickColor = BrickColor.new("颜色名")
+  - 自己换颜色名，做出喜欢的颜色
+tasks:
+  - id: t1
+    label: 在装着脚本的 MyPart 里，写上改颜色的代码
+  - id: t2
+    label: 点 ▶️ 试玩，看方块变成红色
+  - id: t3
+    label: 把 "Bright red" 换成别的颜色名，再试一次
+quiz:
+  - q: 'part.BrickColor = BrickColor.new("Bright red") 会做什么？'
+    type: single
+    options: ["把方块删掉", "把方块颜色变成亮红色", "让方块变大"]
+    answer: 1
+    explain: 这行命令把 part 的砖块颜色（BrickColor）设成括号里写的颜色。
+  - q: 想换成蓝色，应该改哪里？
+    type: single
+    options:
+      - 把引号里的 "Bright red" 换成 "Bright blue"
+      - 把 part 改成 blue
+      - 把 print 删掉
+    answer: 0
+    explain: 颜色名写在引号里，换颜色只要换引号中间那几个英文字就行。
+  - q: 用代码改颜色，和上单元用 Properties 手动改颜色，结果有什么不同？
+    type: single
+    options:
+      - 完全不同
+      - 结果一样，但代码可以让电脑自动帮你改
+      - 代码改的会消失
+    answer: 1
+    explain: 效果一模一样，但写成代码后，电脑能自动、反复地帮你改，这正是脚本的厉害之处。
+challenge: 试试把颜色名改成 "Lime green"（青柠绿）或 "Hot pink"（亮粉），找一个你最喜欢的！
+---
+
+## 🎯 今天要做什么
+
+上单元你用鼠标点 Properties 改颜色。今天我们**用代码**做同样的事——让脚本一声令下，方块自己变成红色！🎨
+
+## ✨ 新知识：用代码给方块下命令
+
+上节课我们用 `part` 抓住了方块。现在就能给它下命令了。改颜色的命令长这样：
+
+```lua
+part.BrickColor = BrickColor.new("Bright red")
+```
+
+拆开看就不难：
+- **`part`** —— 我们要指挥的那个方块
+- **`.BrickColor`** —— 它的“砖块颜色”
+- **`=`** —— “设成……”
+- **`BrickColor.new("Bright red")`** —— 一个亮红色（颜色名写在引号里）
+
+连起来就是：“把 part 的颜色，设成亮红色。”
+
+<StudioStep n={1} title="接着上节课的脚本写">
+  打开 MyPart 里的那个 Script，把代码补成下面这样（第一行还是找方块，第二行才是改颜色）：
+
+```lua
+local part = script.Parent
+part.BrickColor = BrickColor.new("Bright red")
+```
+</StudioStep>
+
+<StudioStep n={2} title="试玩看变化">
+  点 ▶️ Play。一进游戏，MyPart 就**唰地变成亮红色**！这是代码帮你改的。
+</StudioStep>
+
+<StudioStep n={3} title="换成你喜欢的颜色">
+  把引号里的 **`Bright red`** 换成别的颜色名再试，例如：
+
+```lua
+part.BrickColor = BrickColor.new("Bright blue")
+```
+</StudioStep>
+
+<Callout type="tip">
+  常用颜色名（都要用英文、放引号里）：`Bright red` 亮红、`Bright blue` 亮蓝、`Bright yellow` 亮黄、`Lime green` 青柠绿、`Hot pink` 亮粉、`White` 白、`Really black` 纯黑。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一个由**你写的代码**控制颜色的方块！试玩时它会按你写的颜色名变色。改一个词，颜色就换一个——这就是代码的魔法。
+
+<Callout type="warning">
+  方块没变色？最常见的是颜色名写错了。颜色名要**完全照抄**（包括大小写和中间的空格），而且只能写在**英文引号** `" "` 里。比如 `bright red`（全小写）就不认，要写 `Bright red`。
+</Callout>

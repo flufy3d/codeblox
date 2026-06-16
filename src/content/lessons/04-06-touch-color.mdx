@@ -1,0 +1,95 @@
+---
+id: "4.6"
+unit: unit-04
+order: 6
+title: 碰到就变色
+emoji: "🌈"
+estMinutes: 18
+xp: 100
+objectives:
+  - 把函数里的动作换成 part.BrickColor = BrickColor.Random()，做出碰到变色
+  - 学会改成自己指定的颜色（如 BrickColor.new("Bright red")）
+tasks:
+  - id: t1
+    label: 把 onTouch 里的 print 换成 part.BrickColor = BrickColor.Random()
+  - id: t2
+    label: 试玩走上地板，看它每碰一次就换一种颜色
+  - id: t3
+    label: 再试指定颜色：part.BrickColor = BrickColor.new("Bright red")
+  - id: t4
+    label: 把 "Bright red" 换成你喜欢的颜色名，再试玩
+quiz:
+  - q: BrickColor.Random() 的作用是？
+    type: single
+    options: ["随机选一种颜色", "删掉方块", "让方块变大"]
+    answer: 0
+    explain: Random 就是“随机”，每次碰到都可能换一种新颜色。
+  - q: 想让方块每次都变成同一种红色，应该用哪个？
+    type: single
+    options: ['BrickColor.new("Bright red")', "BrickColor.Random()", "print(\"red\")"]
+    answer: 0
+    explain: BrickColor.new("颜色名") 是“指定这一种颜色”，不随机。
+  - q: 变色这行代码，应该放在哪里？
+    type: single
+    options: ["onTouch 函数里面", "最后一行 Connect 后面", "脚本最上面 local part 之前"]
+    answer: 0
+    explain: 它是“碰到时要做的事”，所以要打包进 onTouch 里。
+challenge: 把变色那行换成指定颜色，再多加一行 part.Material = Enum.Material.Neon，让它碰到后又变色又发光。
+---
+
+## 🎯 今天要做什么
+
+终于到真正的魔法了！把上一课的 `print` 换成**变色**，让你的地板**每碰一次就换一种颜色**。这正是 AUTHORING 里那段经典代码做的事！🌈
+
+## ✨ 新知识：碰到 → 改方块的颜色
+
+还记得我们的“包裹” `onTouch` 吗？现在不打印文字了，改成**给方块换颜色**：
+
+```lua
+local part = script.Parent
+
+local function onTouch(hit)
+	part.BrickColor = BrickColor.Random()
+end
+
+part.Touched:Connect(onTouch)
+```
+
+- `part.BrickColor = ...`：改这块地板的颜色。
+- `BrickColor.Random()`：**随机**挑一种颜色，所以每次碰到都可能不一样！
+
+如果你想要**固定一种颜色**，把那行换成：
+
+```lua
+	part.BrickColor = BrickColor.new("Bright red")
+```
+
+把引号里的 `Bright red` 换成别的颜色名，比如 `Bright blue`、`Lime green`、`Hot pink`。
+
+<Callout type="info">
+  `BrickColor` 是 Roblox 给颜色起的“名字本”。`Random()` 是随机翻一页；`new("名字")` 是直接翻到你点名的那一页。
+</Callout>
+
+<StudioStep n={1} title="打开脚本，换掉那行">
+  打开 `MagicFloor` 里的 Script，把 `onTouch` 里的 `print(...)` 删掉，换成：
+
+```lua
+	part.BrickColor = BrickColor.Random()
+```
+</StudioStep>
+
+<StudioStep n={2} title="试玩反复踩">
+  点 ▶️ **Play**，走上地板，**来回多踩几次**——颜色一直在变！🌈
+</StudioStep>
+
+<StudioStep n={3} title="改成你点名的颜色（可选）">
+  想要固定颜色，就把那行换成 `BrickColor.new("Bright red")`，再把颜色名换成你喜欢的，重新试玩。
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+一块**踩一下就变色**的魔法地板！这就是 Touched 事件 + 函数 + 变量合在一起的威力。✨ 下一课，我们把它升级成完整的单元成果——还能让它消失！
+
+<Callout type="warning">
+  颜色名写错（比如拼成 `Red`）会报错。颜色名要照 Roblox 的写法，常见的有 `Bright red`、`Bright blue`、`Lime green`、`Bright yellow`，注意大小写和空格。
+</Callout>

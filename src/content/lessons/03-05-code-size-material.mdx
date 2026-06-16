@@ -1,0 +1,98 @@
+---
+id: "3.5"
+unit: unit-03
+order: 5
+title: 用代码改大小和材质
+emoji: "📏"
+estMinutes: 18
+xp: 100
+objectives:
+  - 用脚本改方块的大小（Size）
+  - 用脚本把材质（Material）改成会发光的 Neon
+  - 明白一段脚本可以一口气改好几样东西
+tasks:
+  - id: t1
+    label: 在脚本里加一行 part.Size = Vector3.new(8, 8, 8)
+  - id: t2
+    label: 再加一行 part.Material = Enum.Material.Neon
+  - id: t3
+    label: 点 ▶️ 试玩，看方块变大又发光
+  - id: t4
+    label: 改一改括号里的数字，让方块变成你想要的大小
+quiz:
+  - q: 'part.Material = Enum.Material.Neon 会让方块怎样？'
+    type: single
+    options: ["变成木头", "开始发光（霓虹）", "消失"]
+    answer: 1
+    explain: Neon 是“霓虹”材质，会让方块像灯一样发光。
+  - q: 'part.Size = Vector3.new(8, 8, 8) 里的三个 8 大概是指什么？'
+    type: single
+    options:
+      - 颜色
+      - 方块的长、宽、高
+      - 速度
+    answer: 1
+    explain: Vector3 用三个数字表示长、宽、高，数字越大方块越大。
+  - q: 一段脚本里可以写好几行命令吗？
+    type: single
+    options:
+      - 不行，只能写一行
+      - 可以，电脑会从上到下一行一行都执行
+      - 只能写颜色
+    answer: 1
+    explain: 脚本就是清单，你写几行它就从上往下做几行。
+challenge: 把 Size 的三个数字改成不一样的，比如 Vector3.new(2, 10, 2)，看方块变成又高又细的柱子！
+---
+
+## 🎯 今天要做什么
+
+上节课你用代码改了颜色。今天再学两招：用代码把方块**变大**，还能让它**发光**（Neon 霓虹）！🪄
+
+## ✨ 新知识：还能改大小和材质
+
+给方块下命令的写法都很像，左边是“方块.要改的东西”，右边是“设成什么”。
+
+**改大小**用 `Size`，要给三个数字（长、宽、高）：
+
+```lua
+part.Size = Vector3.new(8, 8, 8)
+```
+
+**改材质**用 `Material`，把它设成 Neon 就会发光：
+
+```lua
+part.Material = Enum.Material.Neon
+```
+
+`Vector3` 和 `Enum.Material.Neon` 看起来有点长，先**照抄**就好，会用就行！
+
+<StudioStep n={1} title="把命令加到脚本里">
+  打开 MyPart 里的脚本，把它补成下面这样（在改颜色后面，再加改大小和材质两行）：
+
+```lua
+local part = script.Parent
+part.BrickColor = BrickColor.new("Bright red")
+part.Size = Vector3.new(8, 8, 8)
+part.Material = Enum.Material.Neon
+```
+</StudioStep>
+
+<StudioStep n={2} title="试玩看效果">
+  点 ▶️ Play。方块会一下子**变大、变红、还开始发光**——三个命令一起生效了！
+</StudioStep>
+
+<StudioStep n={3} title="改改大小试试">
+  把 `Vector3.new(8, 8, 8)` 里的数字换一换，越大方块越大。试试 `Vector3.new(4, 4, 4)` 或者 `Vector3.new(12, 1, 12)`（一块大薄板）。
+</StudioStep>
+
+<Callout type="tip">
+  `Enum.Material.Neon` 里的 Neon 也能换别的材质，比如 `Enum.Material.Wood`（木头）、`Enum.Material.Grass`（草）。但 **Neon 最适合做我们这单元的发光方块**，先留着它！
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一个又大、又红、还会发光的方块——而且**大小、颜色、材质全是代码改的**！你已经能用一段脚本，一口气改好几样东西了。
+
+<Callout type="warning">
+  报错或没反应？检查这几点：① `Vector3` 和 `Material` 的大小写要对（V、M 大写）；② 三个数字之间用**英文逗号** `,`；③ `Neon` 第一个字母大写。下一课我们专门学怎么看懂报错。
+</Callout>

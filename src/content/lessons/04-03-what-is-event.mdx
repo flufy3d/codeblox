@@ -1,0 +1,77 @@
+---
+id: "4.3"
+unit: unit-04
+order: 3
+title: 事件是什么
+emoji: "🔔"
+estMinutes: 14
+xp: 100
+objectives:
+  - 理解事件就是“发生某件事 → 就做某事”
+  - 认识 Touched（碰到）这个事件，知道它什么时候会发生
+tasks:
+  - id: t1
+    label: 想 3 个生活里的“发生 → 反应”例子（如门铃响 → 去开门）
+  - id: t2
+    label: 在 Workspace 放一个 Part，给它起名叫 MagicFloor
+  - id: t3
+    label: 在这个 Part 里插入一个 Script，先留空，下一课用
+quiz:
+  - q: “事件”最好的解释是哪个？
+    type: single
+    options: ["发生某件事 → 就做某事", "一种颜色", "一个数字盒子"]
+    answer: 0
+    explain: 事件就像“信号”：某件事一发生，就触发我们事先安排好的动作。
+  - q: 下面哪个最像 Touched（碰到）事件？
+    type: single
+    options: ["有人踩到地雷 → 爆炸", "天空一直是蓝的", "把数字存进盒子"]
+    answer: 0
+    explain: Touched = “被碰到”这件事发生时触发，正好像踩到地雷就爆炸。
+  - q: Touched 事件什么时候发生？
+    type: single
+    options: ["有东西碰到这个方块时", "游戏一打开就一直发生", "永远不会发生"]
+    answer: 0
+challenge: 再想 2 个游戏里的事件，比如“玩家跳起来”“捡到金币”，说说各自该“做某事”做什么。
+---
+
+## 🎯 今天要做什么
+
+今天不写很多代码，先搞懂一个超重要的词：**事件（Event）**。懂了它，下一课我们就能让方块“被碰一下就有反应”！
+
+## ✨ 新知识：事件 = “发生某件事 → 就做某事”
+
+生活里到处都是事件：
+
+- **门铃响了 → 就去开门**
+- **闹钟响了 → 就起床**
+- **有人踩到地雷 → 就爆炸** 💥
+
+游戏里也一样。Roblox 里有很多事件，今天认识最有用的一个：
+
+> **Touched（碰到）**：当**有东西碰到这个方块**时，就触发。
+
+也就是说：
+
+> 有人/有东西碰到方块（发生某件事）→ 我们让方块变色、消失……（就做某事）
+
+下一课我们就把“做某事”写成代码，让魔法地板真的动起来。
+
+<StudioStep n={1} title="放一块“魔法地板”">
+  **Home 选项卡 → Insert → Part**，把它压扁一点当地板。
+</StudioStep>
+
+<StudioStep n={2} title="起个名字">
+  在 Properties 里把它的 **Name** 改成 `MagicFloor`（魔法地板）。这样我们一眼就知道它是干嘛的。
+</StudioStep>
+
+<StudioStep n={3} title="先放好一个脚本">
+  **右键这个 Part → Insert Object → Script**，先留着空的，下一课我们往里写 Touched。
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+你已经懂了“事件”这个大概念，还准备好了一块叫 `MagicFloor` 的地板和一个空脚本。**下一课，碰一下它就会有反应！** 🔔
+
+<Callout type="tip">
+  记住这句口诀：**“发生某件事 → 就做某事”**。整个单元的魔法，都是从这句话来的。
+</Callout>

@@ -1,0 +1,78 @@
+---
+id: "3.2"
+unit: unit-03
+order: 2
+title: print 说“你好”
+emoji: "💬"
+estMinutes: 16
+xp: 100
+objectives:
+  - 学会用 print 在 Output 窗口打印一句话
+  - 点 ▶️ 试玩，亲眼看到脚本说出的话
+tasks:
+  - id: t1
+    label: 把脚本里的代码改成 print("你好，Roblox！")
+  - id: t2
+    label: 点 ▶️ Play 试玩
+  - id: t3
+    label: 在 Output 窗口里找到你打印的那句话
+quiz:
+  - q: print() 的作用是什么？
+    type: single
+    options: ["删除零件", "在 Output 窗口显示文字", "让角色跳"]
+    answer: 1
+    explain: print 会把括号里的内容显示在 Output 窗口，常用来检查代码有没有在跑。
+  - q: 想打印“你好”，引号里应该写什么？
+    type: single
+    options: ['print(你好)', 'print("你好")', 'print[你好]']
+    answer: 1
+    explain: 要打印的文字必须放在英文双引号 " " 中间。
+  - q: 写完代码后，要怎样才能看到效果？
+    type: single
+    options: ["保存就行", "点 ▶️ Play 试玩", "关掉 Studio"]
+    answer: 1
+challenge: 再加一行 print，把你自己的名字也打印出来，比如 print("我是小明")。
+---
+
+## 🎯 今天要做什么
+
+让你的脚本开口说第一句话！我们用一个叫 **print** 的命令，让它在 Output 窗口里打出「你好，Roblox！」。💬
+
+## ✨ 新知识：print 就是“让电脑说话”
+
+`print` 是英文“打印”的意思。在代码里，它的作用是——**把括号里的话显示到 Output 窗口**。
+
+写法是这样，整段先照抄：
+
+```lua
+print("你好，Roblox！")
+```
+
+记住三个小细节：
+- **print** 全是小写英文
+- 要说的话，放在英文**双引号 `" "`** 中间
+- 括号 `( )` 把内容包起来
+
+<StudioStep n={1} title="清空旧代码，写上这一行">
+  双击你上节课的 Script，把里面原来的字删掉，换成上面这一行 `print("你好，Roblox！")`。
+</StudioStep>
+
+<StudioStep n={2} title="点 ▶️ 试玩">
+  按顶部的 **▶️ Play**。游戏一开始，脚本就被电脑读了一遍。
+</StudioStep>
+
+<StudioStep n={3} title="去 Output 窗口找它">
+  看屏幕下方的 **Output** 窗口，应该出现一行白字：**你好，Roblox！** 🎉
+</StudioStep>
+
+<Callout type="tip">
+  双引号里的字可以随便换！把它改成 `print("我做出第一个脚本啦！")`，再试玩一次，看 Output 怎么变。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+Output 窗口里出现了你写的那句话——这说明**电脑真的读懂并执行了你的命令**！你正式写出了能跑起来的代码。
+
+<Callout type="warning">
+  Output 里什么都没有？最常见的 3 个原因：① 引号用成了中文“”（要用英文 `"`）；② print 拼错或带了大写；③ 忘了点 ▶️ Play。逐个检查一下吧！
+</Callout>

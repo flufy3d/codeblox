@@ -1,0 +1,74 @@
+---
+id: "2.4"
+unit: unit-02
+order: 4
+title: 锚定与穿过
+emoji: "👻"
+estMinutes: 20
+xp: 100
+objectives:
+  - 知道 Anchored（锚定）能把方块“钉”在半空不掉下来
+  - 用 CanCollide（能否碰撞）做一个能穿过去的“光帘”
+tasks:
+  - id: t1
+    label: 放一个方块抬到半空，勾上 Anchored（锚定），试玩确认它不掉
+  - id: t2
+    label: 再放一个薄薄的方块当“光帘”，做成半透明发光
+  - id: t3
+    label: 取消勾选光帘的 CanCollide（能否碰撞）
+  - id: t4
+    label: 点 ▶️ 试玩，让小人直接穿过光帘
+quiz:
+  - q: Anchored（锚定）打勾后，方块会怎样？
+    type: single
+    options: ["掉到地上", "钉在原地，不会掉下来", "变透明"]
+    answer: 1
+    explain: Anchored 打勾，方块就被“钉”住，悬在半空也不会掉。
+  - q: 想让小人能“穿过”一个方块，要怎么做？
+    type: single
+    options: ["取消勾选 CanCollide", "把 Anchored 取消", "把颜色改成白色"]
+    answer: 0
+    explain: CanCollide 取消勾选后，方块就不再挡路，小人可以直接穿过去。
+  - q: 一个发光的“光帘”，应该让它能不能被穿过？
+    type: single
+    options: ["能穿过（取消 CanCollide）", "不能穿过", "随便"]
+    answer: 0
+challenge: 做一个 CanCollide 关掉、Transparency 0.5 的“光墙”，让小人穿过去时像走进了光里。
+---
+
+## 🎯 今天要做什么
+
+学会两个超重要的开关：把方块**钉在半空**（Anchored），以及让方块**能被穿过去**（CanCollide）——做一道能直接走进去的**发光光帘**！
+
+## ✨ 新知识：CanCollide（能不能被穿过）
+
+每个方块上有两个小勾勾（在 Properties 里）：
+
+- **Anchored（锚定）**：打勾 = 钉在原地，悬在半空也不会掉。我们搭的东西几乎都要打勾。
+- **CanCollide（能否碰撞）**：打勾 = 实心、会挡路；**取消勾选 = 能被穿过去**，像幽灵一样。
+
+传送门的“门帘”就要关掉 CanCollide，小人才能走进去。👻
+
+<StudioStep n={1} title="先把方块钉住">
+  放一个方块，用 **Move** 抬到半空。在 Properties 里勾上 **Anchored**。点 ▶️ 试玩——它稳稳地浮着，没掉下来！
+</StudioStep>
+
+<StudioStep n={2} title="做一片光帘">
+  再放一个**薄薄的**方块当门帘，把 **Material** 改成 **Neon**、**Transparency** 调到 **0.4**，让它发光又半透明。
+</StudioStep>
+
+<StudioStep n={3} title="让它能被穿过">
+  选中光帘，在 Properties 里**取消勾选 CanCollide**。
+</StudioStep>
+
+<StudioStep n={4} title="试玩穿过去">
+  点 ▶️ Play，操纵小人走向光帘——直接穿过去了！像走进了一道光。
+</StudioStep>
+
+<Callout type="warning">
+  如果小人被门帘**挡住**了，说明 CanCollide 还开着。回到 Properties 把它的勾**取消**就行。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一道发光的光帘，小人能直接走穿。再加上昨天的两根柱子，传送门已经有模有样了！

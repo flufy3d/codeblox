@@ -1,0 +1,9 @@
+order: 7
+title: 组装一个完整小游戏
+subtitle: 重生点、检查点、会动的障碍、胜利条件
+emoji: 🎮
+color: "#E4674C"
+badge:
+  id: unit-07-clear
+  name: 游戏制作人
+  emoji: 🎮

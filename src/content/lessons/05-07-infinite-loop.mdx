@@ -1,0 +1,94 @@
+---
+id: "5.7"
+unit: unit-05
+order: 7
+title: 小心无限循环
+emoji: "⚠️"
+estMinutes: 16
+xp: 100
+objectives:
+  - 明白 while true do 不加 task.wait() 会把游戏卡死
+  - 养成好习惯：循环里一定要留一句 task.wait()
+tasks:
+  - id: t1
+    label: 回到第 3 课那个让方块闪色的 while 脚本
+  - id: t2
+    label: 对照范例，确认循环里有没有 task.wait()
+  - id: t3
+    label: 检查你写过的每个 while 循环，补上漏掉的 task.wait()
+  - id: t4
+    label: 试玩，确认游戏顺畅、不卡顿
+quiz:
+  - q: 为什么 while true do 里一定要放 task.wait()？
+    type: single
+    options: ["让代码好看", "不然循环转得太快、太多，会把游戏卡死", "没必要放"]
+    answer: 1
+    explain: 没有“等一等”，循环会在一秒里转成千上万次，把电脑累垮，游戏就卡住不动了。
+  - q: 下面哪段是“好习惯”的循环？
+    type: single
+    options: ["while true do print(\"hi\") end", "while true do print(\"hi\") task.wait(1) end", "两段都好"]
+    answer: 1
+    explain: 第二段每转一圈都 task.wait(1) 歇一下，电脑才有空喘气，游戏才不会卡。
+  - q: 如果游戏一 Play 就卡住、点不动，最该先怀疑什么？
+    type: single
+    options: ["颜色不好看", "某个 while 循环忘了加 task.wait()", "方块太大"]
+    answer: 1
+challenge: 故意（在自己的练习里）写一个没有 task.wait() 的 while，Play 体验一下卡顿，再立刻 Stop 并补回 task.wait()，记住这个感觉。
+---
+
+## 🎯 今天要做什么
+
+学一个**超级重要的安全习惯**：循环里一定要留一句“等一等”，不然游戏会**卡死**！这一课没有新成果，但能帮你避开最常见的大坑。
+
+## ✨ 新知识：没有 task.wait() 的循环会“卡死”
+
+还记得第 3 课那个一直换色的方块吗？它能正常工作，是因为循环里有一句 `task.wait(1)`——每转一圈，**歇一秒**。
+
+如果**漏掉**这句会怎样？
+
+> 电脑会在**一秒里把循环转成千上万次**，忙到没空做别的事，整个游戏就**卡住不动**了，连 Stop 都很难点。
+
+**对比一下：**
+
+❌ 危险（不要这样）：
+
+```lua
+while true do
+	print("hi")
+end
+```
+
+✅ 好习惯（永远这样）：
+
+```lua
+while true do
+	print("hi")
+	task.wait(1)
+end
+```
+
+两段只差一行 `task.wait(1)`，但一个会卡死、一个很顺畅。
+
+<StudioStep n={1} title="回去检查你的循环">
+  打开第 3 课那个让方块闪色的脚本，确认里面那句 **task.wait(1)** 还在。
+</StudioStep>
+
+<StudioStep n={2} title="给每个 while 都配上 task.wait()">
+  以后每写一个 `while ... do`，都顺手在里面加一句 **task.wait()**（哪怕只是 `task.wait(0.1)`），让循环每圈都歇一下。
+</StudioStep>
+
+<StudioStep n={3} title="试玩，感受“顺畅”">
+  点 ▶️ **Play**，玩一会儿。有了 task.wait()，方块照常闪色，游戏却很流畅、点哪都灵。
+</StudioStep>
+
+<Callout type="tip">
+  记住一句口诀：**“while 循环里，必有 task.wait”**。养成这个习惯，你就基本不会写出卡死游戏的代码了。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+你现在拥有一个**老手才懂的好习惯**。以后游戏一卡，你第一个就会想到：“是不是哪个循环忘了 task.wait()？”——这正是会写代码的人解决问题的方式！⚠️
+
+<Callout type="warning">
+  万一真的卡住、Stop 点不动：等一两秒它常会自己缓过来；实在不行，关掉再打开 Studio。然后回去把漏掉的 task.wait() 补上。
+</Callout>

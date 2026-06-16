@@ -1,0 +1,82 @@
+---
+id: "7.7"
+unit: unit-07
+order: 7
+title: 整理与命名（多脚本协作）
+emoji: "🗂️"
+estMinutes: 18
+xp: 100
+objectives:
+  - 给每个 Part 和 Script 起清楚的名字，方便自己看懂
+  - 明白每个脚本只管自己那块，多个脚本就能互不打架
+tasks:
+  - id: t1
+    label: 把每块 Part 改名（Spawn、Checkpoint1、MovingPlatform、Lava1、FinishPad…）
+  - id: t2
+    label: 把同类的 Part 打组成 Model（比如所有检查点放一组）
+  - id: t3
+    label: 确认每个脚本只管它所在的那块 Part
+  - id: t4
+    label: 整理后再 Play 一遍，确认游戏照常运行
+quiz:
+  - q: 给 Part 和脚本起清楚的名字，主要好处是？
+    type: single
+    options: ["自己一眼看懂哪块是哪块，好维护", "游戏会变快", "能多得分"]
+    answer: 0
+    explain: 名字清楚，回头改 bug、加东西时一眼就找得到，不会乱。
+  - q: 为什么多个脚本能同时运行、互不打架？
+    type: single
+    options: ["因为每个脚本只管自己那块 Part（script.Parent）", "因为只有一个脚本在跑", "因为它们颜色不同"]
+    answer: 0
+    explain: 每块 Part 里的脚本用 script.Parent 只操心“自己”，各管各的，自然不会冲突。
+  - q: 这节课要写新代码吗？
+    type: single
+    options: ["要写一大段", "不写代码，只整理和命名", "要删掉所有脚本"]
+    answer: 1
+    explain: 今天是“收拾房间”——给东西归类、起名，不改逻辑。
+challenge: 在 Explorer 里把整个 Obby 打成一个大 Model，命名为 MyObby，这样以后能整体移动或复制。
+---
+
+## 🎯 今天要做什么
+
+我们的 Obby 现在有重生点、好几个检查点、移动平台、熔岩、终点……Explorer 里一堆 `Part`、`Part`、`Part`，谁是谁都分不清！今天像**收拾房间**一样，给它们**起名字、归归类**，让多个脚本各司其职、互不打架。🗂️
+
+## ✨ 新知识：好名字 + 各管各的
+
+今天**不写新代码**，但这是高手都会做的一步。
+
+**第一件事：起清楚的名字。** Explorer 里默认全叫 `Part`，根本认不出。给它们改成一看就懂的名字：
+
+> `Spawn`、`Checkpoint1`、`Checkpoint2`、`MovingPlatform`、`Lava1`、`Lava2`、`FinishPad`、`FinishArch`……
+
+**第二件事：明白脚本为什么不打架。** 你可能担心：放了这么多脚本，它们会不会乱套？不会——因为每个脚本里写的都是 `script.Parent`，意思是“**只管我自己这块 Part**”。
+
+> 熔岩脚本只管熔岩，平台脚本只管平台，终点脚本只管终点。各扫门前雪，**互不干涉**。
+
+<Callout type="info">
+  唯一“管所有人”的，是 **ServerScriptService** 里的那份 **leaderstats** 计分板——它给每个玩家发分数，所以**只留一份**就够，别复制多份。
+</Callout>
+
+<StudioStep n={1} title="逐个改名字">
+  在 Explorer 里，**双击**每块 Part 的名字（或选中按 **F2**）改成好懂的名字：重生点叫 `Spawn`，检查点叫 `Checkpoint1`、`Checkpoint2`，依此类推。
+</StudioStep>
+
+<StudioStep n={2} title="把同类打组">
+  选中所有检查点 → 右键 **Group（打组成 Model）**，命名为 `Checkpoints`。熔岩也可以归一组 `Lavas`。Explorer 一下就清爽了。
+</StudioStep>
+
+<StudioStep n={3} title="检查脚本归属">
+  点开每块 Part，确认**它的脚本就在它里面**（熔岩脚本在熔岩里、平台脚本在平台里）。计分板那一份单独待在 **ServerScriptService**。
+</StudioStep>
+
+<StudioStep n={4} title="整理后再跑一遍">
+  点 ▶️ **Play**，从头玩到尾。改了名字、归了类，游戏应该**照常运行**——因为我们没动逻辑，只是收拾整齐。
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+一个 Explorer 里**整整齐齐、名字清楚**的 Obby。回头要改 bug 或加机关，你一眼就能找到对应的那块。下一节，我们**完整测试**整个游戏，再请家人朋友来试玩、抓 bug！
+
+<Callout type="tip">
+  改名字时，**别动**第 6 课里要靠名字找到的 `FinishArch`——如果你改了它的名字，记得把脚本里的 `workspace.FinishArch` 也改成新名字，两边要一致。
+</Callout>

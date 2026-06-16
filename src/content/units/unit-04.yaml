@@ -1,0 +1,9 @@
+order: 4
+title: 变量与事件：碰一下就有反应
+subtitle: 变量、Touched 事件、函数
+emoji: ⚡
+color: "#F2A65A"
+badge:
+  id: unit-04-clear
+  name: 事件触发者
+  emoji: ⚡

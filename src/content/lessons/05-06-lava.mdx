@@ -1,0 +1,98 @@
+---
+# 👪 家长提示：本课会让“踩到熔岩”的角色血量归零、立刻原地复活重来——
+# 这是 Roblox 跑酷游戏里最常见、最安全的“失败即重来”机制，没有任何暴力或可怕画面，
+# 只是把小人送回起点重新尝试，和滑梯上滑下来再爬上去是一回事。孩子可以放心练习。
+id: "5.6"
+unit: unit-05
+order: 6
+title: 熔岩判定
+emoji: "🌋"
+estMinutes: 22
+xp: 100
+objectives:
+  - 用 if 判断“碰到熔岩的是不是一个角色”
+  - 碰到红色熔岩就让角色血量归零，原地“重来”
+tasks:
+  - id: t1
+    label: 放一个又大又扁的 Part，染成红色当熔岩地面
+  - id: t2
+    label: 在这个熔岩 Part 里右键 Insert Object → Script
+  - id: t3
+    label: 整段抄入熔岩判定的范例代码
+  - id: t4
+    label: 点 ▶️ Play，走上去试试，看小人会不会重来
+quiz:
+  - q: hit.Parent:FindFirstChild("Humanoid") 是在判断什么？
+    type: single
+    options: ["碰到的是不是一个角色（有没有 Humanoid）", "方块是什么颜色", "现在几点"]
+    answer: 0
+    explain: 只有玩家/NPC 角色里才有 Humanoid。找到它，就说明踩上来的是个“人”，而不是别的方块。
+  - q: humanoid.Health = 0 会发生什么？
+    type: single
+    options: ["角色变大", "角色血量归零，触发重来", "游戏关闭"]
+    answer: 1
+    explain: 血量归零后，Roblox 会自动把角色送回起点重新开始——这就是“失败可重来”。
+  - q: 为什么要先 if 判断有没有 Humanoid，再让血量归零？
+    type: single
+    options: ["为了好看", "免得碰到的是普通方块时去改它根本没有的血量而出错", "没有原因"]
+    answer: 1
+    explain: 不是所有碰到熔岩的都是“人”。先确认是角色，再动它的血量，代码才不会出错。
+challenge: 在让血量归零之前，加一行 print("有人踩到熔岩啦！")，这样 Output 里能看到每次触发。
+---
+
+## 🎯 今天要做什么
+
+做一块**红色熔岩地面**：谁踩上去，谁就**原地“重来”**回到起点！这是跑酷游戏里最经典的机关。
+
+<Callout type="info">
+  **给爸爸妈妈的话**：这里的“失败”只是把小人送回起点重新试，就像滑梯滑下来再爬上去，没有任何吓人的画面，是 Roblox 里最常见也最安全的玩法，孩子可以放心练习。
+</Callout>
+
+## ✨ 新知识：先“认出是不是人”，再让它重来
+
+第 4 单元我们学过：方块被踩到会触发 **Touched（碰到）** 事件，它会告诉我们“碰我的是谁”（我们叫它 `hit`）。
+
+但碰到熔岩的不一定是“人”，也可能是别的方块。所以要先用 `if` **认一认**：
+
+> `hit.Parent:FindFirstChild("Humanoid")` —— 去碰我的那个东西身上**找找有没有 Humanoid**。只有玩家/角色身上才有 Humanoid，找到了就说明“踩上来的是个人”。
+
+确认是人，再让它 `Health = 0`（血量归零），Roblox 就会自动把它送回起点**重来**。
+
+<StudioStep n={1} title="做一块红色熔岩地面">
+  放一个 **Part**，在 Properties 里调大、压扁（比如 Size 改成又宽又薄），**Color** 染成**红色**，**Anchored** 打勾。它就是熔岩了。
+</StudioStep>
+
+<StudioStep n={2} title="给熔岩加一个脚本">
+  在 Explorer 里右键这块熔岩 Part → **Insert Object → Script**。
+</StudioStep>
+
+<StudioStep n={3} title="整段抄入熔岩判定代码">
+  整段换成下面这些：
+
+```lua
+local lava = script.Parent
+
+local function onTouch(hit)
+	local humanoid = hit.Parent:FindFirstChild("Humanoid")
+	if humanoid then
+		humanoid.Health = 0
+	end
+end
+
+lava.Touched:Connect(onTouch)
+```
+
+  读出来就是：有东西碰到熔岩时，**先找它身上有没有 Humanoid**；**如果**找到了（说明是个角色），**就**把血量设成 0，让它重来。
+</StudioStep>
+
+<StudioStep n={4} title="试玩，踩一脚试试">
+  点 ▶️ **Play**，用 **W/A/S/D** 走到红色熔岩上。小人会立刻“重来”，回到起点！🌋
+</StudioStep>
+
+<Callout type="warning">
+  如果踩上去没反应：检查熔岩 Part 的 **CanCollide / Anchored** 设置，以及脚本里 `Touched:Connect(onTouch)` 有没有写对（注意大小写）。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一块**踩上去就让人重来**的红色熔岩。把它和前面的彩虹跑道放在一起，一个真正的小关卡就快成形了！🌋

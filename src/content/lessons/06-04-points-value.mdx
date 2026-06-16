@@ -1,0 +1,97 @@
+---
+id: "6.4"
+unit: unit-06
+order: 4
+title: 加一个分数项 Points
+emoji: "🔢"
+estMinutes: 18
+xp: 100
+objectives:
+  - 在 leaderstats 里新建一个 IntValue 叫 Points
+  - 让左上角出现玩家的分数
+tasks:
+  - id: t1
+    label: 在 leaderstats 文件夹里新建一个 IntValue
+  - id: t2
+    label: 把它命名为 Points，初始 Value 设为 0
+  - id: t3
+    label: Play，确认左上角出现 Points：0
+quiz:
+  - q: 用来存“整数分数”的对象是哪个？
+    type: single
+    options: ["StringValue（文字）", "IntValue（整数）", "Folder（文件夹）"]
+    answer: 1
+    explain: IntValue 专门存整数，正好用来记分数。
+  - q: points.Parent = leaderstats 的意思是？
+    type: single
+    options: ["把分数放进 leaderstats 文件夹", "删掉 leaderstats", "给分数改颜色"]
+    answer: 0
+    explain: 分数项要放进 leaderstats 文件夹，左上角才会显示出来。
+  - q: 想让分数从 0 开始，应该写？
+    type: single
+    options: ["points.Value = 0", "points.Name = 0", "points.Jump = 0"]
+    answer: 0
+challenge: 把 points.Value = 0 改成 points.Value = 10，Play 看看左上角是不是直接显示 10。
+---
+
+## 🎯 今天要做什么
+
+往计分卡里放一个**分数**！这一节做完，游戏**左上角**就会真的出现你的分数，像真正的游戏一样。
+
+## ✨ 新知识：IntValue 是一个“数字盒子”
+
+上节课我们做好了空的 **leaderstats** 文件夹。现在往里放一个能装**整数**的盒子——**IntValue（整数值）**，用它来记分数。
+
+我们还是用 `Instance.new` 来造：
+
+```lua
+local points = Instance.new("IntValue")
+points.Name = "Points"
+points.Value = 0
+points.Parent = leaderstats
+```
+
+- `Name = "Points"`：盒子的名字（左上角就显示这个名字）
+- `Value = 0`：一开始是 0 分
+- `Parent = leaderstats`：把盒子放进计分卡文件夹里
+
+把它接到上节课的代码后面，就是完整的计分板脚本：
+
+```lua
+local Players = game:GetService("Players")
+
+Players.PlayerAdded:Connect(function(player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"   -- 名字必须正好是 leaderstats（全小写）
+	leaderstats.Parent = player
+
+	local points = Instance.new("IntValue")
+	points.Name = "Points"
+	points.Value = 0
+	points.Parent = leaderstats
+end)
+```
+
+<Callout type="info">
+  这段依然放在 **ServerScriptService** 的 Script 里。它对每个加入的玩家都发一张带 **Points** 的计分卡。
+</Callout>
+
+<StudioStep n={1} title="补上分数项">
+  在 **ServerScriptService** 的 Script 里，把上面的完整代码写进去。
+</StudioStep>
+
+<StudioStep n={2} title="看清放在哪">
+  注意 `points.Parent = leaderstats`——分数要放进 **leaderstats 文件夹**里，不是直接挂玩家身上。
+</StudioStep>
+
+<StudioStep n={3} title="试运行">
+  按 **▶️ Play**，看屏幕**左上角**——出现 **Points 0** 啦！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+左上角亮出了 `Points 0`。计分板成型了！只是现在分数永远是 0，下一节我们就让“**碰到我的那个玩家**”能被认出来，为加分做准备。
+
+<Callout type="warning">
+  左上角没出现分数？检查名字是不是全小写 `leaderstats`，以及分数项的 `Parent` 是不是指向 `leaderstats`。
+</Callout>

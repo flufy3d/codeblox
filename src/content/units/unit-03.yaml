@@ -1,0 +1,9 @@
+order: 3
+title: 第一个脚本：让方块听我的话
+subtitle: Script、Output、print、用代码改属性
+emoji: 💬
+color: "#5BC0BE"
+badge:
+  id: unit-03-clear
+  name: 脚本初鸣
+  emoji: 💬

@@ -1,0 +1,112 @@
+---
+id: "7.6"
+unit: unit-07
+order: 6
+title: 终点 + 通关提示
+emoji: "🏁"
+estMinutes: 22
+xp: 100
+objectives:
+  - 做一个终点垫：碰到就加分，并在 Output 打印“你赢了！”
+  - 做一个明显的胜利效果（把终点拱门变成 Neon 金色）
+tasks:
+  - id: t1
+    label: 确认 ServerScriptService 里有 leaderstats 脚本（含 Wins）
+  - id: t2
+    label: 在终点放一个 Part 当终点垫，里面 Insert Object → Script
+  - id: t3
+    label: 整段抄入终点垫代码（加分 + print + 变金色）
+  - id: t4
+    label: Play 跑到终点，看分数 +1、Output 显示“你赢了！”、拱门变金
+quiz:
+  - q: 想在玩家通关时记一次“胜利”，要先有什么？
+    type: single
+    options: ["一份 leaderstats 计分板", "一首音乐", "三块熔岩"]
+    answer: 0
+    explain: 和第 6 单元一样，用 leaderstats 记分。这次我们记的是“通关次数 Wins”。
+  - q: 终点垫脚本里的 debounce（去抖）是干嘛的？
+    type: single
+    options: ["防止站在终点上一直加分", "让终点变红", "删除玩家"]
+    answer: 0
+    explain: 没有 debounce，玩家站在终点不动，分数会疯狂往上涨。加了它，过一次只记一次。
+  - q: 怎么做出“明显的胜利效果”？
+    type: single
+    options: ["把拱门 Material 改成 Neon、颜色变金", "把游戏关掉", "删掉终点"]
+    answer: 0
+    explain: 让拱门发出金光，是给玩家最直接的“你通关啦！”信号。简单又有成就感。
+challenge: 把 print("你赢了！") 改成 print(player.Name .. " 通关啦！🎉")，让 Output 显示是谁赢的。
+---
+
+## 🎯 今天要做什么
+
+给 Obby 装上**终点**！🏁 玩家冲过终点垫，就会：**得 1 分**、**Output 喊出“你赢了！”**、而且**终点拱门唰地变成金色**——满满的通关仪式感！
+
+## ✨ 新知识：终点垫 = 得分垫 + 胜利效果
+
+好消息：今天的核心你**全学过**。终点其实就是一块特别的**得分垫**（第 6 单元），我们在它上面再加一点点**胜利效果**。
+
+第一步，先有一份**计分板**记“通关次数”。这就是熟悉的 leaderstats（放在 **ServerScriptService**），只是把分数名字叫 `Wins`：
+
+```lua
+local Players = game:GetService("Players")
+
+Players.PlayerAdded:Connect(function(player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"   -- 名字必须正好是 leaderstats（全小写）
+	leaderstats.Parent = player
+
+	local wins = Instance.new("IntValue")
+	wins.Name = "Wins"
+	wins.Value = 0
+	wins.Parent = leaderstats
+end)
+```
+
+第二步，**终点垫脚本**（放在终点垫这块 Part 里）：碰到就加分、打印“你赢了！”、再把旁边的拱门变金。我们用熟悉的 **debounce** 防止站着刷分：
+
+```lua
+local pad = script.Parent
+local arch = workspace.FinishArch   -- 你的终点拱门，名字要和这里一致
+local debounce = false
+
+pad.Touched:Connect(function(hit)
+	local player = game.Players:GetPlayerFromCharacter(hit.Parent)
+	if player and not debounce then
+		debounce = true
+		player.leaderstats.Wins.Value += 1
+		print("你赢了！")
+		arch.Material = Enum.Material.Neon
+		arch.Color = Color3.fromRGB(255, 215, 0)   -- 金色
+		task.wait(2)
+		debounce = false
+	end
+end)
+```
+
+<Callout type="info">
+  代码里的 `workspace.FinishArch` 是去 Workspace 里**按名字找**你的终点拱门。所以下一步你要放一个拱门 Part，并把它的 **Name 改成正好 `FinishArch`**，名字一字不差，脚本才找得到它。
+</Callout>
+
+<StudioStep n={1} title="放好计分板">
+  确认 **ServerScriptService** 里有上面第一段计分板脚本（含 `Wins`）。没有就新建一个 **Script** 抄进去。
+</StudioStep>
+
+<StudioStep n={2} title="搭一个终点拱门">
+  在终点用几个 **Part** 搭一个简单的拱门（两根柱子 + 一根横梁就行），把这个拱门（或它的横梁）**Name 改成 `FinishArch`**，**Anchored** 打勾。
+</StudioStep>
+
+<StudioStep n={3} title="放终点垫 + 加脚本">
+  在拱门下面地上放一块 **Part** 当终点垫，里面 **Insert Object → Script**，整段抄入上面第二段终点垫代码。
+</StudioStep>
+
+<StudioStep n={4} title="冲线！">
+  点 ▶️ **Play**，从起点一路闯到终点，踩上终点垫——**分数 +1**、**Output 显示“你赢了！”**、**拱门变成金色**！🏁✨
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+一个有**真正终点**的 Obby：通关有加分、有提示、有金光闪闪的庆祝。你已经把**得分垫**和**胜利效果**漂亮地组合在了一起！下一节，我们把这一堆 Part 和脚本**整理命名**，让它们各司其职、互不打架。
+
+<Callout type="warning">
+  Output 报 `FinishArch is not a valid member of Workspace`？说明拱门的**名字没改对**——它必须**正好叫 `FinishArch`**（大小写一致），脚本才找得到。
+</Callout>

@@ -1,0 +1,86 @@
+---
+id: "4.2"
+unit: unit-04
+order: 2
+title: 把方块存进变量
+emoji: "🧱"
+estMinutes: 16
+xp: 100
+objectives:
+  - 用 local part = script.Parent 把脚本所在的方块存进变量
+  - 明白为什么先存进变量能让代码更短、更清楚
+tasks:
+  - id: t1
+    label: 在 Workspace 里放一个 Part
+  - id: t2
+    label: 右键这个 Part → Insert Object → Script（把脚本放进方块里）
+  - id: t3
+    label: 写下 local part = script.Parent
+  - id: t4
+    label: 加一行 print(part.Name)，试玩在 Output 看到方块的名字
+quiz:
+  - q: script.Parent 指的是什么？
+    type: single
+    options: ["脚本外面那个装着它的东西（这里就是方块）", "整个游戏", "玩家"]
+    answer: 0
+    explain: 脚本放在方块里，方块就是脚本的 Parent（家长 / 外面的盒子）。
+  - q: 为什么要 local part = script.Parent？
+    type: single
+    options: ["让代码报错", "之后写 part 就行，又短又清楚", "让方块变大"]
+    answer: 1
+    explain: 存进变量后，后面想用这个方块只要写 part，不用每次都写一长串。
+  - q: 这个脚本应该放在哪里？
+    type: single
+    options: ["方块（Part）里面", "玩家身上", "天空里"]
+    answer: 0
+challenge: 把 print(part.Name) 改成 print(part.Parent.Name)，猜猜 Output 会显示什么，再试玩验证。
+---
+
+## 🎯 今天要做什么
+
+上一课我们用盒子装数字。今天我们把**一个方块**装进盒子！这样之后写代码会又短又清楚——这是写脚本最常用的第一步。
+
+## ✨ 新知识：script.Parent 是“我住的方块”
+
+把脚本放进一个方块里，这个方块就是脚本的 **Parent（家长 / 外面那层盒子）**。
+
+我们用一句话把它存进变量 `part`：
+
+```lua
+local part = script.Parent
+print(part.Name)
+```
+
+第一行：做一个盒子 `part`，把“我住的那个方块”装进去。
+第二行：拿出这个方块，打印它的名字。
+
+为什么要这样？因为后面只要写 `part`，就代表那个方块了——不用每次都写 `script.Parent` 一长串，**又短又不容易写错**。
+
+<StudioStep n={1} title="放一个方块">
+  **Home 选项卡 → Insert → Part**，在世界里放一个方块。
+</StudioStep>
+
+<StudioStep n={2} title="把脚本放进方块">
+  在 Explorer 里找到这个 Part，**右键它 → Insert Object → Script**。注意：Script 要在 Part 的**里面**（缩进在它下方）。
+</StudioStep>
+
+<StudioStep n={3} title="写上这两行">
+  把脚本里原来的字删掉，写：
+
+```lua
+local part = script.Parent
+print(part.Name)
+```
+</StudioStep>
+
+<StudioStep n={4} title="试玩看名字">
+  打开 **Output**，点 ▶️ **Play**。Output 里会出现这个方块的名字（默认是 `Part`）——说明 `part` 真的抓到了那个方块！
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+Output 里打印出了方块的名字。从今天起，`part` 就是你脚本里那个方块的“小名”，下一课开始我们就用它来变魔术。✨
+
+<Callout type="warning">
+  如果报错说找不到东西：八成是 Script 没放在 Part **里面**，而是放在了 Workspace 下。把它拖进 Part 里再试。
+</Callout>

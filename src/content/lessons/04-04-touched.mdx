@@ -1,0 +1,89 @@
+---
+id: "4.4"
+unit: unit-04
+order: 4
+title: "Touched：碰一下触发"
+emoji: "👆"
+estMinutes: 18
+xp: 100
+objectives:
+  - 用 Touched 事件让方块“被碰到 → 在 Output 打印一句话”
+  - 试玩时走上方块，亲眼看到 Output 里跳出文字
+tasks:
+  - id: t1
+    label: 在 MagicFloor 这个 Part 里的 Script 中，写 local part = script.Parent
+  - id: t2
+    label: 写一个 onTouch 函数，里面 print("有人碰到我啦！")
+  - id: t3
+    label: 加上 part.Touched:Connect(onTouch)
+  - id: t4
+    label: 点 ▶️ 试玩，走上方块，看 Output 跳出文字
+quiz:
+  - q: part.Touched:Connect(onTouch) 是什么意思？
+    type: single
+    options: ["方块被碰到时，就去做 onTouch 里的事", "删除方块", "给方块上色"]
+    answer: 0
+    explain: Connect 就是“把事件和动作连起来”：碰到（Touched）→ 执行 onTouch。
+  - q: 想看 print 打印出来的文字，要打开哪个窗口？
+    type: single
+    options: ["Output", "Explorer", "Toolbox"]
+    answer: 0
+  - q: 走上方块 Output 却没反应，最可能是？
+    type: single
+    options: ["方块勾了 Anchored 所以不该碰——错，那是正常的", "Connect 那行忘了写，或函数名拼错", "Roblox 坏了"]
+    answer: 1
+    explain: 90% 是 Connect 没写、函数名 onTouch 拼错或大小写不对。
+challenge: 把 print 里的话改成你自己的，比如 print("欢迎来到魔法地板！")。
+---
+
+## 🎯 今天要做什么
+
+把上一课学的“事件”真正用起来！让你的 `MagicFloor` 地板**被碰到时，就在 Output 喊一句话**。走上去试试，超有成就感！
+
+## ✨ 新知识：把动作“连”到 Touched 上
+
+我们要做三件事：
+
+1. 先把方块存进盒子 `part`（第 2 课学过）。
+2. 写好“碰到要做什么”——先简单地 `print` 一句话。
+3. 用 `Connect` 把“碰到（Touched）”和这个动作**连起来**。
+
+先整段抄下来，看懂结构：
+
+```lua
+local part = script.Parent
+
+local function onTouch(hit)
+	print("有人碰到我啦！")
+end
+
+part.Touched:Connect(onTouch)
+```
+
+- `local part = script.Parent`：抓住这块地板。
+- `local function onTouch(hit)` … `end`：这是“碰到时要做的事”，先打印一句话。
+- `part.Touched:Connect(onTouch)`：**碰到 → 就去做 onTouch**。这就是“发生某件事 → 就做某事”！
+
+<Callout type="info">
+  `hit` 是个变量，代表“碰到我的那个东西”（比如玩家的脚）。这节课先不用它，下一课会讲到。
+</Callout>
+
+<StudioStep n={1} title="打开地板里的脚本">
+  在 Explorer 里找到 `MagicFloor` 里的 **Script**，双击打开。
+</StudioStep>
+
+<StudioStep n={2} title="整段写上去">
+  把原来的字删掉，照上面那段一字不差地写好（中文那句话可以换成你自己的）。
+</StudioStep>
+
+<StudioStep n={3} title="试玩走上去">
+  打开 **Output**，点 ▶️ **Play**，用 **W/A/S/D** 走到地板上踩一下。Output 里立刻跳出你写的那句话！🎉
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+你一踩上地板，Output 就喊出一句话——这是你第一次让“碰到”这件事**触发**了代码！下一课，我们把这句话换成真正的魔法：变色。✨
+
+<Callout type="warning">
+  没反应？检查两点：①最后一行 `part.Touched:Connect(onTouch)` 写了吗？②函数名 `onTouch` 两个地方拼写、大小写要**一模一样**。
+</Callout>

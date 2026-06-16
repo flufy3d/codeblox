@@ -1,5 +1,5 @@
 import { defineCollection, reference } from 'astro:content';
-import { z } from 'astro:schema';
+import { z } from 'zod';
 import { glob } from 'astro/loaders';
 
 // ───────────────────────── 单元（关卡地图上的“大关”）─────────────────────────

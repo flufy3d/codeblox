@@ -1,0 +1,71 @@
+---
+id: "2.2"
+unit: unit-02
+order: 2
+title: 透明与发光
+emoji: "💎"
+estMinutes: 18
+xp: 100
+objectives:
+  - 用 Transparency（透明度）做出半透明的玻璃方块
+  - 用 Neon（霓虹）材质做一个会发光的核心
+tasks:
+  - id: t1
+    label: 放一个方块，把 Transparency 改成 0.5，做成半透明玻璃
+  - id: t2
+    label: 再放一个小方块，把 Material 改成 Neon（霓虹）
+  - id: t3
+    label: 给 Neon 方块挑一个亮色（亮蓝或亮粉），让它更亮
+  - id: t4
+    label: 把发光小方块放进半透明方块里，做出“发光核心”
+quiz:
+  - q: Transparency（透明度）的数值是 0 的时候，方块是什么样子？
+    type: single
+    options: ["完全看不见", "完全实心、看得见", "一半透明"]
+    answer: 1
+    explain: Transparency 0 = 完全实心；1 = 完全看不见；0.5 = 半透明。
+  - q: 想做“半透明”的玻璃，Transparency 应该调到大约多少？
+    type: single
+    options: ["0", "0.5", "1"]
+    answer: 1
+  - q: 想让一个方块自己“发光”，Material 选哪个？
+    type: single
+    options: ["Neon（霓虹）", "Wood（木头）", "Ice（冰）"]
+    answer: 0
+    explain: Neon 材质会让方块像灯一样发亮，是做发光核心的关键。
+challenge: 把半透明方块的 Transparency 慢慢从 0 调到 0.9，找一个你觉得最像“玻璃”的数值。
+---
+
+## 🎯 今天要做什么
+
+做一个**半透明的玻璃方块**，再在里面放一个**会发光的霓虹核心**——像装着能量的水晶一样！
+
+## ✨ 新知识：Transparency（透明度）
+
+**Transparency（透明度）** 是一个 **0 到 1** 之间的数字，决定一个方块“能不能看穿”：
+
+- **0** = 完全实心，看不穿（普通方块）
+- **0.5** = 半透明，像玻璃、像果冻
+- **1** = 完全看不见（透明到消失）
+
+数字越大，越透明。💎
+
+<StudioStep n={1} title="做一块玻璃">
+  放一个方块，在 Properties 里找到 **Transparency**，把它改成 **0.5**。方块一下子变成半透明的玻璃啦！
+</StudioStep>
+
+<StudioStep n={2} title="做一个发光核心">
+  再放一个**小方块**，把它的 **Material** 改成 **Neon（霓虹）**，再给它挑一个亮色（比如亮蓝色）。它会像灯一样发亮。
+</StudioStep>
+
+<StudioStep n={3} title="把核心装进玻璃里">
+  用 **Move（移动）** 工具，把发光小方块挪到半透明方块**中间**，让它“包”在里面。
+</StudioStep>
+
+<Callout type="warning">
+  如果方块直接“消失”了，多半是 Transparency 调成了 **1**。把它改回 **0.5** 就又能看见了。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一颗会发光的水晶：外面是半透明玻璃，里面透出亮亮的霓虹光。这个“发光核心”的做法，正是单元结尾传送门要用到的！

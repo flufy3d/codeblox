@@ -1,0 +1,82 @@
+---
+id: "2.6"
+unit: unit-02
+order: 6
+title: 单元成果 —— 发光传送门 + 漂浮岛
+emoji: "🌀"
+estMinutes: 24
+xp: 150
+objectives:
+  - 综合用上材质、透明、发光、形状、复制粘贴，做出发光传送门拱门
+  - 搭一座 Anchored 的漂浮岛，把作品截图炫耀给家人朋友
+tasks:
+  - id: t1
+    label: 检查：传送门拱门做好，门帘用 Neon + 半透明、CanCollide 关掉
+  - id: t2
+    label: 检查：拱门柱子用了 Shape 和 Size 调过形状
+  - id: t3
+    label: 做一座漂浮岛（一块大地砖），全部 Anchored，浮在半空
+  - id: t4
+    label: 把传送门放到漂浮岛上，点 ▶️ 试玩，让小人穿过发光门帘
+  - id: t5
+    label: 截图或叫家人来看你试玩（炫耀环节！），然后 Ctrl+S 保存
+quiz:
+  - q: 让传送门门帘“发光又能穿过”，要同时用上哪两样？
+    type: single
+    options:
+      - Neon 材质 + 取消 CanCollide
+      - Wood 材质 + Anchored
+      - Ball 形状 + Color
+    answer: 0
+    explain: Neon 让它发光，取消 CanCollide 让小人能穿过去，两样合起来就是“光门”。
+  - q: 想让漂浮岛稳稳浮在半空不掉下来，要怎么做？
+    type: single
+    options: ["勾上 Anchored", "取消 CanCollide", "调 Transparency"]
+    answer: 0
+    explain: Anchored 把岛“钉”在半空，玩家走上去也不会让它掉。
+  - q: 这一单元，你主要在学用什么把东西变得好看又特别？
+    type: single
+    options: ["属性（材质、透明、形状这些）", "Robux", "脚本代码"]
+    answer: 0
+challenge: 下个单元，我们要写第一个 Script，用代码让传送门**自己旋转、自己变色**——让它真正“动起来”！
+---
+
+## 🎯 今天要做什么
+
+把这一单元学的**全部用上**，做出你的第二个大作品：一座**漂浮岛**，上面立着一座**会发光、能穿过去的传送门**。然后——**叫家人来秀一秀！** 🎉
+
+## ✨ 复习：把属性的魔法串起来
+
+今天不学新东西，把学过的魔法连成一条龙：
+
+> 形状 / 大小（Shape & Size）→ 材质（Material）→ 透明 / 发光（Transparency & Neon）→ 锚定 / 能否穿过（Anchored & CanCollide）→ 复制粘贴 + 打组
+
+<StudioStep n={1} title="升级你的传送门">
+  把上节课的 `传送门` Model 拿出来：给柱子换上 **Metal（金属）** 材质，门帘用 **Neon + Transparency 0.4** 发光半透明、并**取消 CanCollide**，让它又亮又能穿。
+</StudioStep>
+
+<StudioStep n={2} title="造一座漂浮岛">
+  放一个又大又扁的方块当岛面，用 **Move** 抬到半空，**勾上 Anchored**。再用 **Material** 给它换上 **Grass（草）** 或你喜欢的质感。
+</StudioStep>
+
+<StudioStep n={3} title="把传送门搬上岛">
+  整体拖动 `传送门` Model，放到漂浮岛的中间。可以再加一颗 **Neon 球** 当“能量核心”点缀。
+</StudioStep>
+
+<StudioStep n={4} title="试玩验收">
+  点 ▶️ Play，让小人走上漂浮岛、**穿过发光的门帘**。岛不掉、门能穿、还发着光，就成功啦！
+</StudioStep>
+
+<StudioStep n={5} title="炫耀环节 🎉">
+  按截图键拍下你的发光传送门 + 漂浮岛，或者直接叫爸爸妈妈来，让他们用你的小人穿一次门。最后 **Ctrl + S** 保存。
+</StudioStep>
+
+<Callout type="tip">
+  给你的作品起个名字吧（比如“星光传送门”“云端浮岛”）——它就真正属于你了。完成这一课，你将拿到本单元徽章 **🎨 属性魔法师**！
+</Callout>
+
+## 🕹️ 看看你的成果
+
+一座浮在半空的小岛，岛上一座金属柱、发光门帘的传送门，小人能直接走穿。光是“属性”就能做出这么酷的东西！
+
+下个单元，我们要写第一行**代码**，让这座传送门**自己转起来、自己变颜色**——准备好让它真正动起来了吗？

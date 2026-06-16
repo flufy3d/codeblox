@@ -1,0 +1,87 @@
+---
+id: "5.2"
+unit: unit-05
+order: 2
+title: else 与比较
+emoji: "🔀"
+estMinutes: 18
+xp: 100
+objectives:
+  - 用 else 给判断加一条“否则”的路，做出“对/错两条路”
+  - 认识比较符号 ==（等于）、>（大于）、<（小于）
+tasks:
+  - id: t1
+    label: 在 ServerScriptService 里新建一个 Script
+  - id: t2
+    label: 整段抄入带 if ... else ... end 的范例代码
+  - id: t3
+    label: 把 score 改成不同的值，看 Output 走哪条路
+  - id: t4
+    label: 把 > 换成 <，观察结果反过来
+quiz:
+  - q: else 的作用是什么？
+    type: single
+    options: ["重复一段代码", "当 if 的条件不成立时，走另一条路", "结束游戏"]
+    answer: 1
+    explain: if 成立走上面，else 就是“否则”，不成立时走下面那条路。
+  - q: 想判断“两个东西是不是相等”，用哪个符号？
+    type: single
+    options: ["=", "==", ">"]
+    answer: 1
+    explain: 一个 = 是“赋值”（把值放进变量），两个 == 才是“比较是否相等”。
+  - q: score < 10 的意思是？
+    type: single
+    options: ["分数等于 10", "分数小于 10", "分数大于 10"]
+    answer: 1
+challenge: 在 else 里再多加一行 print，比如打印“再加把劲！”，让“没通过”的提示更丰富。
+---
+
+## 🎯 今天要做什么
+
+给昨天的判断加一条**“否则”**的路：分数够 → 打印“你赢了！”，**否则** → 打印“还差一点！”。这样游戏就有了**对/错两条路**。
+
+## ✨ 新知识：else 是“否则”，还有三个比较符号
+
+`if` 只能管“如果成立怎么办”。加上 `else`（否则），就能同时管“**不成立**又该怎么办”——一上一下，**两条路**。
+
+判断时常用三个**比较符号**：
+
+- `==` 等于（**两个**等号！一个等号是“赋值”，不是比较）
+- `>` 大于
+- `<` 小于
+
+<StudioStep n={1} title="新建脚本，整段抄入">
+  在 **ServerScriptService** 里右键 → Insert Object → **Script**，整段换成：
+
+```lua
+local score = 8
+
+if score > 10 then
+	print("你赢了！")
+else
+	print("还差一点！")
+end
+```
+
+  读出来就是：**如果** `score` 大于 10，打印“你赢了！”；**否则**，打印“还差一点！”。
+</StudioStep>
+
+<StudioStep n={2} title="试玩，看走哪条路">
+  点 ▶️ **Play**，看 **Output**。现在 `score` 是 8，不大于 10，所以走 else，打印 **还差一点！**
+</StudioStep>
+
+<StudioStep n={3} title="改大分数，换另一条路">
+  把第一行的 `8` 改成 `15`，再 Play。这次 15 大于 10，走上面那条，打印 **你赢了！**
+</StudioStep>
+
+<StudioStep n={4} title="玩玩比较符号">
+  把 `score > 10` 改成 `score == 8`（**两个**等号），把分数留在 8。再 Play——8 正好等于 8，又会打印“你赢了！”。
+</StudioStep>
+
+<Callout type="warning">
+  最容易错的地方：比较“相等”要用 **两个** 等号 `==`。只写一个 `=` 电脑会以为你在“放一个新值进去”，常常报错。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+同一段代码，改改分数就能走出**两种不同结果**。你的游戏现在会说“对”也会说“错”啦！🔀

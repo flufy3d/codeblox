@@ -1,0 +1,9 @@
+order: 5
+title: 逻辑与重复：让游戏会思考、会循环
+subtitle: if/else、for/while 循环、随机数
+emoji: 🧠
+color: "#9B8AE4"
+badge:
+  id: unit-05-clear
+  name: 逻辑小子
+  emoji: 🧠

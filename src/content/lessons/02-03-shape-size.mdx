@@ -1,0 +1,74 @@
+---
+id: "2.3"
+unit: unit-02
+order: 3
+title: 形状不止方块
+emoji: "🔵"
+estMinutes: 20
+objectives:
+  - 在 Properties 里把 Shape 改成球（Ball）或圆柱（Cylinder）
+  - 用 Size 精确地改方块的长、宽、高，搭出拱门的柱子
+xp: 100
+tasks:
+  - id: t1
+    label: 放一个 Part，把它的 Shape 改成 Cylinder（圆柱）
+  - id: t2
+    label: 用 Size 把圆柱改高，做成一根“柱子”
+  - id: t3
+    label: 复制出第二根一样高的柱子，左右摆开
+  - id: t4
+    label: 再放一个 Part，把 Shape 改成 Ball（球），放在柱子顶上当装饰
+quiz:
+  - q: 想把一个方块变成“圆柱”，要改哪个属性？
+    type: single
+    options: ["Shape（形状）", "Color（颜色）", "Anchored（锚定）"]
+    answer: 0
+    explain: Shape 决定一个 Part 是方块、球还是圆柱。
+  - q: Size（大小）里的三个数字，分别控制什么？
+    type: single
+    options: ["颜色、材质、透明度", "长、宽、高", "上、下、左"]
+    answer: 1
+    explain: Size 用三个数字精确决定方块的长、宽、高。
+  - q: 想做一根“又细又高”的柱子，Size 应该怎么调？
+    type: single
+    options: ["三个数字都很大", "高的那个数字大，另两个小", "三个数字都很小"]
+    answer: 1
+challenge: 试着把一根柱子的 Shape 改成 Ball，再改回 Cylinder，看看同一个 Part 怎么“变身”。
+---
+
+## 🎯 今天要做什么
+
+让方块**不再只是方块**！把它变成圆柱当柱子、变成球当装饰，再用数字精确控制大小——搭出传送门拱门的**两根柱子**。
+
+## ✨ 新知识：Shape（形状）和 Size（大小）
+
+一个 Part 不只有方块一种样子。在 Properties 里有两个好用的属性：
+
+- **Shape（形状）**：可以选 **Block（方块）/ Ball（球）/ Cylinder（圆柱）**，一个 Part 想变啥变啥。
+- **Size（大小）**：用 **三个数字** 精确决定 **长、宽、高**。想要又细又高的柱子？把“高”那个数字调大就行。
+
+不用拖手柄一点点猜，直接打数字最精确。🔵
+
+<StudioStep n={1} title="把方块变成圆柱">
+  放一个 Part，在 Properties 里找到 **Shape**，选 **Cylinder（圆柱）**。
+</StudioStep>
+
+<StudioStep n={2} title="拉成一根柱子">
+  在 **Size** 里把代表“高”的数字调大（比如改成 12），圆柱就变成一根高高的柱子了。
+</StudioStep>
+
+<StudioStep n={3} title="复制出第二根">
+  选中柱子，**Ctrl + C** 复制、**Ctrl + V** 粘贴，再用 **Move** 把它移到左边。两根一样高的柱子左右摆开。
+</StudioStep>
+
+<StudioStep n={4} title="加一个圆球装饰">
+  再放一个 Part，把 **Shape** 改成 **Ball（球）**，放到一根柱子顶上当装饰。
+</StudioStep>
+
+<Callout type="tip">
+  改 Size 时，三个数字旁边通常写着 **X、Y、Z**——**Y** 一般就是“高”。想长高就调 Y。
+</Callout>
+
+## 🕹️ 看看你的成果
+
+两根整整齐齐、一样高的圆柱，顶上还有个小圆球。这就是传送门拱门的“两条腿”，下一步我们要让它们能被穿过去！

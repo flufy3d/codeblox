@@ -1,0 +1,90 @@
+---
+id: "6.3"
+unit: unit-06
+order: 3
+title: 做一个计分板 leaderstats
+emoji: "📋"
+estMinutes: 18
+xp: 100
+objectives:
+  - 用 Instance.new("Folder") 在脚本里新建一个文件夹
+  - 把文件夹命名为 leaderstats 并挂到 player 身上
+tasks:
+  - id: t1
+    label: 在 ServerScriptService 的 Script 里连接 PlayerAdded
+  - id: t2
+    label: 用 Instance.new("Folder") 新建一个文件夹
+  - id: t3
+    label: 把它的 Name 设为 leaderstats（全小写），Parent 设为 player
+quiz:
+  - q: 计分板文件夹的名字必须是什么？
+    type: single
+    options: ["Leaderstats", "leaderstats（全小写）", "ScoreBoard"]
+    answer: 1
+    explain: Roblox 认的是全小写的 leaderstats，名字写错就不会显示计分板。
+  - q: Instance.new("Folder") 的作用是？
+    type: single
+    options: ["删除一个文件夹", "用代码新建一个文件夹", "改文件夹颜色"]
+    answer: 1
+    explain: Instance.new 就是“用代码造一个新东西”，这里造的是 Folder（文件夹）。
+  - q: leaderstats.Parent = player 是什么意思？
+    type: single
+    options: ["把文件夹挂到这个玩家身上", "删掉玩家", "给玩家改名"]
+    answer: 0
+    explain: Parent（父级）决定一个东西“挂在谁下面”，这里挂在玩家身上。
+challenge: 把名字故意写成大写 Leaderstats，Play 看看会不会出问题，再改回小写。
+---
+
+## 🎯 今天要做什么
+
+给每个进来的玩家发一张**计分卡**！我们用代码新建一个叫 **leaderstats** 的文件夹，挂到玩家身上——这是 Roblox 显示分数的“官方暗号”。
+
+## ✨ 新知识：用 Instance.new 造一个文件夹
+
+之前都是在 Explorer 里**手动**插入东西。今天学一招更厉害的：用代码**造**东西！
+
+```lua
+local leaderstats = Instance.new("Folder")
+```
+
+`Instance.new("Folder")` 就是“造一个新文件夹”。造好后要做两件事：给它**取名字**、把它**挂到玩家身上**。
+
+<Callout type="warning">
+  名字必须正好是全小写的 **leaderstats**！这是 Roblox 认的“暗号”，写成 `Leaderstats` 或 `LeaderStats` 都不行，计分板就不会出现。
+</Callout>
+
+完整片段（接着上节课的 PlayerAdded）：
+
+```lua
+local Players = game:GetService("Players")
+
+Players.PlayerAdded:Connect(function(player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"   -- 名字必须正好是 leaderstats（全小写）
+	leaderstats.Parent = player
+end)
+```
+
+<Callout type="info">
+  这段还是要放在 **ServerScriptService** 的 Script 里，这样对**所有玩家**都生效。
+</Callout>
+
+<StudioStep n={1} title="打开服务器脚本">
+  在 **ServerScriptService** 里的 Script，把上面整段代码写进去。
+</StudioStep>
+
+<StudioStep n={2} title="看清三步">
+  造文件夹 → 取名 `leaderstats` → `Parent = player`（挂到玩家）。三步缺一不可。
+</StudioStep>
+
+<StudioStep n={3} title="试运行">
+  按 **▶️ Play**，在 **Explorer** 里点开 **Players → 你的名字**，能看到一个 **leaderstats** 文件夹挂在下面。
+</StudioStep>
+
+## 🕹️ 看看你的成果
+
+玩家身上多了一个 `leaderstats` 文件夹。它现在是空的——下一节我们往里放一个**分数**，左上角就会出现计分板！
+
+<Callout type="warning">
+  Explorer 里看不到文件夹？多半是名字大小写不对，或者 `Parent = player` 那行漏了。
+</Callout>
