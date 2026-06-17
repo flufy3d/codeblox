@@ -1,8 +1,16 @@
 // localStorage 读写、迁移、工厂函数。单一顶层 key，便于整体导出/导入。
-import type { CodeBloxStore, Profile, Progress } from './types';
+import type { CodeBloxStore, Profile, Progress, ProfileSettings, TtsSettings } from './types';
 
 export const STORAGE_KEY = 'codeblox.v1';
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
+
+export function defaultTtsSettings(): TtsSettings {
+  return { rate: 0.9, voiceURI: null };
+}
+
+export function defaultSettings(): ProfileSettings {
+  return { tts: defaultTtsSettings() };
+}
 
 export function emptyProgress(): Progress {
   return {
@@ -35,7 +43,14 @@ export function makeProfile(name: string, avatar: string): Profile {
     pin: null,
     createdAt: new Date().toISOString(),
     progress: emptyProgress(),
+    settings: defaultSettings(),
   };
+}
+
+// 给一个档案补齐 settings（朗读等），用于迁移老数据 / 导入旧备份。就地修改，幂等。
+export function ensureSettings(p: { settings?: ProfileSettings }): void {
+  if (!p.settings) p.settings = defaultSettings();
+  else if (!p.settings.tts) p.settings.tts = defaultTtsSettings();
 }
 
 export function freshProfileId(): string {
@@ -51,6 +66,8 @@ function migrate(data: unknown): CodeBloxStore {
   if (!data || typeof data !== 'object') return emptyStore();
   const store = data as CodeBloxStore;
   if (typeof store.profiles !== 'object' || store.profiles === null) return emptyStore();
+  // v2：给每个档案补齐 settings（朗读语速 / 选音）
+  for (const p of Object.values(store.profiles)) ensureSettings(p);
   store.schemaVersion = SCHEMA_VERSION;
   return store;
 }

@@ -23,7 +23,7 @@ const taskIds = d.tasks.map((t) => t.id);
   <h1 class="mt-3 text-3xl font-black text-slate-800">{d.emoji} {d.title}</h1>
   <p class="mt-1 text-sm text-slate-400">约 {d.estMinutes} 分钟 · 完成 +{d.xp} XP</p>
 
-  <div class="mt-4 rounded-2xl border-2 border-indigo-100 bg-indigo-50 px-4 py-3">
+  <div class="tts-scope mt-4 rounded-2xl border-2 border-indigo-100 bg-indigo-50 px-4 py-3">
     <p class="font-bold text-indigo-700">{UI.objectivesTitle}</p>
     <ul class="mt-1 list-disc pl-5 text-slate-600">
       {d.objectives.map((o) => <li class="my-1">{o}</li>)}
@@ -54,7 +54,7 @@ const taskIds = d.tasks.map((t) => t.id);
 
   {
     d.challenge && (
-      <section class="mt-8 rounded-2xl border-2 border-amber-200 bg-amber-50 px-4 py-3">
+      <section class="tts-scope mt-8 rounded-2xl border-2 border-amber-200 bg-amber-50 px-4 py-3">
         <p class="font-bold text-amber-700">{UI.challengeTitle}</p>
         <p class="mt-1 text-slate-600">{d.challenge}</p>
       </section>
@@ -93,6 +93,8 @@ const taskIds = d.tasks.map((t) => t.id);
 </article>
 
 <script>
+  import { initLessonTTS } from '../lib/tts';
+
   // 配图点击放大：点 .shot-zoom 图片弹出大图，点背景 / ✕ / Esc 关闭。
   // 用事件委托挂在 document 上（跨视图过渡仍有效），覆盖层懒创建到 body。
   function initShotZoom() {
@@ -142,4 +144,8 @@ const taskIds = d.tasks.map((t) => t.id);
 
   initShotZoom();
   document.addEventListener('astro:page-load', initShotZoom);
+
+  // 段落朗读：给每段注入 🔊 按钮 + 顶部控制条；视图过渡后重新初始化
+  initLessonTTS();
+  document.addEventListener('astro:page-load', initLessonTTS);
 </script>

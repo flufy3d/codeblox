@@ -1,7 +1,15 @@
 // 全站交互的心脏：localStorage 支撑的 Svelte 5 runes 响应式档案 store（单例）。
 // 所有孤岛 import 同一个 store，读写它即可联动。每次改动后立即持久化。
-import { load, save, emptyStore, makeProfile, freshProfileId } from './storage';
-import type { CodeBloxStore, Profile, PinData, ProfileExport } from './types';
+import {
+  load,
+  save,
+  emptyStore,
+  makeProfile,
+  freshProfileId,
+  defaultTtsSettings,
+  ensureSettings,
+} from './storage';
+import type { CodeBloxStore, Profile, PinData, ProfileExport, TtsSettings } from './types';
 import { readCatalog, orderedLessonIds } from './catalog';
 import { rollStreak, levelInfo, firstIncompleteId } from './progress';
 import { newlyEarned } from './badges';
@@ -75,6 +83,27 @@ class ProfileStore {
     const p = this.data.profiles[id];
     if (!p) return;
     p.pin = pin;
+    this.persist();
+  }
+
+  // ───────── 设置（朗读，每档案）─────────
+  get ttsSettings(): TtsSettings {
+    return this.active?.settings?.tts ?? defaultTtsSettings();
+  }
+
+  setTtsRate(rate: number) {
+    const p = this.active;
+    if (!p) return;
+    ensureSettings(p);
+    p.settings.tts.rate = rate;
+    this.persist();
+  }
+
+  setTtsVoice(voiceURI: string | null) {
+    const p = this.active;
+    if (!p) return;
+    ensureSettings(p);
+    p.settings.tts.voiceURI = voiceURI;
     this.persist();
   }
 
@@ -157,6 +186,7 @@ class ProfileStore {
   /** 导入一个档案；asCopy=true 时分配新 id 并加“（副本）”，否则按原 id 覆盖/新增。 */
   importProfile(prof: Profile, asCopy: boolean): string {
     const clone = JSON.parse(JSON.stringify(prof)) as Profile;
+    ensureSettings(clone); // 旧备份可能没有 settings，补齐
     if (asCopy) {
       clone.id = freshProfileId();
       clone.name = clone.name + '（副本）';

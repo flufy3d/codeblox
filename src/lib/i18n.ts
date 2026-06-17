@@ -30,6 +30,14 @@ export const UI = {
   newProfile: '＋ 新建小档案',
   pinPrompt: '请输入 4 位密码',
   pinWrong: '密码不对，再试试',
+  // 朗读（Read Aloud）
+  ttsListen: '朗读这段',
+  ttsPlayAll: '🔊 朗读整课',
+  ttsStop: '⏹ 停止',
+  ttsSpeed: '语速',
+  ttsVoice: '声音',
+  ttsVoiceAuto: '自动选择',
+  ttsNoVoice: '没找到中文语音，建议用 Edge 或 Chrome 浏览器',
   // 通用
   level: '级',
   xp: 'XP',
