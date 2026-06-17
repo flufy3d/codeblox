@@ -12,7 +12,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "shots": "node scripts/shot-console.mjs",
+    "shots:check": "node scripts/shot-console.mjs --check"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.3",

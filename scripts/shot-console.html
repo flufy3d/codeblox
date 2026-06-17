@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>📸 CodeBlox 截图控制台</title>
+    <style>
+      * { box-sizing: border-box; }
+      :root {
+        --indigo: #4f46e5;
+        --amber: #f59e0b;
+        --red: #ef4444;
+        --slate900: #0f172a;
+        --slate700: #334155;
+        --slate500: #64748b;
+        --slate300: #cbd5e1;
+        --slate100: #f1f5f9;
+      }
+      body {
+        margin: 0;
+        font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+        color: var(--slate700);
+        background: #f4f6fb;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 20px;
+        background: var(--indigo);
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      header h1 { font-size: 18px; margin: 0; font-weight: 800; }
+      .progress { flex: 1; }
+      .bar { height: 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.25); overflow: hidden; }
+      .bar > div { height: 100%; background: #a5f3fc; transition: width 0.3s; }
+      .progress small { opacity: 0.9; }
+      header button {
+        border: none;
+        background: rgba(255, 255, 255, 0.18);
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      header button:hover { background: rgba(255, 255, 255, 0.3); }
+
+      main { display: flex; height: calc(100vh - 54px); }
+      #queue {
+        width: 320px;
+        flex-shrink: 0;
+        overflow-y: auto;
+        border-right: 1px solid var(--slate300);
+        background: #fff;
+        padding: 10px;
+      }
+      .qgroup { font-size: 12px; font-weight: 800; color: var(--slate500); margin: 12px 6px 4px; }
+      .qitem {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 12px;
+        cursor: pointer;
+        margin-bottom: 3px;
+      }
+      .qitem:hover { background: var(--slate100); }
+      .qitem.active { background: #eef2ff; outline: 2px solid var(--indigo); }
+      .qitem.done { opacity: 0.55; }
+      .dot { width: 10px; height: 10px; border-radius: 999px; flex-shrink: 0; background: var(--amber); }
+      .qitem.done .dot { background: #10b981; }
+      .qitem.skipped .dot { background: var(--slate300); }
+      .qmeta { min-width: 0; flex: 1; }
+      .qmeta b { display: block; font-size: 13px; color: var(--slate900); font-weight: 700; }
+      .qmeta span { display: block; font-size: 11px; color: var(--slate500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .qthumb { width: 40px; height: 28px; object-fit: cover; border-radius: 6px; border: 1px solid var(--slate300); }
+      .dup { color: var(--red); font-weight: 800; }
+
+      #editor { flex: 1; overflow-y: auto; padding: 20px 24px; }
+      .info { max-width: 920px; }
+      .crumbs { font-size: 12px; color: var(--slate500); }
+      .capture {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--slate900);
+        margin: 6px 0 10px;
+        line-height: 1.4;
+      }
+      .sub { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 13px; color: var(--slate500); margin-bottom: 14px; }
+      .sub code { background: var(--slate100); padding: 2px 6px; border-radius: 6px; }
+      .sub a { color: var(--indigo); font-weight: 700; text-decoration: none; }
+      .sub a:hover { text-decoration: underline; }
+      .alt-note { color: #b45309; }
+
+      #stage { max-width: 920px; }
+      .dropzone {
+        border: 3px dashed var(--slate300);
+        border-radius: 18px;
+        padding: 60px 20px;
+        text-align: center;
+        color: var(--slate500);
+        background: #fff;
+      }
+      .dropzone.hot { border-color: var(--indigo); background: #eef2ff; color: var(--indigo); }
+      .dropzone .big { font-size: 40px; }
+      .dropzone .hint { margin-top: 10px; font-size: 15px; }
+      .dropzone kbd {
+        background: var(--slate900); color: #fff; border-radius: 6px; padding: 2px 7px; font-size: 12px; font-weight: 700;
+      }
+
+      .toolbar { display: none; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; align-items: center; }
+      .toolbar.show { display: flex; }
+      .tool {
+        border: 2px solid var(--slate300);
+        background: #fff;
+        padding: 7px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--slate700);
+      }
+      .tool:hover { border-color: var(--indigo); }
+      .tool.on { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+      .tool.save { background: #10b981; color: #fff; border-color: #10b981; margin-left: auto; }
+      .tool.save:hover { background: #059669; }
+      .tool.skip { background: #fff; color: var(--slate500); }
+      .sep { width: 1px; height: 24px; background: var(--slate300); }
+
+      #canvasWrap { display: none; background: #fff; border-radius: 14px; border: 1px solid var(--slate300); padding: 10px; }
+      #canvasWrap.show { display: block; }
+      #canvas { max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px; cursor: crosshair; touch-action: none; }
+      .canvas-hint { text-align: center; font-size: 12px; color: var(--slate500); margin-top: 8px; }
+
+      .done-banner { max-width: 920px; background: #ecfdf5; border: 2px solid #6ee7b7; color: #065f46; padding: 24px; border-radius: 16px; text-align: center; font-size: 18px; font-weight: 700; }
+
+      #toast {
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        background: var(--slate900); color: #fff; padding: 10px 18px; border-radius: 12px;
+        font-weight: 700; opacity: 0; transition: opacity 0.25s; pointer-events: none;
+      }
+      #toast.show { opacity: 1; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>📸 截图控制台</h1>
+      <div class="progress">
+        <div class="bar"><div id="barFill" style="width: 0%"></div></div>
+        <small id="progressText">加载中…</small>
+      </div>
+      <button id="refreshBtn" title="重新扫描课程">↻ 刷新</button>
+    </header>
+
+    <main>
+      <aside id="queue"></aside>
+      <section id="editor">
+        <div id="emptyState" class="done-banner" style="display: none"></div>
+        <div class="info" id="info"></div>
+        <div id="stage">
+          <div class="toolbar" id="toolbar">
+            <button class="tool" data-tool="crop">✂️ 裁剪</button>
+            <button class="tool" data-tool="arrow">➜ 箭头</button>
+            <button class="tool" data-tool="circle">◯ 圆圈</button>
+            <span class="sep"></span>
+            <button class="tool" id="undoBtn">↶ 撤销</button>
+            <button class="tool" id="resetBtn">⟲ 重来</button>
+            <button class="tool skip" id="skipBtn">跳过 (S)</button>
+            <button class="tool save" id="saveBtn">✓ 保存 (回车)</button>
+          </div>
+          <div class="dropzone" id="dropzone">
+            <div class="big">📋</div>
+            <div class="hint">
+              截好图后，在这里按 <kbd>Ctrl</kbd> + <kbd>V</kbd> 粘贴<br />
+              （或把图片文件拖进来）
+            </div>
+          </div>
+          <div id="canvasWrap">
+            <canvas id="canvas"></canvas>
+            <div class="canvas-hint" id="canvasHint">选「裁剪／箭头／圆圈」后在图上拖动；不需要标注就直接按回车保存</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast"></div>
+
+    <script>
+      const PREVIEW_BASE = "http://localhost:4321/codeblox/lessons/";
+      const RED = "#ef4444";
+
+      let data = { shots: [], total: 0, done: 0, pending: 0, duplicates: [] };
+      let current = null;
+      const skipped = new Set();
+
+      // 编辑器状态
+      let baseImg = null;
+      let ops = []; // {type:'crop'|'arrow'|'circle', x,y,w,h} 或 {type:'arrow', x1,y1,x2,y2}
+      let tool = null;
+      let dragging = null;
+
+      const $ = (id) => document.getElementById(id);
+      const canvas = $("canvas");
+      const ctx = canvas.getContext("2d");
+
+      function toast(msg) {
+        const t = $("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(t._t);
+        t._t = setTimeout(() => t.classList.remove("show"), 1500);
+      }
+
+      async function loadQueue(keepCurrentId) {
+        const res = await fetch("/api/queue");
+        data = await res.json();
+        renderProgress();
+        renderQueue();
+        let next = null;
+        if (keepCurrentId) next = data.shots.find((s) => s.id === keepCurrentId);
+        if (!next) next = firstPending();
+        if (next) selectShot(next);
+        else showAllDone();
+      }
+
+      function firstPending() {
+        return data.shots.find((s) => s.status === "pending" && !skipped.has(s.id)) || null;
+      }
+
+      function renderProgress() {
+        const pct = data.total ? Math.round((data.done / data.total) * 100) : 0;
+        $("barFill").style.width = pct + "%";
+        $("progressText").textContent = `已拍 ${data.done} / 共 ${data.total}　待拍 ${data.pending}`;
+        if (data.duplicates.length) toast("⚠️ 重复 id：" + data.duplicates.join(", "));
+      }
+
+      function renderQueue() {
+        const q = $("queue");
+        q.innerHTML = "";
+        let lastFile = null;
+        for (const s of data.shots) {
+          if (s.lessonFile !== lastFile) {
+            lastFile = s.lessonFile;
+            const g = document.createElement("div");
+            g.className = "qgroup";
+            g.textContent = (s.lessonTitle || s.lessonFile) + "　·　" + s.lessonFile;
+            q.appendChild(g);
+          }
+          const item = document.createElement("div");
+          item.className = "qitem " + s.status + (skipped.has(s.id) ? " skipped" : "");
+          if (current && s.id === current.id) item.classList.add("active");
+          item.onclick = () => selectShot(s);
+
+          const dot = document.createElement("div");
+          dot.className = "dot";
+          item.appendChild(dot);
+
+          const meta = document.createElement("div");
+          meta.className = "qmeta";
+          const b = document.createElement("b");
+          b.textContent = s.id + (s.duplicate ? " ⚠重复" : "");
+          if (s.duplicate) b.classList.add("dup");
+          const span = document.createElement("span");
+          span.textContent = s.capture || "(无说明)";
+          meta.appendChild(b);
+          meta.appendChild(span);
+          item.appendChild(meta);
+
+          if (s.status === "done" && s.existingExt) {
+            const img = document.createElement("img");
+            img.className = "qthumb";
+            img.src = "/shots/" + s.id + "." + s.existingExt + "?t=" + Date.now();
+            item.appendChild(img);
+          }
+          q.appendChild(item);
+        }
+      }
+
+      function selectShot(s) {
+        current = s;
+        resetEditor();
+        $("emptyState").style.display = "none";
+        $("stage").style.display = "";
+        const previewUrl = PREVIEW_BASE + s.slug;
+        $("info").innerHTML = "";
+        const crumbs = el("div", "crumbs", `${s.lessonTitle || s.lessonFile}　›　${s.section || "正文"}`);
+        const cap = el("div", "capture", "📸 " + (s.capture || "（这张没有写说明）"));
+        const sub = document.createElement("div");
+        sub.className = "sub";
+        sub.innerHTML =
+          `<span>id <code>${escapeHtml(s.id)}</code></span>` +
+          (s.alt ? `<span class="alt-note">图注：${escapeHtml(s.alt)}</span>` : "") +
+          `<a href="${previewUrl}" target="_blank" rel="noopener">在预览里打开这一课 ↗</a>` +
+          (s.status === "done" ? `<span style="color:#10b981;font-weight:700">已拍 ✓（粘贴新图可重拍）</span>` : "");
+        $("info").appendChild(crumbs);
+        $("info").appendChild(cap);
+        $("info").appendChild(sub);
+
+        // 已拍的：先把现有图显示出来当参考
+        if (s.status === "done" && s.existingExt) {
+          showExisting(s);
+        }
+        renderQueue();
+      }
+
+      function showExisting(s) {
+        const img = new Image();
+        img.onload = () => {
+          baseImg = img;
+          ops = [];
+          setupCanvas();
+          redraw();
+          $("canvasWrap").classList.add("show");
+          $("dropzone").style.display = "none";
+          $("toolbar").classList.remove("show"); // 只展示，先不进编辑（粘贴新图才进编辑）
+          $("canvasHint").textContent = "这是已拍的图。要重拍：直接 Ctrl+V 粘贴新截图。";
+          baseImg = null; // 不进入可编辑状态，避免误存旧图
+        };
+        img.src = "/shots/" + s.id + "." + s.existingExt + "?t=" + Date.now();
+      }
+
+      function resetEditor() {
+        baseImg = null;
+        ops = [];
+        tool = null;
+        dragging = null;
+        $("toolbar").classList.remove("show");
+        $("canvasWrap").classList.remove("show");
+        $("dropzone").style.display = "";
+        $("dropzone").classList.remove("hot");
+        setTool(null);
+      }
+
+      function showAllDone() {
+        current = null;
+        $("stage").style.display = "none";
+        $("info").innerHTML = "";
+        const e = $("emptyState");
+        e.style.display = "";
+        e.textContent = data.total === 0 ? "课程里还没有 <Shot> 占位。" : "🎉 全部拍完了！辛苦啦。";
+        renderQueue();
+      }
+
+      // ── 载入剪贴板/拖拽的图片 ──
+      function loadImage(blob) {
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          baseImg = img;
+          ops = [];
+          setupCanvas();
+          redraw();
+          $("dropzone").style.display = "none";
+          $("canvasWrap").classList.add("show");
+          $("toolbar").classList.add("show");
+          $("canvasHint").textContent = "选「裁剪／箭头／圆圈」后在图上拖动；不需要标注就直接按回车保存";
+          toast("已粘贴，回车保存");
+        };
+        img.onerror = () => toast("图片读取失败");
+        img.src = url;
+      }
+
+      function setupCanvas() {
+        canvas.width = baseImg.naturalWidth;
+        canvas.height = baseImg.naturalHeight;
+      }
+
+      function norm(o) {
+        return { x: Math.min(o.x, o.x + o.w), y: Math.min(o.y, o.y + o.h), w: Math.abs(o.w), h: Math.abs(o.h) };
+      }
+
+      function lineW(w) {
+        return Math.max(4, Math.round(w * 0.006));
+      }
+
+      function drawArrow(c, x1, y1, x2, y2, lw) {
+        c.strokeStyle = RED;
+        c.fillStyle = RED;
+        c.lineWidth = lw;
+        c.lineCap = "round";
+        c.beginPath();
+        c.moveTo(x1, y1);
+        c.lineTo(x2, y2);
+        c.stroke();
+        const ang = Math.atan2(y2 - y1, x2 - x1);
+        const head = lw * 3.6;
+        c.beginPath();
+        c.moveTo(x2, y2);
+        c.lineTo(x2 - head * Math.cos(ang - Math.PI / 6), y2 - head * Math.sin(ang - Math.PI / 6));
+        c.lineTo(x2 - head * Math.cos(ang + Math.PI / 6), y2 - head * Math.sin(ang + Math.PI / 6));
+        c.closePath();
+        c.fill();
+      }
+
+      function drawCircle(c, o, lw) {
+        const n = norm(o);
+        c.strokeStyle = RED;
+        c.lineWidth = lw;
+        c.beginPath();
+        c.ellipse(n.x + n.w / 2, n.y + n.h / 2, n.w / 2, n.h / 2, 0, 0, Math.PI * 2);
+        c.stroke();
+      }
+
+      function redraw(temp) {
+        if (!baseImg) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          return;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(baseImg, 0, 0);
+        const all = temp ? ops.concat([temp]) : ops;
+        const lw = lineW(canvas.width);
+        for (const o of all) {
+          if (o.type === "arrow") drawArrow(ctx, o.x1, o.y1, o.x2, o.y2, lw);
+          else if (o.type === "circle") drawCircle(ctx, o, lw);
+        }
+        const crop = lastCrop(all);
+        if (crop) {
+          const n = norm(crop);
+          ctx.save();
+          ctx.fillStyle = "rgba(0,0,0,0.45)";
+          ctx.fillRect(0, 0, canvas.width, n.y);
+          ctx.fillRect(0, n.y + n.h, canvas.width, canvas.height - (n.y + n.h));
+          ctx.fillRect(0, n.y, n.x, n.h);
+          ctx.fillRect(n.x + n.w, n.y, canvas.width - (n.x + n.w), n.h);
+          ctx.strokeStyle = "#fbbf24";
+          ctx.lineWidth = lw;
+          ctx.setLineDash([lw * 2, lw * 2]);
+          ctx.strokeRect(n.x, n.y, n.w, n.h);
+          ctx.restore();
+        }
+      }
+
+      function lastCrop(list) {
+        for (let i = list.length - 1; i >= 0; i--) if (list[i].type === "crop") return list[i];
+        return null;
+      }
+
+      // ── 画布交互 ──
+      function evToImg(e) {
+        const r = canvas.getBoundingClientRect();
+        return {
+          x: ((e.clientX - r.left) / r.width) * canvas.width,
+          y: ((e.clientY - r.top) / r.height) * canvas.height,
+        };
+      }
+
+      canvas.addEventListener("pointerdown", (e) => {
+        if (!baseImg || !tool) return;
+        canvas.setPointerCapture(e.pointerId);
+        const p = evToImg(e);
+        dragging = { sx: p.x, sy: p.y };
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const p = evToImg(e);
+        redraw(makeOp(dragging.sx, dragging.sy, p.x, p.y));
+      });
+      canvas.addEventListener("pointerup", (e) => {
+        if (!dragging) return;
+        const p = evToImg(e);
+        const op = makeOp(dragging.sx, dragging.sy, p.x, p.y);
+        dragging = null;
+        // 太小的拖动忽略（误触）
+        const small = Math.abs(op.type === "arrow" ? op.x2 - op.x1 : op.w) < 6 && Math.abs(op.type === "arrow" ? op.y2 - op.y1 : op.h) < 6;
+        if (small) {
+          redraw();
+          return;
+        }
+        if (op.type === "crop") ops = ops.filter((o) => o.type !== "crop"); // 只保留一个裁剪
+        ops.push(op);
+        redraw();
+      });
+
+      function makeOp(sx, sy, ex, ey) {
+        if (tool === "arrow") return { type: "arrow", x1: sx, y1: sy, x2: ex, y2: ey };
+        return { type: tool, x: sx, y: sy, w: ex - sx, h: ey - sy }; // crop / circle
+      }
+
+      function setTool(t) {
+        tool = t;
+        document.querySelectorAll(".tool[data-tool]").forEach((b) => b.classList.toggle("on", b.dataset.tool === t));
+      }
+
+      // ── 导出 + 保存 ──
+      function exportCanvas() {
+        const crop = lastCrop(ops);
+        const region = crop ? norm(crop) : { x: 0, y: 0, w: baseImg.naturalWidth, h: baseImg.naturalHeight };
+        const scale = Math.min(1, 1600 / Math.max(region.w, region.h));
+        const outW = Math.max(1, Math.round(region.w * scale));
+        const outH = Math.max(1, Math.round(region.h * scale));
+        const oc = document.createElement("canvas");
+        oc.width = outW;
+        oc.height = outH;
+        const o = oc.getContext("2d");
+        o.drawImage(baseImg, region.x, region.y, region.w, region.h, 0, 0, outW, outH);
+        const lw = lineW(outW);
+        const map = (x, y) => [(x - region.x) * scale, (y - region.y) * scale];
+        for (const op of ops) {
+          if (op.type === "arrow") {
+            const [a, b] = map(op.x1, op.y1);
+            const [c, d] = map(op.x2, op.y2);
+            drawArrow(o, a, b, c, d, lw);
+          } else if (op.type === "circle") {
+            const n = norm(op);
+            const [a, b] = map(n.x, n.y);
+            drawCircle(o, { x: a, y: b, w: n.w * scale, h: n.h * scale }, lw);
+          }
+        }
+        return oc;
+      }
+
+      function save() {
+        if (!baseImg || !current) return;
+        const oc = exportCanvas();
+        oc.toBlob(
+          (blob) => {
+            if (!blob) {
+              oc.toBlob((b2) => b2 && postBlob(b2), "image/png");
+              return;
+            }
+            postBlob(blob);
+          },
+          "image/webp",
+          0.9
+        );
+      }
+
+      async function postBlob(blob) {
+        try {
+          const res = await fetch("/api/shot/" + encodeURIComponent(current.id), {
+            method: "POST",
+            headers: { "Content-Type": blob.type || "image/webp" },
+            body: blob,
+          });
+          const j = await res.json();
+          if (!j.ok) {
+            toast("保存失败：" + (j.error || res.status));
+            return;
+          }
+          const savedId = current.id;
+          toast("✓ 已保存 " + savedId);
+          // 本地标记 done，刷新队列并跳下一张
+          const s = data.shots.find((x) => x.id === savedId);
+          const wasPending = s && s.status === "pending";
+          if (s) {
+            s.status = "done";
+            s.existingExt = j.ext;
+          }
+          if (wasPending) {
+            data.done++;
+            data.pending--;
+          }
+          renderProgress();
+          const next = firstPending();
+          if (next) selectShot(next);
+          else showAllDone();
+        } catch (e) {
+          toast("保存失败：" + e);
+        }
+      }
+
+      function skip() {
+        if (!current) return;
+        skipped.add(current.id);
+        const next = firstPending();
+        if (next) selectShot(next);
+        else showAllDone();
+      }
+
+      // ── 事件绑定 ──
+      document.querySelectorAll(".tool[data-tool]").forEach((b) => {
+        b.onclick = () => setTool(tool === b.dataset.tool ? null : b.dataset.tool);
+      });
+      $("undoBtn").onclick = () => {
+        ops.pop();
+        redraw();
+      };
+      $("resetBtn").onclick = () => {
+        ops = [];
+        setTool(null);
+        redraw();
+      };
+      $("saveBtn").onclick = save;
+      $("skipBtn").onclick = skip;
+      $("refreshBtn").onclick = () => loadQueue(current && current.id);
+
+      document.addEventListener("paste", (e) => {
+        const items = (e.clipboardData || {}).items || [];
+        for (const it of items) {
+          if (it.kind === "file" && it.type.startsWith("image/")) {
+            const f = it.getAsFile();
+            if (f) {
+              loadImage(f);
+              e.preventDefault();
+              return;
+            }
+          }
+        }
+      });
+
+      const dz = $("dropzone");
+      ["dragenter", "dragover"].forEach((ev) =>
+        dz.addEventListener(ev, (e) => {
+          e.preventDefault();
+          dz.classList.add("hot");
+        })
+      );
+      ["dragleave", "drop"].forEach((ev) =>
+        dz.addEventListener(ev, (e) => {
+          e.preventDefault();
+          dz.classList.remove("hot");
+        })
+      );
+      dz.addEventListener("drop", (e) => {
+        const f = [...(e.dataTransfer.files || [])].find((x) => x.type.startsWith("image/"));
+        if (f) loadImage(f);
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+        if (e.key === "Enter" && baseImg) {
+          e.preventDefault();
+          save();
+        } else if ((e.key === "s" || e.key === "S") && current) {
+          skip();
+        } else if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "Z")) {
+          ops.pop();
+          redraw();
+        }
+      });
+
+      function el(tag, cls, text) {
+        const n = document.createElement(tag);
+        if (cls) n.className = cls;
+        if (text != null) n.textContent = text;
+        return n;
+      }
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      }
+
+      loadQueue();
+    </script>
+  </body>
+</html>

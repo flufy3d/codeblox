@@ -6,6 +6,7 @@ import { buildCatalog } from '../../lib/server-catalog';
 import StudioStep from '../../components/astro/StudioStep.astro';
 import CodeBlock from '../../components/astro/CodeBlock.astro';
 import Callout from '../../components/astro/Callout.astro';
+import Shot from '../../components/astro/Shot.astro';
 
 export async function getStaticPaths() {
   const lessons = await getCollection('lessons');
@@ -26,6 +27,6 @@ const next = idx >= 0 && idx < catalog.lessons.length - 1 ? catalog.lessons[idx 
 
 <BaseLayout title={entry.data.title}>
   <LessonLayout entry={entry} prev={prev} next={next}>
-    <Content components={{ StudioStep, CodeBlock, Callout }} />
+    <Content components={{ StudioStep, CodeBlock, Callout, Shot }} />
   </LessonLayout>
 </BaseLayout>

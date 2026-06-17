@@ -91,3 +91,55 @@ const taskIds = d.tasks.map((t) => t.id);
     }
   </nav>
 </article>
+
+<script>
+  // 配图点击放大：点 .shot-zoom 图片弹出大图，点背景 / ✕ / Esc 关闭。
+  // 用事件委托挂在 document 上（跨视图过渡仍有效），覆盖层懒创建到 body。
+  function initShotZoom() {
+    if ((window as any).__shotZoom) return;
+    (window as any).__shotZoom = true;
+
+    function getOverlay() {
+      let o = document.getElementById('shot-lightbox');
+      if (o) return o;
+      o = document.createElement('div');
+      o.id = 'shot-lightbox';
+      const btn = document.createElement('button');
+      btn.className = 'shot-lightbox-close';
+      btn.setAttribute('aria-label', '关闭');
+      btn.textContent = '✕';
+      const big = document.createElement('img');
+      big.alt = '';
+      o.appendChild(btn);
+      o.appendChild(big);
+      o.addEventListener('click', (e) => {
+        const t = e.target as HTMLElement;
+        if (t === o || t.classList.contains('shot-lightbox-close')) close();
+      });
+      document.body.appendChild(o);
+      return o;
+    }
+    function open(src: string, alt: string) {
+      const o = getOverlay();
+      (o.querySelector('img') as HTMLImageElement).src = src;
+      (o.querySelector('img') as HTMLImageElement).alt = alt || '';
+      o.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      const o = document.getElementById('shot-lightbox');
+      if (o) o.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('click', (e) => {
+      const img = (e.target as HTMLElement).closest('img.shot-zoom') as HTMLImageElement | null;
+      if (img) open(img.currentSrc || img.src, img.alt);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  }
+
+  initShotZoom();
+  document.addEventListener('astro:page-load', initShotZoom);
+</script>

@@ -1,0 +1,74 @@
+---
+/**
+ * <Shot> —— 课程配图占位 / 渲染组件
+ *
+ * 作者只需在 MDX 里图该出现的位置写一行（单行、自闭合、值用英文双引号、顺序 id→capture→alt）：
+ *   <Shot id="1.2-s1" capture="点 Play 后，框选 Output 窗口里那行白字" alt="Output 里出现「你好，Roblox！」" />
+ *
+ * 真图由「截图控制台」（npm run shots）写到 public/shots/<id>.{webp,png,jpg}。
+ *   - 图存在            → 渲染 <figure><img>（alt 当中文图注）
+ *   - 图缺失 + 开发预览   → 渲染「📸 待拍」虚线占位框（显示 id 和拍摄说明）
+ *   - 图缺失 + 生产构建   → 渲染空 + console.warn（只警告、绝不 throw，缺图也能正常构建/部署）
+ *
+ * id 规范：<课id>-s<序号>，如 1.2-s1；全局唯一、发布后不改。
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { withBase } from '../../lib/url';
+
+interface Props {
+  id: string;
+  capture?: string;
+  alt?: string;
+}
+const { id, capture, alt } = Astro.props;
+
+const EXTS = ['webp', 'png', 'jpg'] as const;
+const ID_OK = /^[A-Za-z0-9][A-Za-z0-9._-]*$/; // 不以 . 或 - 开头，防隐藏文件 / 路径穿越
+
+const shotsDir = path.join(process.cwd(), 'public', 'shots');
+
+let foundExt: string | null = null;
+if (ID_OK.test(id)) {
+  for (const ext of EXTS) {
+    if (fs.existsSync(path.join(shotsDir, `${id}.${ext}`))) {
+      foundExt = ext;
+      break;
+    }
+  }
+} else {
+  console.warn(`[Shot] 非法 id="${id}"（只能用字母/数字/._-，且不以 . 或 - 开头）`);
+}
+
+const src = foundExt ? withBase(`/shots/${id}.${foundExt}`) : null;
+const caption = alt ?? '';
+
+if (!src && !import.meta.env.DEV) {
+  console.warn(`[Shot] 缺图 id="${id}"${capture ? ` — ${capture}` : ''}`);
+}
+---
+
+{
+  src ? (
+    <figure class="relative my-4">
+      <img
+        src={src}
+        alt={caption}
+        loading="lazy"
+        decoding="async"
+        class="shot-zoom w-full h-auto cursor-zoom-in rounded-2xl border-2 border-slate-200 bg-white shadow-sm"
+      />
+      <span class="pointer-events-none absolute right-2 top-2 rounded-full bg-slate-900/60 px-2 py-0.5 text-xs font-bold text-white">🔍 点击放大</span>
+      {caption && (
+        <figcaption class="mt-1 text-center text-sm text-slate-400">{caption}</figcaption>
+      )}
+    </figure>
+  ) : import.meta.env.DEV ? (
+    <div class="my-4 flex flex-col items-center gap-1 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 px-4 py-6 text-center">
+      <p class="font-bold text-amber-700">📸 待拍 <code class="rounded bg-amber-100 px-1">{id}</code></p>
+      {capture && <p class="text-sm text-amber-800">{capture}</p>}
+      {alt && <p class="text-xs text-amber-600">图注：{alt}</p>}
+      <p class="mt-1 text-xs text-amber-500">运行 <code class="rounded bg-amber-100 px-1">npm run shots</code> 去拍它</p>
+    </div>
+  ) : null
+}
