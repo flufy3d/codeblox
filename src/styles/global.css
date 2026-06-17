@@ -54,3 +54,49 @@
     @apply bg-transparent p-0 text-inherit;
   }
 }
+
+/* 配图点击放大（灯箱）—— 覆盖层挂在 <body> 上，需用全局（非 scoped）样式 */
+#shot-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.88);
+  cursor: zoom-out;
+}
+#shot-lightbox.show {
+  display: flex;
+}
+#shot-lightbox img {
+  max-width: 96vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+#shot-lightbox .shot-lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+#shot-lightbox .shot-lightbox-close:hover {
+  background: #fff;
+}
