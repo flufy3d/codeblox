@@ -100,3 +100,65 @@
 #shot-lightbox .shot-lightbox-close:hover {
   background: #fff;
 }
+
+/* 段落朗读（Read Aloud）—— 由 src/lib/tts.ts 注入，需用全局（非 scoped）样式 */
+.tts-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6em;
+  height: 1.6em;
+  margin-inline-start: 0.35em;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: #eef2ff; /* indigo-50 */
+  font-size: 0.85em;
+  line-height: 1;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s, transform 0.1s;
+}
+.tts-btn:hover {
+  background: #e0e7ff; /* indigo-100 */
+}
+.tts-btn:active {
+  transform: scale(0.9);
+}
+
+/* 当前正在朗读的块：柔和高亮，让孩子知道"读到哪了" */
+.tts-reading {
+  border-radius: 8px;
+  background: #fef9c3; /* amber-100 */
+  box-shadow:
+    0 0 0 4px #fef9c3,
+    0 0 0 6px #fcd34d; /* amber-300 外圈 */
+  transition: background-color 0.2s;
+}
+
+/* 控制条 */
+.tts-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 4px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 2px solid #c7d2fe; /* indigo-200 */
+  background: #eef2ff; /* indigo-50 */
+}
+.tts-bar-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #fff;
+  background: #6366f1; /* indigo-500 */
+  cursor: pointer;
+}
+.tts-bar-btn:hover {
+  background: #4f46e5; /* indigo-600 */
+}

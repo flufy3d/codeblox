@@ -24,6 +24,16 @@ export interface PinData {
   hash: string;
 }
 
+// ───────────────────────── 档案设置（每个孩子各一份，随导出/导入走）─────────────────────────
+export interface TtsSettings {
+  rate: number; // 语速 0.7 / 0.9 / 1.1
+  voiceURI: string | null; // 选定的语音；null = 自动挑最自然的
+}
+
+export interface ProfileSettings {
+  tts: TtsSettings;
+}
+
 export interface Profile {
   id: string;
   name: string;
@@ -31,6 +41,7 @@ export interface Profile {
   pin: PinData | null;
   createdAt: string;
   progress: Progress;
+  settings: ProfileSettings;
 }
 
 export interface CodeBloxStore {

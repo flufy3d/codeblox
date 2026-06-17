@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProfileManager from '../components/islands/ProfileManager.svelte';
 import ExportImportProgress from '../components/islands/ExportImportProgress.svelte';
+import ReadAloudSettings from '../components/islands/ReadAloudSettings.svelte';
 ---
 
 <BaseLayout title="我的档案">
@@ -10,6 +11,12 @@ import ExportImportProgress from '../components/islands/ExportImportProgress.sve
       <h1 class="text-2xl font-black text-slate-800">👤 学习者档案</h1>
       <p class="mt-1 text-slate-500">每个孩子一个档案，进度分开记录；可设 4 位密码防止互相覆盖。</p>
       <div class="mt-4"><ProfileManager client:load /></div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-black text-slate-800">🔊 朗读设置</h2>
+      <p class="mt-1 text-slate-500">给认字还不全的孩子：调整朗读语速和声音。课文每段、小测验题目旁边都有 🔊 可以点读。</p>
+      <div class="mt-4"><ReadAloudSettings client:load /></div>
     </section>
 
     <section>

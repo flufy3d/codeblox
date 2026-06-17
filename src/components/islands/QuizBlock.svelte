@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { store } from '../../lib/store.svelte';
   import { scoreQuiz } from '../../lib/progress';
+  import { speak, toggleSpeak } from '../../lib/tts';
+  import { UI } from '../../lib/i18n';
 
   interface Q {
     q: string;
@@ -22,6 +24,7 @@
     quiz.map((q) => (q.type === 'multi' ? [] : undefined)),
   );
   let submitted = $state(false);
+  let qEls: HTMLElement[] = []; // 每道题的文字元素，朗读时高亮
 
   const correctList = $derived(quiz.map((q) => q.answer));
   const score = $derived(scoreQuiz(answers, correctList));
@@ -64,19 +67,35 @@
   <div class="my-4 space-y-5">
     {#each quiz as q, qi (qi)}
       <div class="rounded-2xl border-2 border-slate-100 bg-slate-50 p-4">
-        <p class="mb-3 font-bold text-slate-800">
-          {qi + 1}. {q.q}
-          {#if q.type === 'multi'}<span class="ml-1 text-xs font-normal text-slate-400">（可多选）</span>{/if}
-        </p>
+        <div class="mb-3 flex items-start gap-1">
+          <p bind:this={qEls[qi]} class="flex-1 font-bold text-slate-800">
+            {qi + 1}. {q.q}
+            {#if q.type === 'multi'}<span class="ml-1 text-xs font-normal text-slate-400">（可多选）</span>{/if}
+          </p>
+          <button
+            type="button"
+            class="tts-btn shrink-0"
+            aria-label={UI.ttsListen}
+            onclick={() => toggleSpeak(qEls[qi], q.q)}>🔊</button
+          >
+        </div>
         <div class="space-y-2">
           {#each q.options as opt, oi (oi)}
-            <button
-              type="button"
-              class={`block w-full rounded-xl border-2 px-4 py-2 text-left text-slate-700 transition ${optionClass(qi, oi)}`}
-              onclick={() => pick(qi, oi)}
-            >
-              {opt}
-            </button>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                class={`block flex-1 rounded-xl border-2 px-4 py-2 text-left text-slate-700 transition ${optionClass(qi, oi)}`}
+                onclick={() => pick(qi, oi)}
+              >
+                {opt}
+              </button>
+              <button
+                type="button"
+                class="tts-btn shrink-0"
+                aria-label={UI.ttsListen}
+                onclick={() => speak(opt)}>🔊</button
+              >
+            </div>
           {/each}
         </div>
         {#if submitted && q.explain}
