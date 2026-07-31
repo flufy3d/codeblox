@@ -21,9 +21,10 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = process.cwd();
 const LESSONS_DIR = path.join(ROOT, 'src', 'content', 'lessons');
+const UNITS_DIR = path.join(ROOT, 'src', 'content', 'units');
 const SHOTS_DIR = path.join(ROOT, 'public', 'shots');
 const HTML_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'shot-console.html');
-const PORT = 4444;
+const PORT = Number(process.env.SHOTS_PORT) || 4444;   // 4444 被占用时可以 SHOTS_PORT=4445 另起一个
 const HOST = '127.0.0.1';
 const EXTS = ['webp', 'png', 'jpg'];
 const MAX_BYTES = 8 * 1024 * 1024;
@@ -39,12 +40,31 @@ function readFrontmatter(text) {
   const id = (fm.match(/^id:\s*"?([^"\n\r]+?)"?\s*$/m) || [])[1] || '';
   let title = (fm.match(/^title:\s*(.+?)\s*$/m) || [])[1] || '';
   title = title.replace(/^["']|["']$/g, '');
-  return { id, title };
+  const unit = (fm.match(/^unit:\s*"?([^"\n\r]+?)"?\s*$/m) || [])[1] || '';
+  return { id, title, unit };
+}
+
+// 读 src/content/units/*.yaml 拿单元的序号/名字/emoji（不引 yaml 依赖，按行抓顶层字段；
+// 缩进的嵌套字段如 badge.emoji 不会被 ^ 匹配到，正好）
+function loadUnits() {
+  const out = {};
+  if (!fs.existsSync(UNITS_DIR)) return out;
+  for (const f of fs.readdirSync(UNITS_DIR)) {
+    if (!/\.ya?ml$/i.test(f)) continue;
+    const key = f.replace(/\.ya?ml$/i, '');
+    const t = fs.readFileSync(path.join(UNITS_DIR, f), 'utf8');
+    const pick = (k) => {
+      const m = t.match(new RegExp(`^${k}:[ \\t]*(.+?)[ \\t]*$`, 'm'));
+      return m ? m[1].replace(/^["']|["']$/g, '') : '';
+    };
+    out[key] = { key, order: Number(pick('order')) || 999, title: pick('title'), emoji: pick('emoji') };
+  }
+  return out;
 }
 
 function scanFile(file) {
   const text = fs.readFileSync(path.join(LESSONS_DIR, file), 'utf8');
-  const { id: lessonFmId, title: lessonTitle } = readFrontmatter(text);
+  const { id: lessonFmId, title: lessonTitle, unit } = readFrontmatter(text);
   const slug = file.replace(/\.mdx$/, '');
   const lines = text.split(/\r?\n/);
   const shots = [];
@@ -60,7 +80,7 @@ function scanFile(file) {
       const id = (attrs.match(/\bid\s*=\s*"([^"]*)"/) || [])[1] || '';
       const capture = (attrs.match(/\bcapture\s*=\s*"([^"]*)"/) || [])[1] || '';
       const alt = (attrs.match(/\balt\s*=\s*"([^"]*)"/) || [])[1] || '';
-      shots.push({ id, capture, alt, section: heading, lessonFile: file, slug, lessonFmId, lessonTitle });
+      shots.push({ id, capture, alt, section: heading, lessonFile: file, slug, lessonFmId, lessonTitle, unit });
     }
   }
   return shots;
@@ -75,6 +95,7 @@ function existingExt(id) {
 
 function buildQueue() {
   const files = fs.readdirSync(LESSONS_DIR).filter((f) => f.endsWith('.mdx')).sort();
+  const unitMeta = loadUnits();
   const all = [];
   files.forEach((file, fileIndex) => {
     scanFile(file).forEach((s, inFileIndex) => all.push({ ...s, fileIndex, inFileIndex }));
@@ -86,18 +107,35 @@ function buildQueue() {
     s.existingExt = existingExt(s.id);
     s.status = s.existingExt ? 'done' : 'pending';
     s.duplicate = counts[s.id] > 1;
+    s.unitOrder = (unitMeta[s.unit] || {}).order ?? 999;
   }
 
-  // 待拍优先；同状态按文件顺序、文件内出现顺序
+  // 按课程顺序排（单元 → 文件 → 文件内位置）。以前是「待拍优先」，
+  // 但那样跟按单元分组打架；待拍靠界面上的筛选和「跳到第一张待拍」解决。
   all.sort((a, b) => {
-    if (a.status !== b.status) return a.status === 'pending' ? -1 : 1;
+    if (a.unitOrder !== b.unitOrder) return a.unitOrder - b.unitOrder;
     if (a.fileIndex !== b.fileIndex) return a.fileIndex - b.fileIndex;
     return a.inFileIndex - b.inFileIndex;
   });
 
+  // 每个单元的进度，给侧栏的折叠头用
+  const units = [];
+  for (const s of all) {
+    let u = units.find((x) => x.key === s.unit);
+    if (!u) {
+      const m = unitMeta[s.unit] || {};
+      u = { key: s.unit, order: m.order ?? 999, title: m.title || s.unit, emoji: m.emoji || '📄', total: 0, done: 0, pending: 0 };
+      units.push(u);
+    }
+    u.total++;
+    if (s.status === 'done') u.done++;
+    else u.pending++;
+  }
+  units.sort((a, b) => a.order - b.order);
+
   const done = all.filter((s) => s.status === 'done').length;
   const duplicates = [...new Set(all.filter((s) => s.duplicate).map((s) => s.id))];
-  return { shots: all, total: all.length, done, pending: all.length - done, duplicates };
+  return { shots: all, units, total: all.length, done, pending: all.length - done, duplicates };
 }
 
 function orphanShots(referencedIds) {
@@ -114,15 +152,33 @@ function runCheck() {
   const q = buildQueue();
   console.log(`\n📸 截图覆盖率：已拍 ${q.done} / 共 ${q.total}，待拍 ${q.pending}\n`);
 
-  const byFile = {};
-  for (const s of q.shots) if (s.status === 'pending') (byFile[s.lessonFile] ||= []).push(s);
-  const files = Object.keys(byFile).sort();
-  if (files.length === 0) {
-    console.log('🎉 全部拍完！');
+  // 单元一览：永远只有 8 行，一眼看出还差哪个单元
+  for (const u of q.units) {
+    const filled = u.total ? Math.round((u.done / u.total) * 10) : 0;
+    const bar = '█'.repeat(filled) + '·'.repeat(10 - filled);
+    const tag = u.pending ? `待拍 ${String(u.pending).padStart(2)}` : '✓ 齐了 ';
+    console.log(`  ${u.emoji} 单元 ${u.order}  ${bar}  ${String(u.done).padStart(2)}/${String(u.total).padEnd(2)}  ${tag}  ${u.title}`);
+  }
+
+  const pending = q.shots.filter((s) => s.status === 'pending');
+  if (pending.length === 0) {
+    console.log('\n🎉 全部拍完！');
   } else {
-    for (const f of files) {
-      console.log(`  ${f}  (${byFile[f].length} 待拍)`);
-      for (const s of byFile[f]) console.log(`    · ${s.id}  ${s.capture || '(无说明)'}`);
+    console.log('\n── 待拍明细 ──');
+    let lastUnit = null;
+    let lastFile = null;
+    for (const s of pending) {
+      if (s.unit !== lastUnit) {
+        lastUnit = s.unit;
+        lastFile = null;
+        const u = q.units.find((x) => x.key === s.unit);
+        console.log(`\n  ${u.emoji} 单元 ${u.order} · ${u.title}`);
+      }
+      if (s.lessonFile !== lastFile) {
+        lastFile = s.lessonFile;
+        console.log(`    ${s.lessonFmId} ${s.lessonTitle}`);
+      }
+      console.log(`      · ${s.id}  ${s.capture || '(无说明)'}`);
     }
   }
 

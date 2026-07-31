@@ -3,8 +3,8 @@
 # 所以写成一个个函数。**这是给后续单元照抄的样板**。
 #
 # 用法：
-#   . "...\lib\load.ps1"
-#   . "...\scenes\unit-02-ui.ps1"
+#   . ".claude\skills\studio-shots\lib\load.ps1"
+#   . "scripts\shots\unit-02-ui.ps1"
 #   U2-All                    # 全拍一遍
 #   U2-Material               # 或者单张重拍
 #

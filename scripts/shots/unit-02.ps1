@@ -3,8 +3,8 @@
 # 整个场景会按 config 里的 SceneYawOffsetDeg 相对相机旋转，拿到 3/4 斜角。
 #
 # 用法：
-#   . "...\lib\load.ps1"
-#   . "...\scenes\unit-02.ps1"
+#   . ".claude\skills\studio-shots\lib\load.ps1"
+#   . "scripts\shots\unit-02.ps1"
 #   Shoot-Batch $U2 'sheet-u2'
 
 $U2 = [ordered]@{}

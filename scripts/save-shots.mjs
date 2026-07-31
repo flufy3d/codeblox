@@ -1,18 +1,19 @@
 #!/usr/bin/env node
-// 把拍好的 PNG 转成 webp 存进 public/shots/<id>.webp
+// 把 studio-shots 技能拍好的 PNG 转成 webp 存进 public/shots/<id>.webp
 //
 // 用法（在仓库根目录跑）：
-//   node .claude/skills/studio-shots/tools/save-shots.mjs <源目录>
-//     → 自动把 v_2_1-s3.png 映射成 2.1-s3.webp
-//   node .claude/skills/studio-shots/tools/save-shots.mjs <源目录> 2.1-s3 2.6-s1
-//     → 只存指定的 id
-//   加 --dry 只打印不写盘
+//   npm run shots:save                      → 从默认目录（$TEMP/codeblox-shots）取图
+//   npm run shots:save -- 2.1-s3 2.6-s1     → 只存指定的 id
+//   npm run shots:save -- --dry             → 只打印不写盘
+//   npm run shots:save -- D:/别的目录        → 换源目录
 //
+// 文件名 v_2_1-s3.png 自动映射成 2.1-s3.webp。
 // 参数与截图控制台（scripts/shot-console.html）保持一致：最长边 1600、webp q90。
 // ⚠️ sharp 是 astro 的间接依赖，不是直接依赖 —— 万一升级依赖后没了，
 //    改用截图控制台粘贴那条路（npm run shots），或把 sharp 加进 devDependencies。
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 
@@ -31,16 +32,23 @@ try {
   process.exit(1);
 }
 
+// 源目录默认跟技能的输出目录一致（lib/config.ps1 里的 $SD），所以一般不用传
+const DEFAULT_SRC = process.env.CBS_OUT || path.join(os.tmpdir(), 'codeblox-shots');
+const ID_ARG = /^\d+\.\d+-s\d+$/;
+
 const args = process.argv.slice(2);
 const dry = args.includes('--dry');
 const rest = args.filter((a) => a !== '--dry');
-const srcDir = rest[0];
-const onlyIds = new Set(rest.slice(1));
+// 不长得像 id 的那个参数就当源目录
+const srcDir = rest.find((a) => !ID_ARG.test(a)) || DEFAULT_SRC;
+const onlyIds = new Set(rest.filter((a) => ID_ARG.test(a)));
 
-if (!srcDir || !fs.existsSync(srcDir)) {
-  console.error('用法: node save-shots.mjs <源目录> [id ...] [--dry]');
+if (!fs.existsSync(srcDir)) {
+  console.error(`找不到源目录 ${srcDir}`);
+  console.error('用法: npm run shots:save [-- <源目录>] [id ...] [--dry]');
   process.exit(1);
 }
+console.log(`源目录: ${srcDir}`);
 if (!fs.existsSync(SHOTS_DIR)) {
   console.error(`找不到 ${SHOTS_DIR} —— 请在仓库根目录运行`);
   process.exit(1);

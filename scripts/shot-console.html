@@ -80,6 +80,38 @@
       .qthumb { width: 40px; height: 28px; object-fit: cover; border-radius: 6px; border: 1px solid var(--slate300); }
       .dup { color: var(--red); font-weight: 800; }
 
+      /* 侧栏顶部：待拍 / 全部 筛选 */
+      .qfilter {
+        display: flex; gap: 6px; position: sticky; top: -10px; z-index: 2;
+        background: #fff; padding: 4px 0 8px; margin-bottom: 2px;
+      }
+      .qchip {
+        flex: 1; border: 2px solid var(--slate300); background: #fff; border-radius: 10px;
+        padding: 6px 8px; font-size: 12px; font-weight: 800; color: var(--slate500); cursor: pointer;
+      }
+      .qchip:hover { border-color: var(--indigo); }
+      .qchip.on { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+
+      /* 单元折叠头 */
+      .uhead {
+        display: flex; align-items: center; gap: 8px; cursor: pointer;
+        padding: 7px 9px; margin: 10px 0 0; border-radius: 10px; background: var(--slate100);
+      }
+      .uhead:hover { background: #e4eaf3; }
+      .uhead .chev { font-size: 9px; color: var(--slate500); width: 9px; flex-shrink: 0; transition: transform 0.15s; }
+      .uhead.shut .chev { transform: rotate(-90deg); }
+      .uhead .ut {
+        flex: 1; min-width: 0; font-size: 13px; font-weight: 800; color: var(--slate900);
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      }
+      .uhead .uc { font-size: 11px; font-weight: 800; color: var(--slate500); flex-shrink: 0; }
+      .uhead .uc.left { color: var(--amber); }
+      .ubar { height: 4px; border-radius: 999px; background: var(--slate300); overflow: hidden; margin: 5px 9px 2px; }
+      .ubar > div { height: 100%; background: #10b981; transition: width 0.3s; }
+      .ubar.part > div { background: var(--amber); }
+      .ubody.shut { display: none; }
+      .qempty { font-size: 13px; color: var(--slate500); text-align: center; padding: 24px 8px; }
+
       #editor { flex: 1; overflow-y: auto; padding: 20px 24px; }
       .info { max-width: 920px; }
       .crumbs { font-size: 12px; color: var(--slate500); }
@@ -193,9 +225,24 @@
       const PREVIEW_BASE = "http://localhost:4321/codeblox/lessons/";
       const RED = "#ef4444";
 
-      let data = { shots: [], total: 0, done: 0, pending: 0, duplicates: [] };
+      let data = { shots: [], units: [], total: 0, done: 0, pending: 0, duplicates: [] };
       let current = null;
       const skipped = new Set();
+
+      // 侧栏视图状态**一律不持久化**。默认规则本来就对（有待拍就只看待拍、单元有待拍就展开），
+      // 存进 localStorage 只会留下陈旧状态：拍完一批后再打开，某个还有待拍的单元却是收起的，
+      // 很迷惑。会话内点过的用内存记住就够了（↻ 刷新不重载页面，所以不会丢）。
+      try { localStorage.removeItem("cbFilter"); localStorage.removeItem("cbShut"); localStorage.removeItem("cbOpen"); } catch {}
+
+      let filter = null; // 首次 loadQueue 时按进度定：有待拍→只看待拍，全拍完→看全部
+      const shut = new Set(); // 手动收起的单元
+      const open = new Set(); // 手动展开的单元
+      // 默认规则：还有待拍的单元展开，全拍完的收起；手动点过的按手动来
+      function unitOpen(u) {
+        if (shut.has(u.key)) return false;
+        if (open.has(u.key)) return true;
+        return u.pending > 0;
+      }
 
       // 编辑器状态
       let baseImg = null;
@@ -218,6 +265,7 @@
       async function loadQueue(keepCurrentId) {
         const res = await fetch("/api/queue");
         data = await res.json();
+        if (filter === null) filter = data.pending > 0 ? "pending" : "all";
         renderProgress();
         renderQueue();
         let next = null;
@@ -238,50 +286,100 @@
         if (data.duplicates.length) toast("⚠️ 重复 id：" + data.duplicates.join(", "));
       }
 
+      function qitem(s) {
+        const item = el("div", "qitem " + s.status + (skipped.has(s.id) ? " skipped" : ""));
+        if (current && s.id === current.id) item.classList.add("active");
+        item.onclick = () => selectShot(s);
+        item.appendChild(el("div", "dot"));
+
+        const meta = el("div", "qmeta");
+        const b = el("b", s.duplicate ? "dup" : null, s.id + (s.duplicate ? " ⚠重复" : ""));
+        meta.appendChild(b);
+        meta.appendChild(el("span", null, s.capture || "(无说明)"));
+        item.appendChild(meta);
+
+        if (s.status === "done" && s.existingExt) {
+          const img = el("img", "qthumb");
+          img.src = "/shots/" + s.id + "." + s.existingExt + "?t=" + Date.now();
+          item.appendChild(img);
+        }
+        return item;
+      }
+
       function renderQueue() {
         const q = $("queue");
         q.innerHTML = "";
-        let lastFile = null;
-        for (const s of data.shots) {
-          if (s.lessonFile !== lastFile) {
-            lastFile = s.lessonFile;
-            const g = document.createElement("div");
-            g.className = "qgroup";
-            g.textContent = (s.lessonTitle || s.lessonFile) + "　·　" + s.lessonFile;
-            q.appendChild(g);
+
+        // 筛选 chip
+        const bar = el("div", "qfilter");
+        const mk = (key, label) => {
+          const c = el("button", "qchip" + (filter === key ? " on" : ""), label);
+          c.onclick = () => {
+            filter = key;
+            renderQueue();
+          };
+          return c;
+        };
+        bar.appendChild(mk("pending", `待拍 ${data.pending}`));
+        bar.appendChild(mk("all", `全部 ${data.total}`));
+        q.appendChild(bar);
+
+        const vis = filter === "pending" ? data.shots.filter((s) => s.status === "pending") : data.shots;
+        if (!vis.length) {
+          q.appendChild(el("div", "qempty", filter === "pending" ? "🎉 没有待拍的了" : "课程里还没有 <Shot> 占位"));
+          return;
+        }
+
+        // 按单元分组（data.shots 已按单元→课→出现顺序排好）
+        const groups = [];
+        for (const s of vis) {
+          let g = groups.find((x) => x.key === s.unit);
+          if (!g) groups.push((g = { key: s.unit, list: [] }));
+          g.list.push(s);
+        }
+
+        for (const g of groups) {
+          const u = data.units.find((x) => x.key === g.key) || { key: g.key, order: "?", title: g.key, emoji: "📄", total: g.list.length, done: 0, pending: g.list.length };
+          const isOpen = unitOpen(u);
+
+          const head = el("div", "uhead" + (isOpen ? "" : " shut"));
+          head.appendChild(el("span", "chev", "▼"));
+          head.appendChild(el("span", "ut", `${u.emoji} 单元 ${u.order} · ${u.title}`));
+          head.appendChild(el("span", "uc" + (u.pending ? " left" : ""), u.pending ? `差 ${u.pending}` : `${u.done}/${u.total} ✓`));
+          head.onclick = () => {
+            if (unitOpen(u)) {
+              shut.add(u.key);
+              open.delete(u.key);
+            } else {
+              open.add(u.key);
+              shut.delete(u.key);
+            }
+            renderQueue();
+          };
+          q.appendChild(head);
+
+          const pbar = el("div", "ubar" + (u.pending ? " part" : ""));
+          const fill = el("div");
+          fill.style.width = (u.total ? Math.round((u.done / u.total) * 100) : 0) + "%";
+          pbar.appendChild(fill);
+          q.appendChild(pbar);
+
+          const body = el("div", "ubody" + (isOpen ? "" : " shut"));
+          let lastFile = null;
+          for (const s of g.list) {
+            if (s.lessonFile !== lastFile) {
+              lastFile = s.lessonFile;
+              body.appendChild(el("div", "qgroup", `${s.lessonFmId} ${s.lessonTitle || s.lessonFile}`));
+            }
+            body.appendChild(qitem(s));
           }
-          const item = document.createElement("div");
-          item.className = "qitem " + s.status + (skipped.has(s.id) ? " skipped" : "");
-          if (current && s.id === current.id) item.classList.add("active");
-          item.onclick = () => selectShot(s);
-
-          const dot = document.createElement("div");
-          dot.className = "dot";
-          item.appendChild(dot);
-
-          const meta = document.createElement("div");
-          meta.className = "qmeta";
-          const b = document.createElement("b");
-          b.textContent = s.id + (s.duplicate ? " ⚠重复" : "");
-          if (s.duplicate) b.classList.add("dup");
-          const span = document.createElement("span");
-          span.textContent = s.capture || "(无说明)";
-          meta.appendChild(b);
-          meta.appendChild(span);
-          item.appendChild(meta);
-
-          if (s.status === "done" && s.existingExt) {
-            const img = document.createElement("img");
-            img.className = "qthumb";
-            img.src = "/shots/" + s.id + "." + s.existingExt + "?t=" + Date.now();
-            item.appendChild(img);
-          }
-          q.appendChild(item);
+          q.appendChild(body);
         }
       }
 
       function selectShot(s) {
         current = s;
+        shut.delete(s.unit); // 自动跳到下一张时，别让它藏在收起的单元里
         resetEditor();
         $("emptyState").style.display = "none";
         $("stage").style.display = "";

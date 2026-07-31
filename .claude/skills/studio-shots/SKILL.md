@@ -18,6 +18,20 @@ description: 在本机自动拍 Roblox Studio 课程配图 —— 用命令栏�
 | 资源管理器 | 选中**子节点**会自动展开父节点，再裁树 | 2.5-s2 / 2.5-s3 |
 | 试玩（小人） | **不进 Play 模式**：编辑模式插一个 Rig 角色，PivotTo 摆位 | 2.4-s3 / 2.6-s3 |
 
+## 职责边界（别把两边搞混）
+
+- **技能本身**（`.claude/skills/studio-shots/`）只有 `SKILL.md` + `lib/`：可复用的机械部分
+  和踩坑经验，跟具体单元无关，不该随单元增长。
+- **每个单元的场景定义**放仓库里：`scripts/shots/unit-NN.ps1`（视口类）和
+  `scripts/shots/unit-NN-ui.ps1`（面板/试玩类）。这是**用技能的产物**，不是技能的一部分。
+- **存图**是仓库的一个 npm 脚本：`scripts/save-shots.mjs` / `npm run shots:save`。
+
+为什么场景定义要留下来而不是拍完就扔：「四种质感地砖怎么摆」这种是按课文写的创作，
+没法从工具推出来；留着的价值在**重拍** —— 课文改了、Studio 换版本了、构图不满意了，
+改两个数字重跑一遍就行，不用从零复盘。文件是 agent 写的，不用人手写。
+
+`scripts/shots/unit-02*.ps1` 是完整的工作样板，新单元照它抄。
+
 ## 前置条件
 
 1. Roblox Studio 已打开一个 place（有 Baseplate 就行），窗口最大化
@@ -36,12 +50,12 @@ Show-VpProbe      # 核对视口矩形
 Test-Pipeline     # 端到端自检：居中误差应在 ±10px 内
 
 # 视口类：批量拍一个单元
-. "D:\Projects\CodeBlox\.claude\skills\studio-shots\scenes\unit-02.ps1"
+. "D:\Projects\CodeBlox\scripts\shots\unit-02.ps1"
 Shoot-Batch $U2 'sheet-u2' 2 -Verify
 # 然后 Read 输出目录里的 sheet-u2.png，一张图检查一整批
 
-# 面板 / 试玩类：照 scenes\unit-02-ui.ps1 的样板写，一张一个函数
-. "D:\Projects\CodeBlox\.claude\skills\studio-shots\scenes\unit-02-ui.ps1"
+# 面板 / 试玩类：照 scripts\shots\unit-02-ui.ps1 的样板写，一张一个函数
+. "D:\Projects\CodeBlox\scripts\shots\unit-02-ui.ps1"
 U2-All
 ```
 
@@ -64,7 +78,7 @@ Studio 编辑模式下写 `CurrentCamera.CFrame` **只有位置生效、旋转�
 
 ## 写视口场景
 
-场景定义放 `scenes/unit-NN.ps1`，格式见 `scenes/unit-02.ps1`。
+场景定义放 `scripts/shots/unit-NN.ps1`，格式见 `scripts/shots/unit-02.ps1`。
 
 必填：
 - `geo` — 建几何的 Lua，用 `P(名,大小,位置,材质,颜色,透明度)` / `CYL(名,高,直径,位置,...)` /
@@ -88,7 +102,7 @@ Studio 编辑模式下写 `CurrentCamera.CFrame` **只有位置生效、旋转�
 
 ## 写面板类截图
 
-样板在 `scenes/unit-02-ui.ps1`，每张一个函数。常用积木（`lib/panel.ps1`）：
+样板在 `scripts/shots/unit-02-ui.ps1`，每张一个函数。常用积木（`lib/panel.ps1`）：
 
 ```powershell
 Select-Named "Part"              # 选中部件，属性面板就显示它
@@ -126,14 +140,16 @@ Roblox 小人的样子，画面立刻好看很多 —— 别省这一步。
 截出来的是 PNG，在 `$env:TEMP\codeblox-shots\`。在**仓库根目录**跑：
 
 ```bash
-node .claude/skills/studio-shots/tools/save-shots.mjs "C:/Users/<你>/AppData/Local/Temp/codeblox-shots" --dry
-node .claude/skills/studio-shots/tools/save-shots.mjs "C:/Users/<你>/AppData/Local/Temp/codeblox-shots"
-npm run shots:check      # 确认待拍数减少了
+npm run shots:save -- --dry     # 先看要存哪些
+npm run shots:save              # 真存
+npm run shots:check             # 确认待拍数减少了
 ```
+
+源目录默认就是技能的输出目录，不用传。只存某几张：`npm run shots:save -- 2.1-s3 2.6-s1`。
 
 自动把 `v_2_1-s3.png` 映射成 `public/shots/2.1-s3.webp`，参数和截图控制台一致（最长边
 1600、webp q90），实测 500KB PNG → 20~26KB webp。课程里没有对应 `<Shot>` 的 id 会被跳过，
-不会产生孤儿图。跟 `id` 参数只存指定几张。
+不会产生孤儿图。
 
 用的是 `sharp`（astro 的**间接**依赖）。哪天依赖升级把它弄丢了，退路是截图控制台：
 `npm run shots` 开着 → `Set-Clipboard -Path <png>` → 切到控制台标签 → `Ctrl+V` → `Enter`

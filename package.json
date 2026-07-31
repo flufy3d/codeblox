@@ -14,7 +14,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "shots": "node scripts/shot-console.mjs",
-    "shots:check": "node scripts/shot-console.mjs --check"
+    "shots:check": "node scripts/shot-console.mjs --check",
+    "shots:save": "node scripts/save-shots.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.3",
