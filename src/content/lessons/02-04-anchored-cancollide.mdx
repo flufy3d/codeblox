@@ -51,6 +51,7 @@ challenge: 做一个 CanCollide 关掉、Transparency 0.5 的“光墙”，让�
 
 <StudioStep n={1} title="先把方块钉住">
   放一个方块，用 **Move** 抬到半空。在 Properties 里勾上 **Anchored**。点 ▶️ 试玩——它稳稳地浮着，没掉下来！
+  <Shot id="2.4-s1" capture="Properties 里 CanCollide（在「碰撞」分类下）和 Anchored（在「部件」分类下）两行都打着勾，两行各用红框圈出来——注意这两行并不相邻" alt="Properties 里的两个小勾勾：Anchored 和 CanCollide" />
 </StudioStep>
 
 <StudioStep n={2} title="做一片光帘">
@@ -59,6 +60,7 @@ challenge: 做一个 CanCollide 关掉、Transparency 0.5 的“光墙”，让�
 
 <StudioStep n={3} title="让它能被穿过">
   选中光帘，在 Properties 里**取消勾选 CanCollide**。
+  <Shot id="2.4-s2" capture="Properties 里 CanCollide 这一行的复选框是空的（没打勾），用红圈圈出来" alt="取消 CanCollide 的勾，方块就能被穿过" />
 </StudioStep>
 
 <StudioStep n={4} title="试玩穿过去">
@@ -70,5 +72,7 @@ challenge: 做一个 CanCollide 关掉、Transparency 0.5 的“光墙”，让�
 </Callout>
 
 ## 🕹️ 看看你的成果
+
+<Shot id="2.4-s3" capture="试玩中（▶️ Play）小人正走进半透明发光光帘、身体一半进去的瞬间" alt="小人直接穿进发光的光帘里" />
 
 一道发光的光帘，小人能直接走穿。再加上昨天的两根柱子，传送门已经有模有样了！
