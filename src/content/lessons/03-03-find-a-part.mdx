@@ -14,11 +14,11 @@ tasks:
   - id: t1
     label: 在 Workspace 里插入一个 Part，重命名为 MyPart
   - id: t2
-    label: 右键这个 Part → Insert Object → Script（把脚本放进方块里）
+    label: 右键这个 Part → 插入 → 插入对象…，选 Script（把脚本放进方块里）
   - id: t3
     label: 写上 local part = script.Parent 和一行 print 检查
   - id: t4
-    label: 点 ▶️ 试玩，在 Output 看到方块的名字
+    label: 点 ▶️ 试玩，在输出窗口看到方块的名字
 quiz:
   - q: script.Parent 指的是什么？
     type: single
@@ -40,7 +40,7 @@ quiz:
     type: single
     options: ["先找到那个方块", "先改颜色", "先关掉 Output"]
     answer: 0
-challenge: 把那行 print 改成 print(part.Name)，试玩看看 Output 里打出来的是不是 MyPart。
+challenge: 把那行 print 改成 print(part.Name)，试玩看看输出里打出来的是不是 MyPart。
 ---
 
 ## 🎯 今天要做什么
@@ -56,11 +56,13 @@ challenge: 把那行 print 改成 print(part.Name)，试玩看看 Output 里打�
 > 脚本住在哪个方块里，`script.Parent` 就指那个方块。
 
 <StudioStep n={1} title="放一个方块并改名">
-  在 Explorer 里**右键 Workspace → Insert Object → Part**。点中它，按 **F2** 或双击名字，改名叫 **MyPart**。
+  在资源管理器里**右键 Workspace → 插入 → 插入部件**。点中新出来的 Part，按 **F2** 或双击名字，改名叫 **MyPart**。
 </StudioStep>
 
 <StudioStep n={2} title="把脚本放进方块里">
-  这次右键的不是 Workspace，而是 **MyPart** 这个方块：**右键 MyPart → Insert Object → Script**。脚本就躲进方块里啦！
+  这次右键的不是 Workspace，而是 **MyPart** 这个方块：**右键 MyPart → 插入 → 插入对象…**，选 **Script**。脚本就躲进方块里啦！
+
+<Shot id="3.3-s1" capture="资源管理器里 Script 缩在 MyPart 下面一格（缩进能看出层级），红框框住这两行" alt="Script 缩在 MyPart 下面一格 —— 这就是「住在方块里」" />
 </StudioStep>
 
 <StudioStep n={3} title="找到方块并检查">
@@ -75,7 +77,9 @@ print(part.Name)
 </StudioStep>
 
 <StudioStep n={4} title="试玩验证">
-  点 ▶️ Play，看 **Output** 窗口，应该打出：**MyPart**。说明脚本成功找到方块啦！
+  点 ▶️ 播放，看 **输出** 窗口，应该打出：**MyPart**。说明脚本成功找到方块啦！
+
+<Shot id="3.3-s2" capture="输出面板里正好一行 MyPart，红框框住它" alt="输出里打出了方块的名字 MyPart" />
 </StudioStep>
 
 <Callout type="tip">
@@ -84,8 +88,8 @@ print(part.Name)
 
 ## 🕹️ 看看你的成果
 
-Output 里打出了方块的名字 **MyPart**——这代表脚本已经**牢牢抓住**了这个方块。下一课，我们就要用代码命令它变色！
+输出里打出了方块的名字 **MyPart**——这代表脚本已经**牢牢抓住**了这个方块。下一课，我们就要用代码命令它变色！
 
 <Callout type="warning">
-  打出来的不是 MyPart？检查脚本是不是真的放在了 **MyPart 里面**（在 Explorer 里，Script 应该缩在 MyPart 下面一格）。如果脚本放错地方，`script.Parent` 找到的就是别的东西。
+  打出来的不是 MyPart？检查脚本是不是真的放在了 **MyPart 里面**（在资源管理器里，Script 应该缩在 MyPart 下面一格，就像上面那张图）。如果脚本放错地方，`script.Parent` 找到的就是别的东西。
 </Callout>

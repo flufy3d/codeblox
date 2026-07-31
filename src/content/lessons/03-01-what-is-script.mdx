@@ -12,9 +12,9 @@ objectives:
   - 打开 Output（输出）窗口，知道它是看脚本说话的地方
 tasks:
   - id: t1
-    label: 在 Explorer 里右键 Workspace → Insert Object → Script
+    label: 在资源管理器里右键 Workspace → 插入 → 插入对象…，选 Script
   - id: t2
-    label: 打开 Output 窗口（View 选项卡 → Output）
+    label: 打开输出窗口（「脚本」选项卡 → 输出）
   - id: t3
     label: 看看脚本里自带的那行字（先不用改）
 quiz:
@@ -26,15 +26,15 @@ quiz:
   - q: 想插入一个新的 Script，应该怎么做？
     type: single
     options:
-      - 右键 Workspace → Insert Object → Script
+      - 右键 Workspace → 插入 → 插入对象…，选 Script
       - 双击屏幕中间
       - 按一下空格键
     answer: 0
-  - q: Output（输出）窗口是用来干嘛的？
+  - q: 输出（Output）窗口是用来干嘛的？
     type: single
     options: ["放方块的箱子", "看脚本输出的文字和报错", "调颜色"]
     answer: 1
-    explain: 脚本想“说话”或者出错时，文字都会出现在 Output 窗口里。
+    explain: 脚本想“说话”或者出错时，文字都会出现在输出窗口里。
 challenge: 在 Explorer 里看看你的新 Script 在哪个位置——它是不是躲在 Workspace 下面？
 ---
 
@@ -51,15 +51,25 @@ challenge: 在 Explorer 里看看你的新 Script 在哪个位置——它是不
 **脚本（Script）** 就是给电脑的这种清单——一行一行的命令，电脑会**从上往下**一条一条照着做。你写什么，它就做什么，特别听话。
 
 <StudioStep n={1} title="插入第一个脚本">
-  在右边 **Explorer（资源管理器）** 里，找到 **Workspace**，**右键 → Insert Object → Script**。一个叫 **Script** 的新东西就出现啦！
+  在左边 **资源管理器（Explorer）** 里找到 **Workspace**，**右键它 → 插入（Insert）→ 插入对象…（Insert Object）**。
+
+<Shot id="3.1-s1" capture="资源管理器里右键 Workspace 弹出的菜单，「插入」的子菜单展开着，红框框住「插入对象…」" alt="右键 Workspace，选「插入 → 插入对象…」" />
+
+  会弹出一个搜索框。在里面打 **Script**，然后点列表里的 **Script**。一个叫 **Script** 的新东西就出现在 Workspace 下面啦！
+
+<Shot id="3.1-s2" capture="「插入对象」搜索框里打了 Script，列表筛出 Script / LocalScript / ModuleScript 三项，红框框住第一个 Script" alt="搜 Script，点第一个（不是 LocalScript，也不是 ModuleScript）" />
 </StudioStep>
 
 <StudioStep n={2} title="它会自动打开">
   双击那个 Script，中间会弹出一个写代码的窗口。里面已经有一行字了，先**不用动它**，我们下一课再写。
+
+<Shot id="3.1-s3" capture="左边资源管理器里 Workspace 下面的 Script（红框），和中间打开的写代码窗口同框，代码是自带的那行 print" alt="Script 躲在 Workspace 下面，双击它就打开写代码的窗口" />
 </StudioStep>
 
-<StudioStep n={3} title="打开 Output 窗口">
-  顶部 **View（视图）选项卡 → Output**。屏幕下方会出现一个空空的小窗口——这就是脚本“说话”的地方。
+<StudioStep n={3} title="打开输出窗口">
+  顶部 **「脚本」（Script）选项卡 → 输出（Output）**。屏幕下方会出现一个空空的小窗口——这就是脚本“说话”的地方。
+
+<Shot id="3.1-s4" capture="顶部「脚本」选项卡的工具栏那一条，红框框住「输出」按钮" alt="「脚本」选项卡里的「输出」按钮" />
 </StudioStep>
 
 <Callout type="info">
@@ -68,8 +78,8 @@ challenge: 在 Explorer 里看看你的新 Script 在哪个位置——它是不
 
 ## 🕹️ 看看你的成果
 
-你已经有了：一个躺在 Workspace 里的 **Script**，和一个等着它说话的 **Output 窗口**。万事俱备，只差代码啦！
+你已经有了：一个躺在 Workspace 里的 **Script**，和一个等着它说话的 **输出窗口**。万事俱备，只差代码啦！
 
 <Callout type="warning">
-  找不到 Output 窗口？再检查一次：是 **View 选项卡**里的 **Output**，不是 Explorer。点一下它就会从屏幕下方冒出来。
+  找不到输出窗口？再检查一次：是**「脚本」选项卡**里的 **输出**，不是资源管理器。点一下它就会从屏幕下方冒出来。
 </Callout>

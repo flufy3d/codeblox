@@ -8,13 +8,13 @@ estMinutes: 18
 xp: 100
 objectives:
   - 学会用 -- 写注释，给自己的代码做笔记
-  - 认识 Output 里的红色报错，知道它在帮你
+  - 认识输出窗口里的红色报错，知道它在帮你
   - 学会修最常见的 3 种错：拼写、大小写、引号
 tasks:
   - id: t1
     label: 给脚本的每一行加上 -- 中文注释
   - id: t2
-    label: 故意把 print 写成 Print，看 Output 冒出红字
+    label: 故意把 print 写成 Print，看输出窗口冒出红字
   - id: t3
     label: 把它改回来，让红字消失
 quiz:
@@ -26,7 +26,7 @@ quiz:
       - 让方块变大
     answer: 1
     explain: -- 后面的内容是注释，电脑不执行，只给你自己看，方便记笔记。
-  - q: Output 里出现红色的字，通常代表什么？
+  - q: 输出窗口里出现红色的字，通常代表什么？
     type: single
     options: ["代码完美", "出错了，红字在告诉你哪里有问题", "游戏赢了"]
     answer: 1
@@ -56,11 +56,13 @@ part.BrickColor = BrickColor.new("Bright red")  -- 把它变成亮红色
 
 <StudioStep n={1} title="给你的代码加笔记">
   打开 MyPart 的脚本，在每一行后面用 `--` 写一句中文说明。注释多少都行，电脑只读 `--` **前面**的真代码。
+
+<Shot id="3.6-s1" capture="脚本编辑器里 4 行代码，每行后面都有 -- 中文注释，注释显示成绿色（跟真代码的颜色明显不同）" alt="绿色的部分就是注释 —— 电脑完全不管它" />
 </StudioStep>
 
 ## ✨ 红字不可怕：它在帮你指路
 
-代码出小错时，**Output 窗口**会冒出**红色的字**。别怕！红字不是骂你，而是在说“这里有点问题，快来看看”。
+代码出小错时，**输出窗口**会冒出**红色的字**。别怕！红字不是骂你，而是在说“这里有点问题，快来看看”。
 
 最常见的就 3 种小错：
 
@@ -69,7 +71,9 @@ part.BrickColor = BrickColor.new("Bright red")  -- 把它变成亮红色
 3. **引号错** —— 用了中文的 `"` `"`，要用英文的 `" "`
 
 <StudioStep n={2} title="故意制造一个 bug">
-  把脚本里的 `print` 改成大写的 **`Print`**，点 ▶️ Play。看！Output 里冒出一行**红字**报错了。
+  把脚本里的 `print` 改成大写的 **`Print`**，点 ▶️ 播放。看！输出里冒出一行**红字**报错了。
+
+<Shot id="3.6-s2" capture="输出面板里一行红色报错，开头写着 Workspace.MyPart.Script:3，红框框住这行红字" alt="红字开头就写着哪个脚本、第几行出了问题" />
 </StudioStep>
 
 <StudioStep n={3} title="动手修好它">
@@ -77,7 +81,7 @@ part.BrickColor = BrickColor.new("Bright red")  -- 把它变成亮红色
 </StudioStep>
 
 <Callout type="tip">
-  修 bug 的小窍门：红字里常会写**第几行**出问题。回到脚本看那一行，重点对一对**拼写、大小写、引号**这三样，八成就找到了。
+  修 bug 的小窍门：红字里常会写**第几行**出问题（比如 `Script:3` 就是第 3 行）。回到脚本看那一行，重点对一对**拼写、大小写、引号**这三样，八成就找到了。
 </Callout>
 
 ## 🕹️ 看看你的成果

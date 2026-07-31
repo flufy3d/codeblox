@@ -18,7 +18,7 @@ tasks:
   - id: t3
     label: 给每行加上 -- 注释，说出它在干嘛
   - id: t4
-    label: 点 ▶️ 试玩，确认方块变色 + 发光，Output 有提示
+    label: 点 ▶️ 播放试玩，确认方块变色 + 发光，输出窗口有提示
   - id: t5
     label: 截图或叫家人来看（炫耀环节！），然后 Ctrl + S 保存
 quiz:
@@ -57,7 +57,7 @@ challenge: 给脚本再加一行，把方块的大小也用代码改掉（part.S
 > 找到方块 → 改颜色 → 改材质（发光）→ 打印一句话报告
 
 <StudioStep n={1} title="准备方块和脚本">
-  在 Explorer 里**右键 Workspace → Insert Object → Part**，改名叫 **NeonBlock**。再**右键 NeonBlock → Insert Object → Script**，把脚本放进它里面。
+  在资源管理器里**右键 Workspace → 插入 → 插入部件**，把新方块改名叫 **NeonBlock**。再**右键 NeonBlock → 插入 → 插入对象…**，选 **Script**，把脚本放进它里面。
 </StudioStep>
 
 <StudioStep n={2} title="整段写上成果脚本">
@@ -67,12 +67,16 @@ challenge: 给脚本再加一行，把方块的大小也用代码改掉（part.S
 local part = script.Parent                       -- 找到我住的那个方块（NeonBlock）
 part.BrickColor = BrickColor.new("Lime green")   -- 把颜色改成青柠绿
 part.Material = Enum.Material.Neon               -- 改成霓虹材质，让它发光
-print("方块准备好啦！")                            -- 在 Output 里报个信
+print("方块准备好啦！")                            -- 在输出窗口里报个信
 ```
+
+<Shot id="3.7-s1" capture="脚本编辑器里这 4 行成果代码，每行后面都有绿色的中文注释，带左边的行号 1-4" alt="本单元的成果脚本 —— 4 行，每行都有笔记" />
 </StudioStep>
 
 <StudioStep n={3} title="试玩验收">
-  点 ▶️ Play。NeonBlock 应该**变成发光的青柠绿**，同时 Output 里打出 **方块准备好啦！** 全中啦就成功！
+  点 ▶️ 播放。NeonBlock 应该**变成发光的青柠绿**，同时输出窗口里打出 **方块准备好啦！** 全中啦就成功！
+
+<Shot id="3.7-s2" capture="视口里一个发光的青柠绿方块（Neon 材质），占画面正中，能看出往外发绿光" alt="发光的青柠绿霓虹方块 —— 全是代码改出来的" />
 </StudioStep>
 
 <StudioStep n={4} title="换成你的专属颜色">
@@ -88,6 +92,8 @@ print("方块准备好啦！")                            -- 在 Output 里报�
 </Callout>
 
 ## 🕹️ 看看你的成果
+
+<Shot id="3.7-s3" capture="视口里小人站在那个发光的青柠绿霓虹方块旁边，像一张合照" alt="你和你的第一颗发光宝石" />
 
 一颗**用代码控制的、会发光的霓虹方块**！你不仅做出来了，还能讲清楚每行代码的作用。完成这一课，你将拿到本单元的徽章 **💬 脚本初鸣**！
 

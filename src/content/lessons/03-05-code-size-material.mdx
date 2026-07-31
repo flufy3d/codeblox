@@ -16,7 +16,7 @@ tasks:
   - id: t2
     label: 再加一行 part.Material = Enum.Material.Neon
   - id: t3
-    label: 点 ▶️ 试玩，看方块变大又发光
+    label: 点 ▶️ 播放试玩，看方块变大又发光
   - id: t4
     label: 改一改括号里的数字，让方块变成你想要的大小
 quiz:
@@ -78,11 +78,15 @@ part.Material = Enum.Material.Neon
 </StudioStep>
 
 <StudioStep n={2} title="试玩看效果">
-  点 ▶️ Play。方块会一下子**变大、变红、还开始发光**——三个命令一起生效了！
+  点 ▶️ 播放。方块会一下子**变大、变红、还开始发光**——三个命令一起生效了！
+
+<Shot id="3.5-s1" capture="视口里一个又大又亮的红色发光方块（Neon 材质），能看出它在往外发光" alt="又大、又红、还会发光的方块" />
 </StudioStep>
 
 <StudioStep n={3} title="改改大小试试">
   把 `Vector3.new(8, 8, 8)` 里的数字换一换，越大方块越大。试试 `Vector3.new(4, 4, 4)` 或者 `Vector3.new(12, 1, 12)`（一块大薄板）。
+
+<Shot id="3.5-s2" capture="视口里三个红色发光方块排成一排：左边小立方体(4,4,4)、中间大立方体(8,8,8)、右边一块大薄板(12,1,12)" alt="同样的代码，三个数字一改，大小就完全不同" />
 </StudioStep>
 
 <Callout type="tip">
