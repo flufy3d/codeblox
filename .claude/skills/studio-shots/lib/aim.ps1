@@ -29,6 +29,7 @@ local function aimpt() return base(AL).Position end
 local function P(n,sz,lp,mat,col,tr) local p=Instance.new("Part") p.Name="CB_"..n p.Size=sz p.Anchored=true p.TopSurface=Enum.SurfaceType.Smooth p.BottomSurface=Enum.SurfaceType.Smooth p.CFrame=base(lp) if mat then p.Material=mat end if col then p.Color=col end if tr then p.Transparency=tr end p.Parent=ws return p end
 local function CYL(n,h,dia,lp,mat,col,tr) local p=P(n,Vector3.new(h,dia,dia),lp,mat,col,tr) p.Shape=Enum.PartType.Cylinder p.CFrame=base(lp)*CFrame.Angles(0,0,math.rad(90)) return p end
 local function BALL(n,dia,lp,mat,col,tr) local p=P(n,Vector3.new(dia,dia,dia),lp,mat,col,tr) p.Shape=Enum.PartType.Ball return p end
+local function PN(n,sz,lp,mat,col,tr) local p=P(n,sz,lp,mat,col,tr) p.Name=n ws:SetAttribute("CBX",(ws:GetAttribute("CBX") or "|")..n.."|") return p end
 local function MKPIVOT() local old=ws:FindFirstChild("CB_pivot") if old then old:Destroy() end local b=Instance.new("Part") b.Name="CB_pivot" b.Anchored=true b.CanCollide=false b.Transparency=1 b.Size=Vector3.new(1,1,1) b.CFrame=CFrame.new(aimpt()) b.Parent=ws S:Set({b}) end
 local function CAM(dist) local old=ws:FindFirstChild("CB_pivot") if old then old:Destroy() end S:Set({}) local cam=ws.CurrentCamera local pos=aimpt()-LV*dist local g=(ws:GetAttribute("CBGEN") or 0)+1 ws:SetAttribute("CBGEN",g) task.spawn(function() for i=1,900 do if ws:GetAttribute("CBGEN")~=g then break end cam.CFrame=CFrame.new(pos) task.wait() end end) end
 local function MARK(dist) local old=ws:FindFirstChild("CB_mark") if old then old:Destroy() end local b=Instance.new("Part") b.Name="CB_mark" b.Shape=Enum.PartType.Ball b.Size=Vector3.new(1.6,1.6,1.6) b.Anchored=true b.CanCollide=false b.Material=M.Neon b.Color=Color3.fromRGB(255,0,255) b.CFrame=CFrame.new(aimpt()-LV*(0.35*(dist or 10))) b.Parent=ws end
@@ -38,7 +39,10 @@ local function MARK(dist) local old=ws:FindFirstChild("CB_mark") if old then old
 # 清场片段。⚠️ 相机保持循环必须用 Workspace 属性做代数令牌来互斥：
 # 早期版本用 os.clock() 计时退出，结果循环根本不退，多个场景的循环互相
 # 抢相机，拍出来是随机的哪一个 —— 排查了很久，别再踩。
-$script:CB_CLEAR = 'S:Set({}) for _,v in ipairs(ws:GetChildren()) do if v.Name:sub(1,3)=="CB_" then v:Destroy() end end '
+# PN() 建的部件用的是给孩子看的真名（如 "Part"、"传送门"），所以清场不能只认
+# CB_ 前缀 —— 名字记在 Workspace 的 CBX 属性里（"|Part|门帘|" 这样）。
+# ⚠️ 别把标记打在部件自己身上：属性面板底部的「属性」分类会把它显示出来，直接入镜。
+$script:CB_CLEAR = 'S:Set({}) local L=ws:GetAttribute("CBX") or "|" for _,v in ipairs(ws:GetChildren()) do if v.Name:sub(1,3)=="CB_" or L:find("|"..v.Name.."|",1,true) then v:Destroy() end end ws:SetAttribute("CBX","|") '
 
 # 用 F 键把 Studio 的相机枢轴搬到对准点
 function Set-Pivot([string]$AimLocal, $SceneYaw = $null) {

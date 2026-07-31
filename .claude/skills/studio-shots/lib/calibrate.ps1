@@ -47,6 +47,19 @@ function Show-VpProbe {
   "读这两张: $a  /  $b"
 }
 
+# 重测属性面板各行的 y 坐标（panel.ps1 里的 $PROW）。换机器/换 Studio 版本必做：
+# 面板类截图全靠按坐标点行，坐标错了会点到别的行、还可能把属性改掉。
+function Show-PropRows {
+  Build-Demo 'PN("Part",Vector3.new(6,6,6),Vector3.new(0,3,0))' 'Vector3.new(0,3,0)'
+  Select-Named "Part"
+  Props-Top
+  $p = ShotRegion "_prowtop" "props"
+  Props-Scroll -10
+  $q = ShotRegion "_prowmid" "props"
+  "读这两张量行的 y（图内 y + $($script:CBS.PropY) = 屏幕 y）: $p  /  $q"
+  "行距约 23.5px；值单元格 x=$($script:CBS.PropValX)，下拉箭头 x=$($script:CBS.PropArrowX)，展开小三角 x=$($script:CBS.PropExpX)"
+}
+
 # 端到端自检：建场景 → 设枢轴 → 摆相机 → 截图 → 程序核对居中误差
 function Test-Pipeline {
   $geo = 'P("pad",Vector3.new(20,1,20),Vector3.new(0,0,0),M.Slate) local p=P("chk",Vector3.new(2.5,2.5,2.5),Vector3.new(0,10,0),M.Neon,Color3.fromRGB(255,80,80)) p.Shape=Enum.PartType.Ball'

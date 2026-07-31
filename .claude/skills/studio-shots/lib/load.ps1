@@ -6,4 +6,6 @@
 . "$PSScriptRoot\win.ps1"
 . "$PSScriptRoot\studio.ps1"
 . "$PSScriptRoot\aim.ps1"
+. "$PSScriptRoot\panel.ps1"
+. "$PSScriptRoot\rig.ps1"
 "studio-shots 已加载 · 输出目录: $script:SD"

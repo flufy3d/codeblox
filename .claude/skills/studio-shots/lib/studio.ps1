@@ -42,5 +42,5 @@ function Stop-CamHolds { RunLua 'workspace:SetAttribute("CBGEN",999999)' 700 }
 
 # 清掉脚本建的所有部件 + 相机令牌，收工时用
 function Clear-Scene {
-  RunLua 'local ws=workspace game:GetService("Selection"):Set({}) for _,v in ipairs(ws:GetChildren()) do if v.Name:sub(1,3)=="CB_" then v:Destroy() end end ws:SetAttribute("CBGEN",nil) print("CB scene cleared")' 900
+  RunLua 'local ws=workspace game:GetService("Selection"):Set({}) local L=ws:GetAttribute("CBX") or "|" for _,v in ipairs(ws:GetChildren()) do if v.Name:sub(1,3)=="CB_" or L:find("|"..v.Name.."|",1,true) then v:Destroy() end end ws:SetAttribute("CBGEN",nil) ws:SetAttribute("CBX",nil) print("CB scene cleared")' 900
 }

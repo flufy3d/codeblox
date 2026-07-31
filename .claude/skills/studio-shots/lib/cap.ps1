@@ -68,6 +68,38 @@ function Mark-Center([string]$SrcName, [string]$OutName) {
   $p
 }
 
+# 在图上画红框 / 红圈 / 箭头 —— 面板类截图靠这个「框出某一行」。
+# 坐标是**裁剪后图片内**的坐标，不是屏幕坐标。
+#   $Shapes = @(
+#     @{ t='box';     x=0; y=10; w=450; h=24 }
+#     @{ t='ellipse'; x=0; y=10; w=450; h=24 }
+#     @{ t='arrow';   x1=300; y1=80; x2=200; y2=40 }   # 箭头指向 x2,y2
+#   )
+function Annotate([string]$SrcName, [string]$OutName, $Shapes, [int]$Width = 3, $Color = $null) {
+  if (-not $Color) { $Color = [System.Drawing.Color]::FromArgb(255, 59, 48) }   # 红
+  $img = [System.Drawing.Image]::FromFile((Join-Path $script:SD "$SrcName.png"))
+  $bmp = New-Object System.Drawing.Bitmap $img
+  $g = [System.Drawing.Graphics]::FromImage($bmp)
+  $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+  foreach ($s in $Shapes) {
+    $pen = New-Object System.Drawing.Pen $Color, $Width
+    switch ($s.t) {
+      'box'     { $g.DrawRectangle($pen, [int]$s.x, [int]$s.y, [int]$s.w, [int]$s.h) }
+      'ellipse' { $g.DrawEllipse($pen, [int]$s.x, [int]$s.y, [int]$s.w, [int]$s.h) }
+      'arrow'   {
+        $pen.EndCap = [System.Drawing.Drawing2D.LineCap]::Custom
+        $pen.CustomEndCap = New-Object System.Drawing.Drawing2D.AdjustableArrowCap 4,5
+        $g.DrawLine($pen, [int]$s.x1, [int]$s.y1, [int]$s.x2, [int]$s.y2)
+      }
+    }
+    $pen.Dispose()
+  }
+  $g.Dispose(); $img.Dispose()
+  $p = Join-Path $script:SD "$OutName.png"
+  $bmp.Save($p, [System.Drawing.Imaging.ImageFormat]::Png); $bmp.Dispose()
+  $p
+}
+
 # 多张图拼成一张联络表 —— 一次 Read 就能检查一整批，省 context
 function ContactSheet([string]$OutName, [string[]]$Names, [int]$Cols=2, [int]$CellW=470) {
   $Names = @($Names | Where-Object { Test-Path (Join-Path $script:SD "$_.png") })   # 缺图就跳过

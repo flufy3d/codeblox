@@ -14,7 +14,8 @@ public class Nw {
   [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr h);
   [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
   [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
-  [DllImport("user32.dll")] public static extern void mouse_event(uint f, int dx, int dy, uint d, int e);
+  // dwData 声明成 int，不是 uint：滚轮向下是负值（-120），uint 会溢出报错
+  [DllImport("user32.dll")] public static extern void mouse_event(uint f, int dx, int dy, int d, int e);
   [StructLayout(LayoutKind.Sequential)] public struct RECT { public int Left, Top, Right, Bottom; }
 }
 "@
@@ -58,8 +59,9 @@ function Move-To([int]$X, [int]$Y) { [Nw]::SetCursorPos($X, $Y) | Out-Null; Star
 function Wheel([int]$X, [int]$Y, [int]$Notches) {
   [Nw]::SetCursorPos($X, $Y) | Out-Null
   Start-Sleep -Milliseconds 100
+  $d = [math]::Sign($Notches) * 120        # 负数=向下，所以 dwData 不能是 uint
   for ($i=0; $i -lt [math]::Abs($Notches); $i++) {
-    [Nw]::mouse_event(0x0800, 0, 0, [uint32]([int]([math]::Sign($Notches) * 120)), 0)
+    [Nw]::mouse_event(0x0800, 0, 0, $d, 0)
     Start-Sleep -Milliseconds 40
   }
   Start-Sleep -Milliseconds 200
