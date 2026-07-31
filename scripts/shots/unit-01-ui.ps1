@@ -75,6 +75,21 @@ function U1-PanelBtns {
   Annotate "_rbc" "v_1_2-s1" @( @{ t='box'; x=415; y=4; w=104; h=58 } ) 2
 }
 
+# ── 1.6-s4 · 主页工具栏上的「锚固」按钮 ─────────────────────────
+# 跟 1.2-s1 是**同一块**工具栏裁剪（x 640~1290），只换红框位置 —— 一个单元里的
+# 按钮图取景一致，孩子才认得出「还是刚才那条工具栏」。
+# 锚固按钮的格子：屏幕 991~1043（材质 809 / 颜色 859 / 群组 911 / 锁定 963 / 锚固 1015，间距 52）
+# ⚠️ 必须**先选中一个部件**再拍：没有选中时 群组/锁定/锚固 三个按钮都是灰的（禁用），
+#    拍出来跟孩子「选中方块之后点锚固」时看到的不一样。
+function U1-AnchorBtn {
+  Build-Demo 'PN("方块",Vector3.new(6,6,6),Vector3.new(0,3,0),M.Plastic,Color3.fromRGB(225,120,90))' 'Vector3.new(0,3,0)' | Out-Null
+  Select-Named "方块" | Out-Null
+  Focus-Win | Out-Null
+  ShotWin "_ab" | Out-Null
+  Crop "_ab" "_abc" 640 78 650 68 | Out-Null
+  Annotate "_abc" "v_1_6-s4" @( @{ t='box'; x=351; y=4; w=52; h=58 } ) 2
+}
+
 # ── 1.2-s2 · 「部件」按钮的下拉菜单，框出「方块」──────────────────
 # 弹出层一换工具调用就被 Focus-Win 收起，所以「点开 → 截图」必须同一个函数里做完。
 function U1-PartMenu {
@@ -259,10 +274,10 @@ function U1-OnPlatform {
 #   ④ 小人类最后拍（Unstash-Rig 之后树里就多了 Rig）
 function U1-All {
   U1-Overview                                    # 1.1-s2
-  U1-PanelBtns; U1-Tools; U1-PlayBtn             # 1.2-s1 / 1.3-s1 / 1.6-s2（同一张窗口图裁三次）
+  U1-PanelBtns; U1-Tools; U1-PlayBtn; U1-AnchorBtn   # 1.2-s1 / 1.3-s1 / 1.6-s2 / 1.6-s4（都从窗口图上裁）
   U1-PartMenu; U1-PartTree                       # 1.2-s2 / 1.2-s3
   U1-Handles; U1-Props; U1-ColorPalette          # 1.3-s2 / 1.4-s1 / 1.4-s2
   U1-Rename; U1-GroupMenu; U1-Tidy; U1-Anchored  # 1.5-s1 → 1.5-s2 → 1.5-s3 → 1.6-s1（接力）
   U1-OnSteps; U1-OnPlatform                      # 1.6-s3 / 1.7-s2（要先 Unstash-Rig）
-  "拍完 15 张。逐张 Read $script:SD\v_1_*.png 核对，再跑 npm run shots:save"
+  "拍完 16 张。逐张 Read $script:SD\v_1_*.png 核对，再跑 npm run shots:save"
 }
