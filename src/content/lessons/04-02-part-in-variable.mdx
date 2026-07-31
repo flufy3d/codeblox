@@ -13,7 +13,7 @@ tasks:
   - id: t1
     label: 在 Workspace 里放一个 Part
   - id: t2
-    label: 右键这个 Part → Insert Object → Script（把脚本放进方块里）
+    label: 右键这个 Part → 插入 → 插入对象… → 搜 Script（把脚本放进方块里）
   - id: t3
     label: 写下 local part = script.Parent
   - id: t4
@@ -57,11 +57,11 @@ print(part.Name)
 为什么要这样？因为后面只要写 `part`，就代表那个方块了——不用每次都写 `script.Parent` 一长串，**又短又不容易写错**。
 
 <StudioStep n={1} title="放一个方块">
-  **Home 选项卡 → Insert → Part**，在世界里放一个方块。
+  **主页 → 部件**，在世界里放一个方块。
 </StudioStep>
 
 <StudioStep n={2} title="把脚本放进方块">
-  在 Explorer 里找到这个 Part，**右键它 → Insert Object → Script**。注意：Script 要在 Part 的**里面**（缩进在它下方）。
+  在 Explorer 里找到这个 Part，**右键它 → 插入 → 插入对象… → 搜 Script**。注意：Script 要在 Part 的**里面**（缩进在它下方）。
 </StudioStep>
 
 <StudioStep n={3} title="写上这两行">
