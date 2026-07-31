@@ -84,12 +84,12 @@ function Expand-Prop([int]$RowY) {
 
 # 建一组「给孩子看的」演示部件：名字是真名（Part / 传送门），不带 CB_ 前缀，
 # 靠 CBX 属性标记来清场。$GeoLua 里可以用 P / PN / CYL / BALL / base。
-function Build-Demo([string]$GeoLua, [string]$AimLocal = 'Vector3.new(0,0,0)', $Yaw = $null) {
-  RunLua ((Get-LuaFuncs $AimLocal $Yaw) + " " + $script:CB_CLEAR + $GeoLua) 1400
+function Build-Demo([string]$GeoLua, [string]$AimLocal = 'Vector3.new(0,0,0)', $Yaw = $null, $Pitch = $null) {
+  RunLua ((Get-LuaFuncs $AimLocal $Yaw $Pitch) + " " + $script:CB_CLEAR + $GeoLua) 1400
 }
 
 # 把相机对准（同 Shoot-Scene 的第 2、3 步，但不截图）
-function Aim-Demo([string]$AimLocal, [double]$Dist, $Yaw = $null) {
-  Set-Pivot $AimLocal $Yaw
-  RunLua ((Get-LuaFuncs $AimLocal $Yaw) + " CAM($Dist)") 900
+function Aim-Demo([string]$AimLocal, [double]$Dist, $Yaw = $null, $Pitch = $null) {
+  Set-Pivot $AimLocal $Yaw $Pitch
+  RunLua ((Get-LuaFuncs $AimLocal $Yaw $Pitch) + " CAM($Dist)") 900
 }

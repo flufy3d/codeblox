@@ -11,13 +11,13 @@ objectives:
   - 理解 Anchored（锚定）：钉住的方块不会掉下去
 tasks:
   - id: t1
-    label: 在 Properties 里确认地板和台阶的 Anchored 都打了勾
+    label: 在 Properties 里把地板和台阶的 Anchored 都勾上
   - id: t2
-    label: 点顶部的 ▶️ Play（试玩）按钮
+    label: 点左上角的 ▶️ 试玩按钮
   - id: t3
     label: 用 W/A/S/D 走、空格跳，走上你的台阶和平台
   - id: t4
-    label: 点 ⏹️ Stop（停止）回到编辑状态
+    label: 点 ⏹️ 停止，回到编辑状态
 quiz:
   - q: 怎么进入自己的游戏走一走？
     type: single
@@ -45,13 +45,13 @@ challenge: 故意取消一个台阶的 Anchored，试玩看它掉下去会怎样
 - **Anchored（锚定）**：打勾的方块会“钉”在空中不掉；不打勾会被重力拉下来。
 
 <StudioStep n={1} title="先把地板钉住">
-  选中地板和台阶，在 Properties 里确认 **Anchored** 都打了勾，免得一试玩就塌了。
-  <Shot id="1.6-s1" capture="Properties 里框出 Anchored 这一行、复选框打了勾的样子" alt="Anchored 打勾，方块就被「钉」住不会掉" />
+  选中地板和台阶，在 Properties 里往下找到 **Anchored**（在“部件”这一类下面），**把勾勾上**——新放的方块默认是**没**勾的，一试玩就会塌。
+  <Shot id="1.6-s1" capture="属性面板「部件」分类下的 Anchored 那一行，复选框打了勾，红框圈出来" alt="Anchored 打勾，方块就被「钉」住不会掉" />
 </StudioStep>
 
 <StudioStep n={2} title="进入游戏">
-  点顶部的 ▶️ **Play（试玩）**。稍等一下，小人就出现了！
-  <Shot id="1.6-s2" capture="Studio 顶部中间的播放控件，框出 ▶️ Play（试玩）按钮" alt="点这个 ▶️ Play 就能进游戏走一走" />
+  点**左上角**的 ▶️。稍等一下，小人就出现了！
+  <Shot id="1.6-s2" capture="Studio 左上角的播放控件，红圈圈出 ▶️ 那个按钮" alt="左上角这个 ▶️ 就是试玩" />
 </StudioStep>
 
 <StudioStep n={3} title="走起来">
@@ -59,15 +59,16 @@ challenge: 故意取消一个台阶的 Anchored，试玩看它掉下去会怎样
 </StudioStep>
 
 <StudioStep n={4} title="回到编辑">
-  玩够了，点 ⏹️ **Stop（停止）**，回到搭建状态继续改。
+  玩够了，点左上角的 ⏹️ **停止**（红方块），回到搭建状态继续改。
 </StudioStep>
 
 <Callout type="warning">
   忘了勾 Anchored 的方块，一试玩就会“哗啦”掉下去——这很正常，停下来勾上再玩就好。
+  嫌一个个勾麻烦？全选中之后点 **主页 → 锚固**，一下全钉住。
 </Callout>
 
 ## 🕹️ 看看你的成果
 
 你的小人能在你搭的乐园里走、跳、上台阶。**这就是“我做的游戏”第一次能玩！** 🎉
 
-<Shot id="1.6-s3" capture="试玩中：小人正站在你搭的台阶或平台上" alt="小人走进了你做的世界！" />
+<Shot id="1.6-s3" capture="小人站在自己搭的彩色台阶上，上面是发光平台" alt="小人走进了你做的世界！" />

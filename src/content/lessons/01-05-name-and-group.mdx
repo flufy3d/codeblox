@@ -11,11 +11,11 @@ objectives:
   - 把几个方块打包成一个 Model（模型组）方便管理
 tasks:
   - id: t1
-    label: 把一个方块改名为“地板”
+    label: 右键 → 重命名，把一个方块改名为“地板”
   - id: t2
     label: 再放两三个方块，分别命名“台阶1”“台阶2”
   - id: t3
-    label: 框选这些台阶，按 Ctrl + G 打组成一个 Model
+    label: 框选这些台阶，右键 → 作为模型分组（Ctrl + G）
   - id: t4
     label: 把这个 Model 改名为“台阶组”
 quiz:
@@ -46,8 +46,9 @@ challenge: 选中“台阶组”整体复制粘贴（Ctrl+C / Ctrl+V），做出
 - **Model（模型组）= 收纳盒**：把一组方块打组，就能整体移动、整体复制。
 
 <StudioStep n={1} title="改名字">
-  在 Explorer 里**双击**方块的名字（或在 Properties 改 **Name**），改成 `地板`。
-  <Shot id="1.5-s1" capture="Explorer 里双击 Part 的名字、正在改成「地板」的样子" alt="在 Explorer 里给方块改名为「地板」" />
+  在 Explorer 里**右键**那个方块 → **重命名**，打字改成 `地板`，按回车。
+  （在 Properties 里改 **Name** 那一行也是一样的效果。）
+  <Shot id="1.5-s1" capture="资源管理器里右键 → 重命名 之后出现的输入框，里面正在输入「地板」" alt="右键 → 重命名，把 Part 改叫「地板」" />
 </StudioStep>
 
 <StudioStep n={2} title="多放几级台阶">
@@ -55,9 +56,9 @@ challenge: 选中“台阶组”整体复制粘贴（Ctrl+C / Ctrl+V），做出
 </StudioStep>
 
 <StudioStep n={3} title="打包成一组">
-  框选这些台阶（按住鼠标左键拖一个框，或在 Explorer 里按住 Ctrl 多选），
-  然后 **右键 → Group**（快捷键 **Ctrl + G**），生成一个 `Model`。
-  <Shot id="1.5-s2" capture="右键菜单里框出 Group，或打组后 Explorer 里出现的 Model（里面装着几个台阶）" alt="Ctrl + G 把台阶打包成一个 Model" />
+  框选这些台阶（按住鼠标左键拖一个框，或在 Explorer 里按住 Ctrl 一个个点），
+  然后 **右键 → 作为模型分组**（快捷键 **Ctrl + G**），就生成一个 `Model`。
+  <Shot id="1.5-s2" capture="资源管理器里选中三级台阶后的右键菜单，框出「作为模型分组」" alt="右键 → 作为模型分组（Ctrl + G），把台阶打包成一个 Model" />
 </StudioStep>
 
 <StudioStep n={4} title="给收纳盒命名">
@@ -66,10 +67,11 @@ challenge: 选中“台阶组”整体复制粘贴（Ctrl+C / Ctrl+V），做出
 
 <Callout type="tip">
   Explorer 里名字清清楚楚（`地板`、`台阶组`），就像整理好的玩具箱，找东西超快！
+  主页选项卡上那个 **群组** 按钮，跟右键的“作为模型分组”是同一件事。
 </Callout>
 
 ## 🕹️ 看看你的成果
 
 Explorer 里一眼就能看懂你的世界：哪个是地板、哪组是台阶。整洁的项目，做大游戏才不会乱。
 
-<Shot id="1.5-s3" capture="整洁的 Explorer 树：能看到「地板」和展开的「台阶组」" alt="名字清清楚楚的 Explorer，就像整理好的玩具箱" />
+<Shot id="1.5-s3" capture="整洁的资源管理器：「台阶组」展开着装了三级台阶，下面还有「地板」" alt="名字清清楚楚的 Explorer，就像整理好的玩具箱" />

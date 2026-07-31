@@ -48,3 +48,10 @@ function Rig-At([string]$Lp, [double]$TurnDeg = 0) {
 # ⚠️ 挪到地图**底下**去，别挪到 (0,0,0) —— 那儿离场景原点 (150,0,0) 不算远，
 #    广角一点的构图照样会把它拍进去（踩过）。
 function Park-Rig { RunLua 'local r=workspace:FindFirstChild("Rig") if r then r:PivotTo(CFrame.new(0,-400,0)) end' 800 }
+
+# 把 Rig 搬进 ServerStorage / 搬回 Workspace。
+# 资源管理器类的截图里，Workspace 下多一个「Rig」节点孩子的树上是没有的 ——
+# Park-Rig 只挪出镜头，树上照样露着。删了再 New-Rig 又慢又容易失败，所以改成
+# 临时搬走：ServerStorage 是折叠的，只会多一个展开箭头，可以忽略。
+function Stash-Rig { RunLua 'local r=workspace:FindFirstChild("Rig") if r then r.Parent=game:GetService("ServerStorage") end print("rig stashed")' 900 }
+function Unstash-Rig { RunLua 'local r=game:GetService("ServerStorage"):FindFirstChild("Rig") if r then r.Parent=workspace end print("rig back")' 900 }

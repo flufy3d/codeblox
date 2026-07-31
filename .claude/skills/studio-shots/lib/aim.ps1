@@ -14,8 +14,10 @@
 
 # Lua 公共前缀（只定义函数/常量，不清场）
 #   $AimLocal 是这个场景的对准点（局部坐标 Lua 表达式）
-function Get-LuaFuncs([string]$AimLocal = 'Vector3.new(0,0,0)', $SceneYaw = $null) {
-  $p = $script:CBS.PitchDeg
+#   $Pitch    这一张单独用的俯角（度）。不给就用 config 的 20；要「空中俯视全景」
+#             这类图给 50~60
+function Get-LuaFuncs([string]$AimLocal = 'Vector3.new(0,0,0)', $SceneYaw = $null, $Pitch = $null) {
+  $p = if ($null -ne $Pitch) { $Pitch } else { $script:CBS.PitchDeg }
   $y = $script:CBS.YawDeg
   $so = if ($null -ne $SceneYaw) { $SceneYaw } else { $script:CBS.SceneYawOffsetDeg }
   @"
@@ -45,8 +47,8 @@ local function MARK(dist) local old=ws:FindFirstChild("CB_mark") if old then old
 $script:CB_CLEAR = 'S:Set({}) local L=ws:GetAttribute("CBX") or "|" for _,v in ipairs(ws:GetChildren()) do if v.Name:sub(1,3)=="CB_" or L:find("|"..v.Name.."|",1,true) then v:Destroy() end end ws:SetAttribute("CBX","|") '
 
 # 用 F 键把 Studio 的相机枢轴搬到对准点
-function Set-Pivot([string]$AimLocal, $SceneYaw = $null) {
-  RunLua ((Get-LuaFuncs $AimLocal $SceneYaw) + " MKPIVOT()") 900
+function Set-Pivot([string]$AimLocal, $SceneYaw = $null, $Pitch = $null) {
+  RunLua ((Get-LuaFuncs $AimLocal $SceneYaw $Pitch) + " MKPIVOT()") 900
   Focus-Win | Out-Null
   Click $script:CBS.DocTabX $script:CBS.DocTabY 400   # 焦点给视口，不改选择
   Send "f" 900                                        # 聚焦选中物 → 枢轴到位
@@ -58,17 +60,18 @@ function Set-Pivot([string]$AimLocal, $SceneYaw = $null) {
 #   $Dist     相机到对准点的距离
 #   $Post     相机摆好之后再跑的 Lua（选中高亮之类会被相机步骤清掉，放这里）
 #   $Yaw      单独指定这一张的场景斜角（度），不给就用 config 的默认值
+#   $Pitch    单独指定这一张的俯角（度），不给就用 config 的 20
 #   -Verify   额外拍一张带品红标记球的图，用程序核对是否真的居中
 function Shoot-Scene([string]$GeoLua, [string]$AimLocal, [double]$Dist, [string]$OutName,
-                     [string]$Post = '', $Yaw = $null, [switch]$Verify) {
-  RunLua ((Get-LuaFuncs $AimLocal $Yaw) + " " + $script:CB_CLEAR + $GeoLua) 1400
-  Set-Pivot $AimLocal $Yaw
-  RunLua ((Get-LuaFuncs $AimLocal $Yaw) + " CAM($Dist)") 900
-  if ($Post) { RunLua ((Get-LuaFuncs $AimLocal $Yaw) + " " + $Post) 800 }
+                     [string]$Post = '', $Yaw = $null, [switch]$Verify, $Pitch = $null) {
+  RunLua ((Get-LuaFuncs $AimLocal $Yaw $Pitch) + " " + $script:CB_CLEAR + $GeoLua) 1400
+  Set-Pivot $AimLocal $Yaw $Pitch
+  RunLua ((Get-LuaFuncs $AimLocal $Yaw $Pitch) + " CAM($Dist)") 900
+  if ($Post) { RunLua ((Get-LuaFuncs $AimLocal $Yaw $Pitch) + " " + $Post) 800 }
   Start-Sleep -Milliseconds 450
   ShotVP $OutName | Out-Null
   if ($Verify) {
-    RunLua ((Get-LuaFuncs $AimLocal $Yaw) + " MARK($Dist)") 800
+    RunLua ((Get-LuaFuncs $AimLocal $Yaw $Pitch) + " MARK($Dist)") 800
     Start-Sleep -Milliseconds 300
     ShotVP "_verify" | Out-Null
     $m = Find-Magenta "_verify"
@@ -86,7 +89,7 @@ function Shoot-Batch($Table, [string]$SheetName = 'sheet', [int]$Cols = 2, [swit
   foreach ($id in $Table.Keys) {
     $n = 'v_' + ($id -replace '\.','_')
     $s = $Table[$id]
-    Shoot-Scene $s.geo $s.lp $s.d $n -Post ([string]$s.post) -Yaw $s.yaw -Verify:$Verify
+    Shoot-Scene $s.geo $s.lp $s.d $n -Post ([string]$s.post) -Yaw $s.yaw -Pitch $s.pitch -Verify:$Verify
     $names += $n
   }
   ContactSheet $SheetName $names $Cols | Out-Null

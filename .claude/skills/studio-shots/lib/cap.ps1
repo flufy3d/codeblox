@@ -74,7 +74,10 @@ function Mark-Center([string]$SrcName, [string]$OutName) {
 #     @{ t='box';     x=0; y=10; w=450; h=24 }
 #     @{ t='ellipse'; x=0; y=10; w=450; h=24 }
 #     @{ t='arrow';   x1=300; y1=80; x2=200; y2=40 }   # 箭头指向 x2,y2
+#     @{ t='text'; s='资源管理器'; x=20; y=140; size=26 }  # 红底白字的小标签
 #   )
+# 文字标签用来做「界面导览」那种图（左边=资源管理器、中间=3D 视口……）。
+# 注意整图会被缩到正文宽度（约 700px），所以 1920 宽的全窗口图上 size 至少给 26。
 function Annotate([string]$SrcName, [string]$OutName, $Shapes, [int]$Width = 3, $Color = $null) {
   if (-not $Color) { $Color = [System.Drawing.Color]::FromArgb(255, 59, 48) }   # 红
   $img = [System.Drawing.Image]::FromFile((Join-Path $script:SD "$SrcName.png"))
@@ -90,6 +93,16 @@ function Annotate([string]$SrcName, [string]$OutName, $Shapes, [int]$Width = 3, 
         $pen.EndCap = [System.Drawing.Drawing2D.LineCap]::Custom
         $pen.CustomEndCap = New-Object System.Drawing.Drawing2D.AdjustableArrowCap 4,5
         $g.DrawLine($pen, [int]$s.x1, [int]$s.y1, [int]$s.x2, [int]$s.y2)
+      }
+      'text'    {
+        $fs = if ($s.size) { [float]$s.size } else { 16 }
+        $font = New-Object System.Drawing.Font "Microsoft YaHei", $fs, ([System.Drawing.FontStyle]::Bold)
+        $str = [string]$s.s
+        $m = $g.MeasureString($str, $font)
+        $bg = New-Object System.Drawing.SolidBrush $Color
+        $g.FillRectangle($bg, [int]$s.x, [int]$s.y, [int]($m.Width + 14), [int]($m.Height + 6))
+        $g.DrawString($str, $font, [System.Drawing.Brushes]::White, [float]([int]$s.x + 7), [float]([int]$s.y + 3))
+        $bg.Dispose(); $font.Dispose()
       }
     }
     $pen.Dispose()
