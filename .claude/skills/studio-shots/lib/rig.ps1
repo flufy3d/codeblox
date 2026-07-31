@@ -39,5 +39,7 @@ function Rig-At([string]$Lp, [double]$TurnDeg = 0) {
   "local r=ws:FindFirstChild(`"Rig`") if r then r:PivotTo(base($Lp)*CFrame.Angles(0,math.rad($TurnDeg),0)) end "
 }
 
-# 拍完把小人挪出镜头（不删，下个单元还要用）
-function Park-Rig { RunLua 'local r=workspace:FindFirstChild("Rig") if r then r:PivotTo(CFrame.new(0,0,0)) end' 800 }
+# 拍完把小人挪出镜头（不删，下个单元还要用）。
+# ⚠️ 挪到地图**底下**去，别挪到 (0,0,0) —— 那儿离场景原点 (150,0,0) 不算远，
+#    广角一点的构图照样会把它拍进去（踩过）。
+function Park-Rig { RunLua 'local r=workspace:FindFirstChild("Rig") if r then r:PivotTo(CFrame.new(0,-400,0)) end' 800 }

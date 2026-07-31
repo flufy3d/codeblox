@@ -58,10 +58,13 @@ function U2-Shape {
   Annotate "_shBig" "v_2_3-s1" @( @{ t='box'; x=225; y=264; w=218; h=18 } ) 2
 }
 
-# 2.3-s2 · Size 展开成 X/Y/Z，Y=12，箭头指 Y
+# 2.3-s2 · Size 展开成 X/Y/Z，X=12，箭头指 X
+# ⚠️ 是 X 不是 Y：Roblox 圆柱的轴向是 X（默认躺着），课文的 Callout 专门讲了这件事。
+#    拍之前先 Park-Rig，否则小人会入镜。
 function U2-Size {
+  Park-Rig
   Focus-Win | Out-Null; Send "{ESC}" 400
-  Build-Demo 'PN("Part",Vector3.new(3,12,3),Vector3.new(0,6,0),M.Concrete)' 'Vector3.new(0,6,0)'
+  Build-Demo 'local p=PN("Part",Vector3.new(12,3,3),Vector3.new(0,6,0),M.Concrete) p.Shape=Enum.PartType.Cylinder p.CFrame=base(Vector3.new(0,6,0))*CFrame.Angles(0,0,math.rad(90))' 'Vector3.new(0,6,0)'
   Aim-Demo 'Vector3.new(0,6,0)' 22
   Select-Named "Part"; Props-Top
   Expand-Prop $script:PROW['Size']
@@ -69,8 +72,8 @@ function U2-Size {
   ShotRegion "_sz" "props" | Out-Null
   ReCrop "_sz" "_szBig" 1458 596 452 142 | Out-Null
   Annotate "_szBig" "v_2_3-s2" @(
-    @{ t='box';   x=8;   y=76;  w=432; h=19 }
-    @{ t='arrow'; x1=340; y1=132; x2=262; y2=92 }
+    @{ t='box';   x=8;   y=53;  w=432; h=19 }
+    @{ t='arrow'; x1=340; y1=118; x2=262; y2=69 }
   ) 2
 }
 
