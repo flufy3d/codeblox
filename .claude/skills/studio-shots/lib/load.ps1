@@ -8,4 +8,5 @@
 . "$PSScriptRoot\aim.ps1"
 . "$PSScriptRoot\panel.ps1"
 . "$PSScriptRoot\rig.ps1"
+. "$PSScriptRoot\code.ps1"
 "studio-shots 已加载 · 输出目录: $script:SD"

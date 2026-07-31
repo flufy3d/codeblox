@@ -33,6 +33,23 @@ function Focus-Win([string]$NameLike = "RobloxStudio*") {
   [pscustomobject]@{ Left=$r.Left; Top=$r.Top; Width=$r.Right-$r.Left; Height=$r.Bottom-$r.Top; Title=$p.MainWindowTitle }
 }
 
+# 把宿主终端弹回前台。Studio 会一直被置前，人就看不到 agent 的进度了 ——
+# 每批拍完调一次。做法是从当前 pwsh 往上找第一个有窗口的祖先进程（Windows
+# Terminal / conhost / VS Code 都能命中），不用硬编码终端名。
+function Restore-Console {
+  $cur = Get-CimInstance Win32_Process -Filter "ProcessId = $PID" -ErrorAction SilentlyContinue
+  for ($i = 0; $i -lt 8 -and $cur; $i++) {
+    $p = Get-Process -Id $cur.ProcessId -ErrorAction SilentlyContinue
+    if ($p -and $p.MainWindowHandle -ne 0 -and $p.ProcessName -notlike "*Roblox*") {
+      [Nw]::SetForegroundWindow($p.MainWindowHandle) | Out-Null
+      return $p.ProcessName
+    }
+    if (-not $cur.ParentProcessId) { break }
+    $cur = Get-CimInstance Win32_Process -Filter "ProcessId = $($cur.ParentProcessId)" -ErrorAction SilentlyContinue
+  }
+  $null
+}
+
 function Click([int]$X, [int]$Y, [int]$Delay=250) {
   [Nw]::SetCursorPos($X, $Y) | Out-Null
   Start-Sleep -Milliseconds 100

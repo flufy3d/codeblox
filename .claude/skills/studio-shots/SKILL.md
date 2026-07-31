@@ -9,14 +9,17 @@ description: 在本机自动拍 Roblox Studio 课程配图 —— 用命令栏�
 
 ## 能做到什么
 
-**四类都跑通了**，单元 2 的 18 张全是这么拍的：
+**七类都跑通了**，单元 2 的 18 张 + 单元 3 的 18 张全是这么拍的：
 
 | 类型 | 怎么拍 | 例子 |
 |---|---|---|
 | 视口（3D 场景） | Lua 搭场景 + 枢轴法对准相机，全自动，居中误差 ±1px | 2.1-s3 / 2.6-s2 |
 | 属性面板 | 选中部件 → 滚到目标行 → 按坐标点 → 裁剪 → 画红框 | 2.1-s1 / 2.4-s2 |
-| 资源管理器 | 选中**子节点**会自动展开父节点，再裁树 | 2.5-s2 / 2.5-s3 |
-| 试玩（小人） | **不进 Play 模式**：编辑模式插一个 Rig 角色，PivotTo 摆位 | 2.4-s3 / 2.6-s3 |
+| 资源管理器 | 选中**子节点**会自动展开父节点，再裁树 | 2.5-s2 / 3.3-s1 |
+| 试玩（小人） | **不进 Play 模式**：编辑模式插一个 Rig 角色，PivotTo 摆位 | 2.4-s3 / 3.7-s3 |
+| 代码（脚本编辑器） | 命令栏写 `Script.Source` → 点文档标签 → 裁代码区 | 3.6-s1 / 3.7-s1 |
+| 输出面板 | **真按 F5 进 Play 模式**，等脚本 print 出来再裁 | 3.2-s3 / 3.6-s2 |
+| 右键菜单 / 弹出列表 | 右键 → 悬停子菜单 → 截图 → 点下去，**必须一次调用内做完** | 3.1-s1 / 3.1-s2 |
 
 ## 职责边界（别把两边搞混）
 
@@ -31,13 +34,37 @@ description: 在本机自动拍 Roblox Studio 课程配图 —— 用命令栏�
 改两个数字重跑一遍就行，不用从零复盘。文件是 agent 写的，不用人手写。
 
 `scripts/shots/unit-02*.ps1` 是完整的工作样板，新单元照它抄。
+`scripts/shots/unit-03*.ps1` 是加了代码 / 输出 / 弹出菜单三类之后的样板。
 
 ## 前置条件
 
 1. Roblox Studio 已打开一个 place（有 Baseplate 就行），窗口最大化
 2. 屏幕 1920×1080；资源管理器 + 属性 + 输出 三个面板都开着（坐标是按这个布局标的）
-3. 底部命令栏可见（查看 → 命令栏）
+3. 底部命令栏可见（「脚本」选项卡 → 命令）
 4. 课程里已经写好 `<Shot>` 占位（见 AUTHORING.md），`npm run shots:check` 能列出待拍队列
+
+### Studio 没开的话自己开
+
+```powershell
+Start-Process "$env:LOCALAPPDATA\Roblox\Versions\version-*\RobloxStudioBeta.exe"
+```
+
+会停在开始页（登录状态还在）。**别去「最近」里开用户的正式作品** —— 点左侧 **模板 →
+Baseplate**（第一个）新建一个 Place1。理由不只是安全：单元 3 起有大量资源管理器截图，
+全新模板的树只有 `Camera / Terrain / SpawnLocation / Baseplate`，干净得正好，
+用户那个 place 里的历史遗留物会直接入镜。
+
+新建的 place **不要 Ctrl+S**（会往用户账号里发东西）。代价是 Rig 不会留下来，
+下次得重跑一次 `New-Rig` —— 它已经是全自动的，成本可以忽略。
+
+开完先自检：`Show-VpProbe`（核对视口矩形）+ `Test-Pipeline`（居中误差应在 ±10px 内）。
+
+### 让人能看到进度
+
+Studio 会被反复置前，人就盯不到 agent 在干什么了。**每次工具调用的最后加一句
+`Restore-Console`**，把宿主终端弹回来。它靠往上找第一个有窗口的祖先进程来定位终端，
+不认死终端名。反过来注意：下一次调用要截图前必须先 `Focus-Win`，否则截到的是终端
+（`ShotWin` / `ShotVP` / `ShotRegion` 自己**不会**置前 Studio）。
 
 ## 上手
 
@@ -118,6 +145,39 @@ Annotate "_y" "v_2_3-s1" @( @{t='box'; x=225; y=264; w=218; h=18} ) 2   # 红框
 `$PROW` 是属性面板各行的屏幕 y 坐标表（本机实测）。**换机器或换 Studio 版本必须重测**：
 `Props-Top` 之后 `ShotRegion "_x" "props"`，Read 那张图自己量。
 
+## 写代码类截图
+
+课程从单元 3 开始要拍「代码长什么样」。积木在 `lib/code.ps1`：
+
+```powershell
+Set-Code 'workspace.MyPart.Script' @(
+  'local part = script.Parent                       -- 找到我住的那个方块'
+  'part.Material = Enum.Material.Neon                -- 让它发光'
+) -Open
+ShotCode "v_3_6-s1" 5 700       # 露出 5 行、宽 700px，行号栏也进画面
+```
+
+中文在编辑器里渲染得很好（注释绿、字符串橙、关键字蓝），不用改字体。注释想对齐就
+按「**一个汉字算 2 列**」算，统一对到第 51 列。
+
+宽度：网页上 `<Shot>` 是 `w-full`，会把图拉到正文宽度（约 700px）。所以裁窄一点
+= 字更大更好认，别为了「完整」裁到 1400px 宽 —— 缩下去孩子就看不清了。
+`npm run shots:save` 只缩不放（`withoutEnlargement`），窄图不会被强行放大。
+
+## 写输出面板类截图
+
+**必须真按 F5 进 Play 模式**（`Play-ShotOut`）。命令栏 `print` 出来的行尾是
+「- 编辑」，还多一行 `> print(...)` 回显；Play 模式里是「你好，Roblox！ - 服务器 -
+Script:1」，跟孩子屏幕上一模一样。红字报错更要 Play：能拿到
+`Workspace.MyPart.Script:3: attempt to call a nil value` 加下面三行
+`Stack Begin / Line 3 / Stack End`，行号信息全在。
+
+`rig.ps1` 说「不进 Play 模式」针对的是**视口**（F5 之后相机归客户端管，枢轴法失效）。
+**只裁输出面板不受影响** —— 面板位置在 Play 模式下不动。
+
+⚠️ Play 模式会跑 Workspace 里**所有**脚本，多留一个就在输出里多一行。所以每张输出图
+之前先把别的脚本删干净（`unit-03-ui.ps1` 里的 `U3-NoScripts`）。
+
 ## 写试玩类截图
 
 不进 Play 模式。F5 之后相机归客户端管，枢轴法失效，还得用 WASD 把小人开到位 —— 不可控。
@@ -160,6 +220,18 @@ npm run shots:check             # 确认待拍数减少了
 
 ## 已知坑（都踩过，别重复）
 
+**右键菜单 / 弹出列表一换工具调用就没了**。每次 PowerShell 调用开头的 `Focus-Win`（`SetForegroundWindow`）会让弹出层失焦、自动收起。所以「右键 → 悬停子菜单 → 截图 → 点某项」这一串**必须写在同一个函数里**，中间不能拆成两次工具调用去看中间结果。子菜单用 `Move-To` 悬停 + `Start-Sleep`，比 `Click` 稳。
+
+**写 `Script.Source` 有两个前提**。① 别写成 `s.Source="第一行\n第二行"` —— 源码里本来就有双引号（`print("x")`），会把外层字符串提前闭合，报 `Expected identifier when parsing expression, got Unicode character U+4f60`（U+4F60 是「你」，因为它紧跟在被提前闭合的引号后面）。正解是每行用 Lua 长括号 `[[...]]` 包起来再 `table.concat(...,"\n")`。② 文档**已经在编辑器里打开**时写 `Source` 完全不生效，也不报错，画面上还是旧代码 —— 打开的 `ScriptDocument` 占着缓冲区。要先 `ScriptEditorService:FindScriptDocument(s)` 然后 `doc:CloseAsync()`。这两条 `Set-Code` 都替你处理了。
+
+**`LogService:ClearOutput()` 连命令自己的回显一起清掉**。回显是提交时写进去的，比 `ClearOutput()` 早，所以把它放在**同一条命令的最后**就能得到一块全空的输出面板 —— 这正是 Play 模式截图前想要的状态。
+
+**资源管理器的排序不是创建顺序，也不是字母序**。`Camera` / `Terrain` 钉在最前，后面既不按插入顺序也不按字母（实测 `Script`(265) → `SpawnLocation`(285) → `Baseplate`(305)）。行高 20px。**每次插完东西先 `ShotWin` 看一眼真实行位**，别照抄别的单元的 y 坐标。
+
+**`New-Rig` 的等待时间别往下调**。切标签页 + 弹对话框 + 网格虚拟形象联网拉资源都要时间，短了就「RIG 没建出来」。实测 900/1500/2500 失败、1500/2500/5000 成功。另外建 Rig 会在树里多一个 `Rig` 节点，**资源管理器类的图要在 `New-Rig` 之前拍完**，否则孩子的树里没有它、图就对不上。
+
+**一排东西越长，斜角就得越小、距离越远**。5 个方块排一排时 yaw=195（偏 15°）会让这排在深度上前后差 10 studs，最近那块被透视放大到出画面 —— 收到 188 就好了。「色卡」「等长对比」这类图本来就该接近正对。
+
 **AMSI 会拦脚本**。截屏 + 模拟鼠标键盘 + 窗口置前写在同一个 .ps1 里，Windows Defender 会判成 RAT 特征直接拒绝加载（报 `This script contains malicious content`）。所以 `cap.ps1`（截屏/画图）和 `win.ps1`（输入）**必须分开**。另外别在任何文件里写 `GetAsyncKeyState` —— 键盘记录器特征，一加就被拦。
 
 **别用 SendKeys 打字**。中文输入法会把空格当上屏键吃掉，还会乱改大小写（`hello from claude` → `hellofromClaude`）。所有文本走剪贴板 + `Ctrl+V`。
@@ -189,3 +261,16 @@ npm run shots:check             # 确认待拍数减少了
 ## 界面语言
 
 Unit 1 那 20 张是**英文界面**拍的，Unit 2 起改成**中文界面**（用户拍板：中文反而跟孩子自己屏幕上看到的一致）。新单元跟中文走，别为了跟 U1 一致去改 Studio 语言。
+
+**顺手核对课文里的菜单路径**：课程是照着老版本 Studio 写的，好几处对不上当前中文界面。
+拍图时看到就改（这是拍图的一部分，不是额外任务）：
+
+| 课文原来写的 | 当前中文界面实际是 |
+|---|---|
+| View（视图）选项卡 → Output | **没有「视图」ribbon 选项卡**。输出 / 命令栏在**「脚本」选项卡**里 |
+| View（视图）选项卡 → Explorer / Properties | 资源管理器 / 属性 在**「主页」选项卡**最右边 |
+| 右键 → Insert Object → Script | 右键 → **插入 → 插入对象…**，再在搜索框里搜 Script |
+| 右键 → Insert Object → Part | 右键 → **插入 → 插入部件**（直接一步，不用搜） |
+
+⚠️ 单元 1、2、4~7 里还有同样的错（`grep -n 'View（视图）\|Insert Object' src/content/lessons`），
+单元 3 已改。别顺手全改掉 —— 那是几十处、跨已发布单元的改动，先问用户。
