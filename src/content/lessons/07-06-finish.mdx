@@ -11,11 +11,11 @@ objectives:
   - 做一个明显的胜利效果（把终点拱门变成 Neon 金色）
 tasks:
   - id: t1
-    label: 确认 ServerScriptService 里有 leaderstats 脚本（含 Wins）
+    label: 在 ServerScriptService 里放一份 leaderstats 计分板脚本（记 Wins）
   - id: t2
-    label: 在终点放一个 Part 当终点垫，右键它 → 插入 → 插入对象… → 搜 Script
+    label: 搭一座拱门，把横梁那块 Part 改名成 FinishArch
   - id: t3
-    label: 整段抄入终点垫代码（加分 + print + 变金色）
+    label: 拱门下面放一块终点垫，给它加 Script，整段抄入终点垫代码
   - id: t4
     label: Play 跑到终点，看分数 +1、Output 显示“你赢了！”、拱门变金
 quiz:
@@ -26,9 +26,9 @@ quiz:
     explain: 和第 6 单元一样，用 leaderstats 记分。这次我们记的是“通关次数 Wins”。
   - q: 终点垫脚本里的 debounce（去抖）是干嘛的？
     type: single
-    options: ["防止站在终点上一直加分", "让终点变红", "删除玩家"]
+    options: ["让「冲过一次终点」只记一次胜利", "让终点变红", "删除玩家"]
     answer: 0
-    explain: 没有 debounce，玩家站在终点不动，分数会疯狂往上涨。加了它，过一次只记一次。
+    explain: 踩一脚 Touched 会触发好几次（脚、腿、身子各算一次）。加了 debounce，冲一次线就只记一次。
   - q: 怎么做出“明显的胜利效果”？
     type: single
     options: ["把拱门 Material 改成 Neon、颜色变金", "把游戏关掉", "删掉终点"]
@@ -62,7 +62,7 @@ Players.PlayerAdded:Connect(function(player)
 end)
 ```
 
-第二步，**终点垫脚本**（放在终点垫这块 Part 里）：碰到就加分、打印“你赢了！”、再把旁边的拱门变金。我们用熟悉的 **debounce** 防止站着刷分：
+第二步，**终点垫脚本**（放在终点垫这块 Part 里）：碰到就加分、打印“你赢了！”、再把旁边的拱门变金。还记得第 6 单元那个坑吗——踩一脚 `Touched` 会触发好几次（脚、腿、身子各算一次），所以还要用上熟悉的 **debounce**，让冲一次线只记一次：
 
 ```lua
 local pad = script.Parent
@@ -84,24 +84,40 @@ end)
 ```
 
 <Callout type="info">
-  代码里的 `workspace.FinishArch` 是去 Workspace 里**按名字找**你的终点拱门。所以下一步你要放一个拱门 Part，并把它的 **Name 改成正好 `FinishArch`**，名字一字不差，脚本才找得到它。
+  代码里的 `workspace.FinishArch` 是去 Workspace 里**按名字找**你的终点拱门。所以下一步你要放一块拱门 Part，并把它的 **Name 改成正好 `FinishArch`**，名字一字不差，脚本才找得到它。
+</Callout>
+
+<Callout type="warning">
+  **`FinishArch` 必须是一块 Part，不能是打了组的 Model。** 脚本要改的是 `Material` 和 `Color`，这两样只有 Part 才有。拱门由几块拼成时，把**横梁那一块**命名成 `FinishArch` 就好（变金的就是那根横梁，一样很气派）。
 </Callout>
 
 <StudioStep n={1} title="放好计分板">
-  确认 **ServerScriptService** 里有上面第一段计分板脚本（含 `Wins`）。没有就新建一个 **Script** 抄进去。
+  在 **ServerScriptService** 里新建一个 **Script**，把上面第一段计分板代码抄进去。
 </StudioStep>
 
+<Callout type="warning">
+  如果你这个作品里**已经有第 6 单元那份记 `Points` 的计分板脚本**，**别再加第二份**——两份脚本会各给玩家发一个 `leaderstats` 文件夹，互相打架。正确做法是打开原来那一份，在里面**照着 `Points` 再加一个 `Wins`**。
+</Callout>
+
 <StudioStep n={2} title="搭一个终点拱门">
-  在终点用几个 **Part** 搭一个简单的拱门（两根柱子 + 一根横梁就行），把这个拱门（或它的横梁）**Name 改成 `FinishArch`**，**Anchored** 打勾。
+  在终点用几个 **Part** 搭一个简单的拱门（两根柱子 + 一根横梁就行），把**横梁那块 Part** 的 **Name 改成 `FinishArch`**，**Anchored** 打勾。
 </StudioStep>
+
+<Shot id="7.6-s1" capture="视口：终点区一座灰色的简单拱门，两根柱子加一根横梁，下面地上有一块终点垫" alt="还没通关时的终点拱门——灰扑扑的" />
 
 <StudioStep n={3} title="放终点垫 + 加脚本">
   在拱门下面地上放一块 **Part** 当终点垫，右键它 → **插入 → 插入对象… → 搜 Script**，整段抄入上面第二段终点垫代码。
 </StudioStep>
 
+<Shot id="7.6-s2" capture="脚本编辑器里这 16 行终点垫代码，带行号，红框框住 arch.Material 和 arch.Color 那两行" alt="红框这两句就是「唰地变金」——换材质、换颜色" />
+
 <StudioStep n={4} title="冲线！">
   点 ▶️ **Play**，从起点一路闯到终点，踩上终点垫——**分数 +1**、**Output 显示“你赢了！”**、**拱门变成金色**！🏁✨
 </StudioStep>
+
+<Shot id="7.6-s3" capture="视口：同一个机位同一座拱门，横梁已经变成发光的金色" alt="踩上终点垫的那一刻——横梁唰地变成金光闪闪 ✨" />
+
+<Shot id="7.6-s4" capture="试玩画面右上角的计分板，两列表头是「用户」和 Wins，下面一行是玩家名和数字 1" alt="通关一次，Wins 就记上一笔" />
 
 ## 🕹️ 看看你的成果
 

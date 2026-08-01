@@ -3,92 +3,107 @@ id: "7.4"
 unit: unit-07
 order: 4
 title: 会动的障碍
-emoji: "↔️"
+emoji: "↕️"
 estMinutes: 22
 xp: 100
 objectives:
-  - 用 while 循环加 task.wait 让一个平台来回移动
-  - 通过改 Position 做出挡路的“移动障碍”
+  - 用 while 循环加 task.wait 让一块方块在两个高度之间不停升降
+  - 通过改 Position 做出挡路的“闸门”，看准空当冲过去
 tasks:
   - id: t1
-    label: 放一个 Part 当移动平台，记住它的起始 Position
+    label: 在路中间放一个 Part 当拦路方块，Anchored 打勾
   - id: t2
-    label: 在这个平台 Part 上右键 → 插入 → 插入对象… → 搜 Script
+    label: 在这个 Part 上右键 → 插入 → 插入对象… → 搜 Script
   - id: t3
-    label: 整段抄入“来回移动”的范例代码
+    label: 整段抄入“升降闸门”的范例代码
   - id: t4
-    label: Play 看平台来回移动，试着在它经过时跳上去
+    label: Play 看它一会儿落下挡路一会儿升起让开，看准空当冲过去
 quiz:
-  - q: 让平台“一直来回动”，要用哪个循环？
+  - q: 让方块“一直升上去又落下来”，要用哪个循环？
     type: single
     options: ["if 判断", "while 循环加 task.wait", "只改一次颜色"]
     answer: 1
-    explain: while + task.wait 会一遍遍重复——先移到一边，等一会，再移回来，永远不停。
+    explain: while + task.wait 会一遍遍重复——先抬上去，等一会，再落回来，永远不停。
   - q: 改一个 Part 的什么属性，能让它移动位置？
     type: single
     options: ["Color", "Position（位置）", "Name"]
     answer: 1
     explain: Position 是方块在世界里的坐标。改它，方块就挪到新位置。
-  - q: 循环里如果忘了写 task.wait()，会怎样？
+  - q: 站在这块会动的方块上，人会不会被它带着走？
     type: single
-    options: ["平台动得更好看", "游戏会卡死", "平台变红"]
+    options: ["会，像坐电梯一样", "不会——它是瞬间挪过去的，人会被留在原地", "会飞起来"]
     answer: 1
-    explain: 没有 task.wait 的 while 会转得太快、把游戏卡住——第 5 单元第 7 课专门提醒过这个坑。
-challenge: 把两个 task.wait(1) 都改成 task.wait(0.5)，让平台来回得更快，更难跳上去。
+    explain: Anchored 的方块靠改 Position 移动，是“瞬间搬家”，不是滑过去的，站在上面的人不会跟着走。所以它是障碍，不是电梯。
+challenge: 把两个 task.wait(1) 都改成 task.wait(0.5)，让闸门开关得更快，空当更短，更难冲过去。
 ---
 
 ## 🎯 今天要做什么
 
-给 Obby 加一个**会自己来回移动的平台**！↔️ 玩家得**看准时机跳上去**，跟着它过到对岸。这是跑酷里最经典、最刺激的“移动桥”机关。
+给 Obby 加一道**自己开关的闸门**！↕️ 它一会儿落下来堵死路，一会儿升上去让开——玩家得**看准空当冲过去**。这是跑酷里最经典的机关。
 
-## ✨ 新知识：用 while 让平台来回动
+## ✨ 新知识：用 while 让方块来回动
 
 第 5 单元我们用 **while 循环 + `task.wait`** 让方块不停换颜色。今天用一模一样的本领，只不过这次我们改的不是颜色，而是 **Position（位置）**——方块就会**移动**。
 
 思路很简单，让它**反复做两件事**：
 
-> 移到 A 点 → 等一会 → 移到 B 点 → 等一会 → （再回 A，永远循环）
+> 升到高处（路通了）→ 等一会 → 落回原位（堵住路）→ 等一会 → （再升上去，永远循环）
 
-我们用一个 `startPos` 记住平台的起始位置，再用 `Vector3.new(8, 0, 0)` 表示“往旁边挪 8 格”：
+我们用一个 `startPos` 记住它的起始位置，再用 `Vector3.new(0, 12, 0)` 表示“**往上抬 12 格**”：
 
 ```lua
-local platform = script.Parent
-local startPos = platform.Position
+local block = script.Parent
+local startPos = block.Position
 
 while true do
-	platform.Position = startPos + Vector3.new(8, 0, 0)
+	block.Position = startPos + Vector3.new(0, 12, 0)
 	task.wait(1)
-	platform.Position = startPos
+	block.Position = startPos
 	task.wait(1)
 end
 ```
 
-读出来就是：**一直**重复——把平台挪到右边 8 格、等 1 秒、再挪回原位、等 1 秒……它就**来回动**起来了。
+读出来就是：**一直**重复——把方块抬高 12 格、等 1 秒、再落回原位、等 1 秒……它就变成一道**自己开关的闸门**了。
 
-<Callout type="info">
-  这段脚本放在**移动平台这块 Part 里面**（`script.Parent` 就是平台自己）。它只管自己来回动，不影响别的方块。
+<Callout type="tip">
+  为什么是**往上抬**，不是往旁边挪？因为 `Vector3.new(x, y, z)` 里的 **y 就是“上下”**，不管你的路是朝哪个方向铺的，往上抬永远是“让开”。往旁边挪就得看你的路是横着还是竖着——很容易挪了半天还堵在路上。
 </Callout>
 
-<StudioStep n={1} title="放一个移动平台">
-  在两块固定平台**之间留一段空隙**，放一个 **Part** 当移动桥，**Anchored** 打勾（它靠脚本移动，不靠重力）。
+<Callout type="warning">
+  **它是障碍，不是电梯。** 你八成会想：那我站上去，让它把我抬过去好不好？——**不行**。Anchored 的方块靠改 Position 移动，是**“瞬间搬家”**，不是慢慢升上去的。方块一眨眼挪走了，站在上面的人还留在原地。
+  所以正确玩法是：**等它抬起来，从下面冲过去**。
+</Callout>
+
+<Callout type="info">
+  这段脚本放在**这块拦路方块里面**（`script.Parent` 就是它自己）。它只管自己来回动，不影响别的方块。
+</Callout>
+
+<StudioStep n={1} title="放一个拦路方块">
+  在路当中放一个 **Part**，做得**又高又宽**，正好把路堵死。**Anchored** 打勾（它靠脚本移动，不靠重力）。染个显眼的颜色，比如橙色。
 </StudioStep>
+
+<Shot id="7.4-s1" capture="视口：一块橙色的高方块落在悬空路线的正中间，把路完全堵死" alt="闸门落下来的时候——路被堵死，过不去" />
 
 <StudioStep n={2} title="给它加脚本">
-  在 Explorer 里右键这块平台 → **插入 → 插入对象… → 搜 Script**，整段抄入上面的来回移动代码。
+  在资源管理器里右键这块方块 → **插入 → 插入对象… → 搜 Script**，整段抄入上面的升降代码。
 </StudioStep>
+
+<Shot id="7.4-s2" capture="脚本编辑器里这 9 行升降代码，带行号，红框框住 while true do 到 end 这一段循环体" alt="红框里就是那个「一直重复」：抬上去、等一秒、落回来、等一秒" />
 
 <StudioStep n={3} title="试玩，看它动起来">
-  点 ▶️ **Play**，平台开始**左右来回**移动！站在原地看几趟，找准它靠过来的时机。↔️
+  点 ▶️ **Play**，闸门开始**一升一落**！站在安全的地方看几趟，数一数它抬起来的那一秒有多长。↕️
 </StudioStep>
 
-<StudioStep n={4} title="跳上去过桥">
-  趁平台**靠到你这边**时跳上去，跟着它移到对岸，再跳到下一块地。成功过桥啦！
+<Shot id="7.4-s3" capture="视口：同一个机位，橙色方块已经升到半空，下面的路空出来了" alt="它抬起来的这一秒——就是你冲过去的机会" />
+
+<StudioStep n={4} title="看准空当冲过去">
+  等闸门**刚抬起来**的那一刻，赶紧跑过去。时机没抓准会被挡在外面甚至撞下去——不过没关系，你有检查点！😎
 </StudioStep>
 
 ## 🕹️ 看看你的成果
 
-一座**会来回移动的桥**，玩家得看准时机才能过去。你的 Obby 一下子有了真正的“技巧关卡”！下一节，我们布置**熔岩危险区**，让闯关更紧张。
+一道**会自己开关的闸门**，玩家得看准时机才能过去。你的 Obby 一下子有了真正的“技巧关卡”！下一节，我们布置**熔岩危险区**，让闯关更紧张。
 
 <Callout type="warning">
-  平台不动？确认 **Anchored** 打了勾、脚本在**平台里面**，并且**别删掉两行 `task.wait`**——没有它，游戏会卡死。
+  闸门不动？确认 **Anchored** 打了勾、脚本在**方块里面**，并且**别删掉两行 `task.wait`**——没有它，游戏会卡死（第 5 单元第 7 课专门讲过这个坑）。
 </Callout>

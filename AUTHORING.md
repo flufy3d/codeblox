@@ -162,6 +162,28 @@ print("你好，Roblox！")
 - 试玩时玩家名字就是**登录账号的用户名**，`print(player.Name)`、资源管理器的 `Players` 树、
   计分板的「用户」列里都是它。Studio 里改不动（`Player.Name` / `DisplayName` 都会报
   `lacking capability WritePlayer`）。想要中性的 `Player1`，只能走「客户端和服务器」本地联机测试。
+- 新建项目：**文件 → 新增**（Ctrl+N）。菜单里那一项就叫「新增」，不叫「新建」。
+
+#### 重生点 / 检查点（2026-08 实机验证，单元 7 全部结论都从这儿来）
+
+- **Baseplate 模板自带一个 SpawnLocation**（12×1×12，在原点、贴着地板顶面，顶面印着
+  一圈放射状太阳纹）。孩子从第 1 单元起小人就一直是从它上面出生的。
+  ⚠️ 所以别写「之前试玩小人是随便出现在某处的」，也别教他们再插一个（见下条）。
+- **同时启用着好几个 SpawnLocation 时，玩家每次出生会被随机分到其中一个。**
+  实测两个启用的重生点，连续 5 次出生是 299 / 0 / 299 / -3 / 299 —— 真的在两头跳。
+- **`Player.RespawnLocation` 只接受 SpawnLocation**，赋一块普通 Part 直接报
+  `Expected SpawnLocation got Part for Player.RespawnLocation`。检查点**必须**是 SpawnLocation。
+- **`Enabled = false` 的 SpawnLocation 当不了重生点。** 赋值给 `RespawnLocation` 会成功
+  （不报错），但真死掉重生时人回的是默认出生点。所以检查点脚本要在**碰到的那一刻**
+  把 `Enabled` 改成 `true`；一开始先设 `false`，免得它进随机出生的池子。
+- **掉出世界会自动重生**：`Workspace.FallenPartsDestroyHeight` 默认 **-500**，角色掉到
+  这个高度以下就被销毁并在 RespawnLocation 重生。⚠️ 但 Roblox **默认没有摔落伤害**，
+  所以只要脚下还有 Baseplate，掉下去只是站到地上 —— 想让「掉下去=重来」成立，
+  Obby 的路必须是**悬空**的（单元 7.1 教的第一件事就是删掉 Baseplate）。
+- **Anchored 的部件靠改 `Position` 移动，不会把站在上面的人带走。** 实测大步瞬移
+  （一次 10 studs）和小步平滑（60 次每次 0.2）两种都是 `charDX = 0`。所以「跳上移动
+  平台跟着它过河」这个经典说法在当前 Studio 里**做不到**，会动的方块只能当**障碍**。
+  想做得直观又跟路的朝向无关，就让它**上下升降**（`Vector3.new(0, 12, 0)`）当闸门。
 
 ### 经典代码片段（直接用，别改结构）
 

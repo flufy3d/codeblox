@@ -8,14 +8,14 @@ estMinutes: 22
 xp: 100
 objectives:
   - 理解检查点：碰到它，重来时就从这里出生，不用从头走
-  - 用 Touched 找到玩家，把检查点设成他的 RespawnLocation
+  - 知道检查点必须也是一块 SpawnLocation，并用 Touched 把它设成玩家的 RespawnLocation
 tasks:
   - id: t1
-    label: 放一个 Part 当检查点，摆在第一段路的中间
+    label: 右键 Workspace → 插入 → 插入对象… → 搜 SpawnLocation，插一个当检查点
   - id: t2
-    label: 在这个检查点 Part 上右键 → 插入 → 插入对象… → 搜 Script
+    label: 把它摆在第一段路的中间，Anchored 打勾，染成蓝色
   - id: t3
-    label: 整段抄入检查点代码
+    label: 右键这个检查点 → 插入 → 插入对象… → 搜 Script，整段抄入检查点代码
   - id: t4
     label: Play 走到检查点后，故意掉下去，看会不会从检查点重来
 quiz:
@@ -24,67 +24,92 @@ quiz:
     options: ["碰到后，重来时从这里出生，不用从头走", "加 10 分", "让游戏变快"]
     answer: 0
     explain: 碰过的检查点会成为你新的出生点。摔下去也只回到最近的检查点，不必从头再来。
-  - q: player.RespawnLocation = checkpoint 这行做了什么？
+  - q: 检查点可以用普通的 Part 吗？
     type: single
-    options: ["把这个玩家的重生点改成这个检查点", "删除检查点", "给玩家加分"]
-    answer: 0
-    explain: RespawnLocation 就是“这个玩家下次出生的地方”。把它设成 checkpoint，重来就从这里开始。
-  - q: 代码里为什么要先 if player then？
+    options: ["可以，什么方块都行", "不行，必须是 SpawnLocation，否则代码会报错", "只有红色的 Part 才行"]
+    answer: 1
+    explain: RespawnLocation 只认 SpawnLocation。塞一块普通 Part 进去，Output 会红字报错 Expected SpawnLocation got Part。
+  - q: 代码开头为什么先写 checkpoint.Enabled = false？
     type: single
-    options: ["碰到检查点的可能不是玩家", "让代码更长", "为了好看"]
+    options: ["免得一进游戏就随机出生在半路的检查点上", "让检查点变透明", "省电"]
     answer: 0
-    explain: 万一碰上来的不是玩家（比如别的方块），player 会是空的，先确认一下更安全。
-challenge: 把检查点的 Color 改成蓝色、Material 改成 Neon，让玩家一眼认出“这是存档点”。
+    explain: 启用着的重生点会被 Roblox 随机挑中。先关掉它，等玩家真的碰到了再打开，游戏才总是从起点开始。
+challenge: 把检查点的 Material 改成 Neon，让它在路上远远就发着蓝光，一眼认出“这是存档点”。
 ---
 
 ## 🎯 今天要做什么
 
-给 Obby 加上**检查点**：玩家走到这里，就**存了一次档**——后面就算摔下去，也只**从这个检查点重来**，不用从头再爬一遍！🏳️ 这是跑酷游戏里最贴心的设计。
+给 Obby 加上**检查点**：玩家走到这里，就**存了一次档**——后面就算掉下去，也只**从这个检查点重来**，不用从头再爬一遍！🏳️ 这是跑酷游戏里最贴心的设计。
 
-## ✨ 新知识：碰到检查点，就换出生点
+## ✨ 新知识：检查点也是一块“重生点”
 
-上节课我们学了 SpawnLocation 是出生点。其实**每个玩家**身上都记着一个“我下次从哪出生”，叫做 **RespawnLocation（重生位置）**。
+上节课我们认识了 SpawnLocation。其实**每个玩家**身上都记着一个“我下次从哪出生”，叫做 **RespawnLocation（重生位置）**。
 
-检查点的魔法很简单：当玩家**碰到**一块检查点 Part，我们就把他的 RespawnLocation **改成这块检查点**：
+检查点的魔法很简单：当玩家**碰到**一块检查点，我们就把他的 RespawnLocation **改成这块检查点**：
 
 ```lua
 player.RespawnLocation = checkpoint
 ```
 
-这样，他下次重来就**从这里开始**，不必回到最远的起点。
+<Callout type="warning">
+  **这里有个非做不可的规矩：检查点必须也是一块 SpawnLocation，不能是普通的 Part。**
+  RespawnLocation 只认 SpawnLocation，塞一块普通 Part 进去，Output 会立刻红字报错：
+  `Expected SpawnLocation got Part for Player.RespawnLocation`。
+</Callout>
 
-怎么知道是“哪个玩家”碰到的？还记得第 6 单元学的吗——用 **Touched** 拿到 `hit`，再用 **GetPlayerFromCharacter** 找出玩家：
+## ✨ 新知识：先关着，碰到才打开
+
+上节课说过：**启用着的重生点，Roblox 会随便挑一个**让玩家出生。检查点也是重生点，要是就这么放着，你一进游戏可能直接出现在关卡中段——白闯了。
+
+所以检查点脚本的第一行先把它**关掉**，等玩家真的碰到了再**打开**：
 
 ```lua
 local checkpoint = script.Parent
+checkpoint.Enabled = false   -- 先关着，不然会随机出生在这儿
 
 checkpoint.Touched:Connect(function(hit)
 	local player = game.Players:GetPlayerFromCharacter(hit.Parent)
 	if player then
-		player.RespawnLocation = checkpoint
+		checkpoint.Enabled = true   -- 碰到了，正式启用
+		player.RespawnLocation = checkpoint   -- 下次从这儿重来
 		print(player.Name .. " 到达检查点！")
 	end
 end)
 ```
 
+怎么知道是“哪个玩家”碰到的？还记得第 6 单元学的吗——用 **Touched** 拿到 `hit`，再用 **GetPlayerFromCharacter** 找出玩家。一模一样的老朋友。
+
 <Callout type="info">
-  这段脚本放在**检查点这块 Part 里面**（`script.Parent` 就是检查点自己）。复制这块检查点时，脚本会一起被复制——所以一块做好，就能复制出好几个检查点！
+  这段脚本放在**检查点这块 SpawnLocation 里面**（`script.Parent` 就是检查点自己）。复制这个检查点时，脚本会一起被复制——所以一块做好，就能复制出好几个检查点！
 </Callout>
 
-<StudioStep n={1} title="放一块检查点">
-  在第一段路的中间放一个 **Part**，**Anchored** 打勾，当作检查点（CheckPoint）。
+<StudioStep n={1} title="插一块检查点">
+  在资源管理器里**右键 `Workspace` → 插入 → 插入对象…**，在搜索框里打 `SpawnLocation`，点它一下就插进来了。
+  （**主页 → 部件** 那个下拉里只有方块、球体这些**形状**，没有 SpawnLocation，别在那儿找。）
 </StudioStep>
 
-<StudioStep n={2} title="给检查点加脚本">
-  在 Explorer 里右键这块 Part → **插入 → 插入对象… → 搜 Script**，整段抄入上面的检查点代码。
+<Shot id="7.3-s1" capture="「插入对象」窗口：搜索框里打了 SpawnLocation，下面列出 SpawnLocation 这一项，红框框住它" alt="检查点从这儿来——搜 SpawnLocation，不是普通 Part" />
+
+<StudioStep n={2} title="摆好、染色">
+  把它移到**第一段路的中间**，**Anchored** 打勾。再用 **主页 → 颜色** 染成**蓝色**，跟绿色的起点区分开。
 </StudioStep>
 
-<StudioStep n={3} title="试玩，故意摔一次">
-  点 ▶️ **Play**，走过检查点（**Output** 会打印“到达检查点”），然后**故意从平台上掉下去**——小人会**从检查点重来**，而不是回最起点！🏳️
+<Shot id="7.3-s2" capture="视口：悬空路线上，起点后面一段的位置立着一块蓝色的检查点平台" alt="路上的蓝色平台就是存档点——走过去就存一次档" />
+
+<StudioStep n={3} title="给检查点加脚本">
+  在资源管理器里右键这块检查点 → **插入 → 插入对象… → 搜 Script**，整段抄入上面的检查点代码。
 </StudioStep>
 
-<StudioStep n={4} title="多放几个检查点">
-  ⏹️ Stop，**右键检查点 → 重复（Duplicate）**，在路上每隔一段放一个。每过一个，存档点就往前移。
+<Shot id="7.3-s3" capture="脚本编辑器里这 11 行检查点代码，带行号，红框框住 checkpoint.Enabled = true 和 player.RespawnLocation = checkpoint 这两行" alt="红框这两句就是存档的全部秘密：打开它，再把它记成你的新起点" />
+
+<StudioStep n={4} title="试玩，故意摔一次">
+  点 ▶️ **Play**，走过检查点（**Output** 会打印“到达检查点”），然后**故意从平台上掉下去**——小人摔出世界后，会**从检查点重来**，而不是回最起点！🏳️
+</StudioStep>
+
+<Shot id="7.3-s4" capture="输出面板里一行「玩家名 到达检查点！」，红框框住这一行" alt="Output 里冒出这句话，就说明存档成功了" />
+
+<StudioStep n={5} title="多放几个检查点">
+  ⏹️ Stop，**右键检查点 → 重复**，在路上每隔一段放一个。每过一个，存档点就往前移。
 </StudioStep>
 
 ## 🕹️ 看看你的成果
@@ -92,5 +117,5 @@ end)
 一条**带存档点**的路：走得越远，重来的起点越靠前。玩家再也不怕摔一次就前功尽弃了！下一节，我们给路上加一个**会动的障碍**，让闯关更刺激。
 
 <Callout type="warning">
-  摔下去还是回到最起点？检查脚本是不是放在**检查点 Part 里面**，还有 **RespawnLocation** 和 **GetPlayerFromCharacter** 的大小写有没有写对。
+  摔下去还是回到最起点？三件事挨个查：检查点是不是 **SpawnLocation**（不是普通 Part）、脚本是不是放在**检查点里面**、代码里 `Enabled` 有没有在碰到时改成 `true`（一直关着的重生点是不生效的）。
 </Callout>

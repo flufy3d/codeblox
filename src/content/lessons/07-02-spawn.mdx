@@ -8,14 +8,14 @@ estMinutes: 18
 xp: 100
 objectives:
   - 知道 SpawnLocation（重生点）是玩家进入游戏出生的地方
-  - 在起点放一个 SpawnLocation，让角色从这里开始
+  - 在资源管理器里找到它、把它搬到起点，并染成醒目的颜色
 tasks:
   - id: t1
-    label: 右键 Workspace → 插入 → 插入对象…，搜 SpawnLocation 插进来
+    label: 在资源管理器里找到 Workspace 下的 SpawnLocation
   - id: t2
-    label: 把 SpawnLocation 移到你的起点区，放在地板上
+    label: 把它移到你的起点区，当作起点那块平台
   - id: t3
-    label: 确认 SpawnLocation 的 Anchored 打了勾
+    label: 确认它的 Anchored 打了勾
   - id: t4
     label: 点 ▶️ Play，确认小人从这块重生点出生
 quiz:
@@ -24,48 +24,63 @@ quiz:
     options: ["玩家进入游戏时出生的地方", "一个会发光的方块", "计分板"]
     answer: 0
     explain: 玩家一进游戏，就会出现在 SpawnLocation 上。它是 Obby 的“起跑线”。
-  - q: 应该把 SpawnLocation 放在哪里？
+  - q: 新建的世界里，SpawnLocation 是怎么来的？
     type: single
-    options: ["终点", "起点区", "熔岩里"]
+    options: ["要自己插一个", "本来就有一个，在资源管理器的 Workspace 里", "要写代码生成"]
     answer: 1
-    explain: 重生点放在起点，玩家才会从头开始闯关。
-  - q: SpawnLocation 要不要打勾 Anchored？
+    explain: 你在第 1 单元试玩时小人一直是从它上面出生的，只是那时候没注意到它。
+  - q: 一个 Obby 里如果有好几个启用的重生点，会怎样？
     type: single
-    options: ["要，不然它会掉下去", "不用，让它飞起来", "随便"]
+    options: ["玩家每次进游戏会随机出现在其中一个", "游戏会报错", "只有第一个有用"]
     answer: 0
-    explain: 和别的地板一样，重生点也要 Anchored 钉住，免得一试玩就塌。
+    explain: Roblox 会在所有启用的重生点里随便挑一个。所以起点只留这一个，别再插第二个——下节课的检查点有专门的办法绕开这个坑。
 challenge: 把 SpawnLocation 的 Color 改成醒目的绿色，让玩家一眼看出“从这里开始”。
 ---
 
 ## 🎯 今天要做什么
 
-给你的 Obby 装一个真正的**起跑线**——**重生点（SpawnLocation）**。玩家一进游戏，就会**站在你的起点上**准备闯关！🚩
+给你的 Obby 认领一条正式的**起跑线**——**重生点（SpawnLocation）**。玩家一进游戏，就会**站在你的起点上**准备闯关！🚩
 
-## ✨ 新知识：SpawnLocation 是“出生点”
+## ✨ 新知识：重生点其实一直都在
 
-之前我们试玩时，小人是随便出现在某处的。但一个正经的游戏，需要一个固定的**出生点**——这就是 **SpawnLocation（重生点）**。
+上节课删掉大地板以后，是不是还剩一块**顶面印着一圈放射状花纹、像个小太阳**的方板？把它选中看看名字——**SpawnLocation**。
+
+它不是你放的，是 Roblox **一开始就替你准备好的**。从第 1 单元第一次试玩起，你的小人就一直是从它上面出生的，只是那时候没留意。
 
 > 玩家一进游戏（或者每次重来），都会**出现在 SpawnLocation 上**。
 
-它是 Roblox 准备好的一种特殊方块，**放下就能用**，不用写代码。我们只要把它摆到**起点**就好。
+<Shot id="7.2-s1" capture="资源管理器：Workspace 展开着，下面有 Camera / Terrain / SpawnLocation 三行，红框框住 SpawnLocation 那一行" alt="它一直就在这儿——Workspace 里的 SpawnLocation" />
 
-<StudioStep n={1} title="插入一个重生点">
-  在 Explorer 里**右键 `Workspace` → 插入 → 插入对象…**，在搜索框里打 `SpawnLocation`，点它一下就插进来了。
-  （**主页 → 部件** 那个下拉里只有方块、球体这些**形状**，没有 SpawnLocation，别在那儿找。）
+它是 Roblox 准备好的一种特殊方块，**放着就能用**，不用写代码。今天要做的只是：**把它搬到你的起点**。
+
+<Callout type="warning">
+  **别再插第二个重生点。** 一个世界里有好几个“启用着”的 SpawnLocation 时，Roblox 每次会**随便挑一个**让玩家出生——你可能一进游戏就直接掉在关卡中段。起点只留这一个就好。
+</Callout>
+
+<StudioStep n={1} title="找到它">
+  在资源管理器里点开 **Workspace**，找到 **SpawnLocation** 并选中。视口里那块方格子板会亮起选中框——就是它。
 </StudioStep>
 
-<StudioStep n={2} title="把它放到起点">
-  把这块 SpawnLocation 移到你图纸上的**起点区**，平平地放在地板上。**Anchored** 打勾，钉住它。
+<Shot id="7.2-s2" capture="视口：SpawnLocation 特写，从斜上方俯看，能看清顶面那圈放射状的太阳花纹" alt="这就是重生点——顶上印着一圈小太阳，很好认" />
+
+<StudioStep n={2} title="把它搬到起点">
+  用 **移动** 工具把它挪到你图纸上的**起点**位置，当作起点那块平台。**Anchored** 打勾，钉住它（不然一试玩它自己就掉下去了）。
 </StudioStep>
 
-<StudioStep n={3} title="试玩，看从哪出生">
-  点 ▶️ **Play**。这次小人会**站在你的重生点上**出生——你的 Obby 有正式起跑线了！🚩
+<StudioStep n={3} title="染个醒目的颜色">
+  **主页 → 颜色**，给它挑个亮眼的绿色。玩家一眼就知道“**从这里开始**”。
 </StudioStep>
+
+<StudioStep n={4} title="试玩，看从哪出生">
+  点 ▶️ **Play**。小人会**站在这块重生点上**出生——你的 Obby 有正式起跑线了！🚩
+</StudioStep>
+
+<Shot id="7.2-s3" capture="视口：小人站在起点那块重生点平台上，面朝路线延伸的方向" alt="每一局都从这里开始——你的起跑线" />
 
 ## 🕹️ 看看你的成果
 
 玩家每次进游戏，都会从**你指定的起点**出发。这是一个真正游戏的开始！下一节，我们让路上的**检查点**也能“记住你走到哪了”，过关存档。
 
 <Callout type="warning">
-  试玩时如果小人不是从重生点出生：检查 SpawnLocation 有没有摆在**地板上方**（别埋进地里），还有 **Anchored** 是不是打了勾。
+  试玩时小人一出生就往下掉？检查 SpawnLocation 的 **Anchored** 是不是打了勾。
 </Callout>
