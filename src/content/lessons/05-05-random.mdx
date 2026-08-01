@@ -11,9 +11,9 @@ objectives:
   - 用 math.random 给一排格子刷上随机颜色，做出彩虹跑道
 tasks:
   - id: t1
-    label: 在 ServerScriptService 里新建一个 Script
+    label: 打开上一课那个生成格子的脚本（不用新建）
   - id: t2
-    label: 整段抄入“生成一排彩色格子”的范例代码
+    label: 把里面的内容整段换成“生成一排彩色格子”的范例代码
   - id: t3
     label: 点 ▶️ Play，看一排格子变成五颜六色的彩虹跑道
   - id: t4
@@ -33,7 +33,7 @@ quiz:
     options: ["0 到 255", "0 到 1", "随便几位数"]
     answer: 0
     explain: fromRGB 用 0~255 表示红、绿、蓝三种光的多少，混在一起就成了各种颜色。
-challenge: 把 math.random(1, 255) 的下限从 1 改成 150，让颜色整体更“亮”一些，看看彩虹跑道有什么变化。
+challenge: 把那一行里三个 math.random(1, 255) 的下限都从 1 改成 150，让颜色整体更“亮”一些，看看彩虹跑道有什么变化。
 ---
 
 ## 🎯 今天要做什么
@@ -48,12 +48,16 @@ challenge: 把 math.random(1, 255) 的下限从 1 改成 150，让颜色整体�
 
 颜色用 `Color3.fromRGB(红, 绿, 蓝)` 表示，三个数都在 **0~255**。我们让红、绿、蓝都随机抽——混出来就是**随机的颜色**，每个格子都不一样！
 
-<StudioStep n={1} title="新建一个服务器脚本">
-  在 Explorer 里右键 **ServerScriptService → 插入 → 插入对象… → 搜 Script**。
+<StudioStep n={1} title="打开上一课那个脚本">
+  这次**不用新建**——在**资源管理器**里找到 **ServerScriptService** 下面上一课那个 **Script**，双击打开它。
 </StudioStep>
 
+<Callout type="warning">
+  为什么不新建一个？因为上一课那个脚本还在，它也会在**同一个位置**造一排格子。两个脚本一起跑，新旧格子就**叠在一起**了。直接改旧的那个最省事。
+</Callout>
+
 <StudioStep n={2} title="整段抄入彩虹跑道代码">
-  整段换成下面这些。先原样跑：
+  把里面的内容整段换成下面这些。先原样跑：
 
 ```lua
 for i = 1, 10 do
@@ -70,13 +74,19 @@ end
   和上节一样生成 10 个格子，但这次每个格子的 **Color** 是随机抽的，还把 **Material** 设成 **Neon（霓虹）** 让它发光。
 </StudioStep>
 
+<Shot id="5.5-s1" capture="脚本编辑器里这 9 行代码，带行号；那行很长的 Color3.fromRGB(math.random...) 要完整露出来" alt="多了两行：一行让它发光，一行给它随机颜色" />
+
 <StudioStep n={3} title="试玩，看彩虹亮起来">
   点 ▶️ **Play**。一排**发光的彩色格子**出现了——你的彩虹跑道！🌈
 </StudioStep>
 
+<Shot id="5.5-s2" capture="视口里 10 个发光的彩色扁格子排成一排浮在半空，颜色各不相同" alt="你的彩虹跑道 —— 每格颜色都是掷骰子抽出来的 🌈" />
+
 <StudioStep n={4} title="再玩几次，每次都不同">
   ⏹️ **Stop**，再 ▶️ **Play**。注意看：颜色组合**和上次不一样**！因为每次都是随机抽的。
 </StudioStep>
+
+<Shot id="5.5-s3" capture="跟上一张同一个机位、同一排 10 个格子，但颜色组合完全换了一套" alt="再玩一次 —— 同一段代码，颜色却全变了" />
 
 <Callout type="tip">
   三个 `math.random(1, 255)` 分别管红、绿、蓝三种光。它们各自随机，混在一起，就成了千变万化的颜色。

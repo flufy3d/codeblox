@@ -14,9 +14,9 @@ objectives:
   - 碰到红色熔岩就让角色血量归零，原地“重来”
 tasks:
   - id: t1
-    label: 放一个又大又扁的 Part，染成红色当熔岩地面
+    label: 主页 → 部件 放一个方块，压扁摊开、染成红色当熔岩地面
   - id: t2
-    label: 在这个熔岩 Part 上右键 → 插入 → 插入对象… → 搜 Script
+    label: 在资源管理器里右键这个熔岩 Part → 插入 → 插入对象… → 搜 Script
   - id: t3
     label: 整段抄入熔岩判定的范例代码
   - id: t4
@@ -59,11 +59,13 @@ challenge: 在让血量归零之前，加一行 print("有人踩到熔岩啦！"
 确认是人，再让它 `Health = 0`（血量归零），Roblox 就会自动把它送回起点**重来**。
 
 <StudioStep n={1} title="做一块红色熔岩地面">
-  放一个 **Part**，在 Properties 里调大、压扁（比如 Size 改成又宽又薄），**Color** 染成**红色**，**Anchored** 打勾。它就是熔岩了。
+  在**主页**选项卡点 **部件** 放一个方块。选中它，在右边**属性**面板里把 **Size** 改成又宽又扁（比如 `16, 1, 16`）；再回到**主页 → 颜色**那块六边形色板，挑一个**红色**；最后点**主页 → 锚固**（或在属性面板「部件」分类下给 **Anchored** 打勾），免得它掉下去。它就是熔岩了。
 </StudioStep>
 
+<Shot id="5.6-s1" capture="视口里一块又宽又扁的红色地板铺在灰色地面上，占画面正中" alt="一块压扁摊开的红方块 —— 这就是我们的熔岩" />
+
 <StudioStep n={2} title="给熔岩加一个脚本">
-  在 Explorer 里右键这块熔岩 Part → **插入 → 插入对象… → 搜 Script**。
+  在**资源管理器**里**右键这块熔岩 Part → 插入 → 插入对象… → 搜 Script**。
 </StudioStep>
 
 <StudioStep n={3} title="整段抄入熔岩判定代码">
@@ -85,12 +87,16 @@ lava.Touched:Connect(onTouch)
   读出来就是：有东西碰到熔岩时，**先找它身上有没有 Humanoid**；**如果**找到了（说明是个角色），**就**把血量设成 0，让它重来。
 </StudioStep>
 
+<Shot id="5.6-s2" capture="脚本编辑器里这 10 行熔岩判定代码（含两个空行），红框框住 if humanoid then / humanoid.Health = 0 / end 这三行" alt="红框里就是那句「如果」—— 先确认踩上来的是个人，才动它的血量" />
+
 <StudioStep n={4} title="试玩，踩一脚试试">
   点 ▶️ **Play**，用 **W/A/S/D** 走到红色熔岩上。小人会立刻“重来”，回到起点！🌋
 </StudioStep>
 
+<Shot id="5.6-s3" capture="视口里小人正站在那块红色熔岩上" alt="踩上去的一瞬间 —— 下一秒他就回起点了" />
+
 <Callout type="warning">
-  如果踩上去没反应：检查熔岩 Part 的 **CanCollide / Anchored** 设置，以及脚本里 `Touched:Connect(onTouch)` 有没有写对（注意大小写）。
+  如果踩上去没反应：检查熔岩 Part 的 **Anchored** 有没有打勾（没打勾它一试玩就掉下去了），以及脚本里 `Touched:Connect(onTouch)` 有没有写对（注意大小写）。
 </Callout>
 
 ## 🕹️ 看看你的成果

@@ -11,11 +11,11 @@ objectives:
   - 综合运用 Touched 与 if 判断，加上踩到就重来的熔岩，组成一个小关卡
 tasks:
   - id: t1
-    label: 在 ServerScriptService 里新建 Script，整段抄入“会变色的跑道”代码
+    label: 打开第 5 课那个彩虹跑道脚本，整段换成“会变色的跑道”代码
   - id: t2
     label: 点 ▶️ Play，确认一排格子在不停地循环换色
   - id: t3
-    label: 放一块红色熔岩 Part，在它里面新建 Script 抄入熔岩判定代码
+    label: 用第 6 课那块红色熔岩（没有就再放一块），确认它里面有熔岩判定脚本
   - id: t4
     label: 完整试玩：在彩虹跑道上走，故意踩熔岩，看是否重来
   - id: t5
@@ -55,7 +55,7 @@ challenge: 把跑道格子数从 10 改成 20，再把刷新的 task.wait 调快
 会编程的人，做大东西就是这样——**把小本领一块块拼起来**。
 
 <StudioStep n={1} title="第一段：会变色的彩虹跑道">
-  在 **ServerScriptService** 里新建 **Script**，整段抄入：
+  在**资源管理器**里打开 **ServerScriptService** 下面第 5 课那个彩虹跑道脚本（**不用新建**，不然两个脚本会在同一个位置各造一排格子），整段换成：
 
 ```lua
 local blocks = {}
@@ -81,16 +81,18 @@ end
   先用 `for` 排出 10 个发光格子并记住它们；再用 `while` **一直**重复——每半秒给每个格子换一次随机色。跑道就**活**起来了！
 </StudioStep>
 
+<Shot id="5.8-s1" capture="脚本编辑器里这 18 行成果代码（含空行），带行号 1-18，那两行很长的要完整露出来" alt="本单元的成果脚本 —— for、while、随机、task.wait 全在这一屏里" />
+
 <StudioStep n={2} title="试玩跑道">
   点 ▶️ **Play**，看那排格子**不停地变换颜色**，像流动的彩虹。🌈
 </StudioStep>
 
 <StudioStep n={3} title="第二段：放一块熔岩">
-  ⏹️ Stop。放一个又宽又扁的 **Part**，**Color** 染红、**Anchored** 打勾，摆在跑道旁边当熔岩。
+  ⏹️ Stop。**第 6 课那块红色熔岩还在的话直接用它就行**，把它挪到跑道旁边。没有了就再做一块：**主页 → 部件**放个方块，在**属性**里压扁摊开，到**主页 → 颜色**挑红色，再点**主页 → 锚固**。
 </StudioStep>
 
 <StudioStep n={4} title="给熔岩加判定脚本">
-  在 Explorer 里右键这块熔岩 → **插入 → 插入对象… → 搜 Script**，整段抄入：
+  熔岩里已经有第 6 课那个脚本的话，这一步跳过。要是重做的，就在**资源管理器**里**右键这块熔岩 → 插入 → 插入对象… → 搜 Script**，整段抄入：
 
 ```lua
 local lava = script.Parent
@@ -111,6 +113,10 @@ lava.Touched:Connect(onTouch)
 <StudioStep n={5} title="完整试玩你的关卡">
   点 ▶️ **Play**。在闪动的彩虹跑道上走一走，再故意踩一下红色熔岩——小人“重来”了！你的第一个**有跑道、有机关**的小关卡完成啦！🏆
 </StudioStep>
+
+<Shot id="5.8-s2" capture="视口全景：一排发光的彩色格子浮在半空，旁边地面上一块红色熔岩，小人站在跑道上" alt="跑道 + 熔岩 + 你 —— 一个能真正玩的小关卡 🏆" />
+
+<Shot id="5.8-s3" capture="跟上一张同一个机位，小人这次站到了那块红色熔岩上" alt="一脚踩偏，掉进熔岩 —— 回起点，再来一次！🌋" />
 
 <Callout type="tip">
   想要更稳：确认跑道格子和熔岩的 **Anchored** 都打了勾，免得一试玩就掉下去。

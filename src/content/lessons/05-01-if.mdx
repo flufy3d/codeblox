@@ -11,13 +11,13 @@ objectives:
   - 用 if ... then ... end 写一个简单的判断
 tasks:
   - id: t1
-    label: 在 ServerScriptService 里右键 → 插入 → 插入对象… → 搜 Script
+    label: 在资源管理器里右键 ServerScriptService → 插入 → 插入对象… → 搜 Script
   - id: t2
     label: 把范例整段代码复制进去，先原样跑一次
   - id: t3
-    label: 把数字 10 改成别的（比如 5），看 Output 里有没有变化
+    label: 点 ▶️ Play 试玩，在输出窗口看到「你赢了！」
   - id: t4
-    label: 点 ▶️ Play 试玩，在 Output 窗口看打印结果
+    label: 把第一行的 20 改成 5，再 Play 一次，看那句话消失了
 quiz:
   - q: if ... then ... end 是用来做什么的？
     type: single
@@ -51,7 +51,7 @@ challenge: 把条件里的 10 改成 100，再把 score 改成 200，猜一猜�
 写法是固定的三件套：`if`（如果）、`then`（就）、`end`（结束）。
 
 <StudioStep n={1} title="新建一个服务器脚本">
-  在 Explorer 里右键 **ServerScriptService → 插入 → 插入对象… → 搜 Script**。这种脚本对所有玩家都生效。
+  在左边**资源管理器（Explorer）**里**右键 ServerScriptService → 插入 → 插入对象… → 搜 Script**。这种脚本对所有玩家都生效。
 </StudioStep>
 
 <StudioStep n={2} title="先把整段代码原样抄进去">
@@ -68,13 +68,19 @@ end
   这段的意思是：分数 `score` 是 20；**如果** `score` 大于 10，**就**打印“你赢了！”。
 </StudioStep>
 
-<StudioStep n={3} title="点 Play，看 Output">
+<Shot id="5.1-s1" capture="脚本编辑器里这 5 行 if 代码（含一个空行），带左边的行号 1-5" alt="if…then…end 三件套：条件写在中间，要做的事夹在 then 和 end 之间" />
+
+<StudioStep n={3} title="点 Play，看输出窗口">
   点左上角的 ▶️ 试玩，打开输出窗口（**脚本**选项卡 → **输出**）。因为 20 大于 10，你会看到 **你赢了！**
 </StudioStep>
+
+<Shot id="5.1-s2" capture="输出面板里正好一行「你赢了！」，红框框住它" alt="20 大于 10，条件成立 —— 那句话打出来了" />
 
 <StudioStep n={4} title="改一个数字，再试一次">
   把第一行的 `20` 改成 `5`（**只改这个数字**），再 Play 一次。这次 5 不大于 10，所以那句话**不会**出现——条件不成立，就跳过了。
 </StudioStep>
+
+<Shot id="5.1-s3" capture="输出面板整块，一条消息都没有（空的），要能看到上面「输出」那条标题栏" alt="改成 5 以后，输出窗口一片空白 —— 条件不成立，里面的话就没说" />
 
 <Callout type="tip">
   `>` 读作“大于”。`score > 10` 就是问电脑：“分数比 10 大吗？”大就 true（真），小就 false（假）。

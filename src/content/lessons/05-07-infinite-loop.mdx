@@ -58,6 +58,12 @@ while true do
 end
 ```
 
+<Shot id="5.7-s1" capture="输出面板里两行：上面「hi」后面跟着一个几千的重复次数（红框框住这一行），下面一行红字 Script timeout: exhausted allowed execution time" alt="「hi」说了快 5000 遍，然后 Roblox 忍不了了 —— 红字的意思是「这段代码转太久，我把它掐了」" />
+
+<Callout type="info">
+  看到下面那行**红字**了吗？`Script timeout: exhausted allowed execution time` 的意思是：这段代码转太久、一直不肯歇，Roblox 只好**强行把它掐断**。哪天你的游戏一 Play 就卡住、输出窗口冒出这行红字，那基本就是某个 `while` 忘了 `task.wait()`。
+</Callout>
+
 ✅ 好习惯（永远这样）：
 
 ```lua
@@ -66,6 +72,8 @@ while true do
 	task.wait(1)
 end
 ```
+
+<Shot id="5.7-s2" capture="脚本编辑器里这 4 行代码，带行号，红框框住中间的 task.wait(1) 那一行" alt="就多这一行 —— 循环每转一圈歇一下，游戏就不卡了" />
 
 两段只差一行 `task.wait(1)`，但一个会卡死、一个很顺畅。
 

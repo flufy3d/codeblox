@@ -11,13 +11,13 @@ objectives:
   - 认识比较符号 ==（等于）、>（大于）、<（小于）
 tasks:
   - id: t1
-    label: 在 ServerScriptService 里新建一个 Script
+    label: 在资源管理器里右键 ServerScriptService → 插入 → 插入对象… → 搜 Script
   - id: t2
     label: 整段抄入带 if ... else ... end 的范例代码
   - id: t3
-    label: 把 score 改成不同的值，看 Output 走哪条路
+    label: 把 score 改成不同的值，看输出窗口走哪条路
   - id: t4
-    label: 把 > 换成 <，观察结果反过来
+    label: 把 score > 10 换成 score == 8，试试「等于」怎么用
 quiz:
   - q: else 的作用是什么？
     type: single
@@ -51,7 +51,7 @@ challenge: 在 else 里再多加一行 print，比如打印“再加把劲！”
 - `<` 小于
 
 <StudioStep n={1} title="新建脚本，整段抄入">
-  在 **ServerScriptService** 里右键 → **插入 → 插入对象… → 搜 Script**，整段换成：
+  在**资源管理器**里**右键 ServerScriptService → 插入 → 插入对象… → 搜 Script**，整段换成：
 
 ```lua
 local score = 8
@@ -66,16 +66,22 @@ end
   读出来就是：**如果** `score` 大于 10，打印“你赢了！”；**否则**，打印“还差一点！”。
 </StudioStep>
 
+<Shot id="5.2-s1" capture="脚本编辑器里这 7 行 if/else 代码，红框框住 else 和它下面那行 print（也就是「否则走的那条路」）" alt="红框里就是「否则」那条路 —— 条件不成立时才走这里" />
+
 <StudioStep n={2} title="试玩，看走哪条路">
-  点 ▶️ **Play**，看 **Output**。现在 `score` 是 8，不大于 10，所以走 else，打印 **还差一点！**
+  点 ▶️ **Play**，看**输出**窗口。现在 `score` 是 8，不大于 10，所以走 else，打印 **还差一点！**
 </StudioStep>
+
+<Shot id="5.2-s2" capture="输出面板里正好一行「还差一点！」，红框框住它" alt="8 不大于 10 —— 走了下面那条路" />
 
 <StudioStep n={3} title="改大分数，换另一条路">
   把第一行的 `8` 改成 `15`，再 Play。这次 15 大于 10，走上面那条，打印 **你赢了！**
 </StudioStep>
 
+<Shot id="5.2-s3" capture="输出面板里正好一行「你赢了！」，红框框住它" alt="只改了一个数字，走的路就换了一条" />
+
 <StudioStep n={4} title="玩玩比较符号">
-  把 `score > 10` 改成 `score == 8`（**两个**等号），把分数留在 8。再 Play——8 正好等于 8，又会打印“你赢了！”。
+  先把第一行的 `15` **改回 `8`**，再把 `score > 10` 改成 `score == 8`（**两个**等号）。Play——8 正好等于 8，条件又成立了，于是打印“你赢了！”。
 </StudioStep>
 
 <Callout type="warning">

@@ -11,7 +11,7 @@ objectives:
   - 用 for i = 1, 5 do ... end 一次生成一排台阶/跑道格子
 tasks:
   - id: t1
-    label: 在 ServerScriptService 里新建一个 Script
+    label: 在资源管理器里右键 ServerScriptService → 插入 → 插入对象… → 搜 Script
   - id: t2
     label: 整段抄入 for 循环的范例代码
   - id: t3
@@ -49,7 +49,7 @@ challenge: 把 5 改成 8，并把每个格子之间的距离数字调大一点�
 每转一圈，`i` 就 +1（第一圈 i=1，第二圈 i=2……）。我们用这个 `i` 来决定每个格子摆在哪。
 
 <StudioStep n={1} title="新建一个服务器脚本">
-  在 Explorer 里右键 **ServerScriptService → 插入 → 插入对象… → 搜 Script**。
+  在**资源管理器**里**右键 ServerScriptService → 插入 → 插入对象… → 搜 Script**。
 </StudioStep>
 
 <StudioStep n={2} title="整段抄入生成代码">
@@ -68,13 +68,19 @@ end
   这段是说：**重复 5 次**，每次造一个方块；第 `i` 个方块放在 `i * 5` 的位置，所以它们会一个挨一个排成一排。`Anchored = true` 让它们不会掉下去。
 </StudioStep>
 
+<Shot id="5.4-s1" capture="脚本编辑器里这 7 行 for 代码，带左边的行号 1-7" alt="for i = 1, 5 do … end —— 中间的五句话会被重复做 5 遍" />
+
 <StudioStep n={3} title="试玩，看一排格子冒出来">
   点 ▶️ **Play**。一排 **5 个格子**自动出现，整整齐齐！
 </StudioStep>
 
+<Shot id="5.4-s2" capture="视口里 5 个一样大的灰色扁方块排成一排浮在半空，靠画面一侧，另一侧留空" alt="重复 5 次 → 5 个格子" />
+
 <StudioStep n={4} title="改一个数字，生成更多">
   把第一行的 `5` 改成 `10`（**只改这个数字**），再 Play。这次一口气生成 **10 个**格子——一条跑道出来了！
 </StudioStep>
+
+<Shot id="5.4-s3" capture="跟上一张同一个机位，这次 10 个格子把整排铺满了" alt="只改了一个数字，格子就从 5 个变成 10 个 —— 跑道长了一倍" />
 
 <Callout type="tip">
   `i * 5` 让每个格子隔开 5 格距离。如果格子叠在一起，就是这里的数字太小了，调大一点它们就分开。

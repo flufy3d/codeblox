@@ -11,7 +11,7 @@ objectives:
   - 用 while 加 task.wait(1)，让方块每秒闪一下颜色
 tasks:
   - id: t1
-    label: 放一个 Part，右键它 → 插入 → 插入对象… → 搜 Script
+    label: 主页 → 部件 放一个方块，在资源管理器里右键它 → 插入 → 插入对象… → 搜 Script
   - id: t2
     label: 整段抄入 while 循环的范例代码
   - id: t3
@@ -49,7 +49,7 @@ challenge: 把 task.wait(1) 改成 task.wait(0.5)，让方块半秒闪一次，�
 > `task.wait(1)` = “停 1 秒再继续”。没有它，电脑会快到我们根本看不见。
 
 <StudioStep n={1} title="放一个方块，给它一个脚本">
-  放一个 **Part**，在 Explorer 里右键这个 Part → **插入 → 插入对象… → 搜 Script**。
+  在**主页**选项卡点 **部件** 放一个方块，再到**资源管理器**里**右键这个 Part → 插入 → 插入对象… → 搜 Script**。脚本要在方块**里面**（缩在它下面一格），`script.Parent` 才找得到它。
 </StudioStep>
 
 <StudioStep n={2} title="整段抄入循环代码">
@@ -67,9 +67,15 @@ end
   意思是：**一直**重复——给方块换一个随机颜色，然后等 1 秒，再换……
 </StudioStep>
 
+<Shot id="5.3-s1" capture="脚本编辑器里这 6 行 while 代码（含一个空行），带左边的行号 1-6" alt="while true do … end 中间夹着的两句，会被一遍又一遍地重复" />
+
 <StudioStep n={3} title="试玩，看它闪起来">
   点 ▶️ **Play**。方块开始**每秒换一次颜色**，像彩灯一样！
 </StudioStep>
+
+<Shot id="5.3-s2" capture="视口里一个方块，现在是某个颜色（比如绿色）" alt="第 1 秒：方块是这个颜色" />
+
+<Shot id="5.3-s3" capture="跟上一张同一个机位，同一个方块换成了另一个明显不同的颜色（比如橙色）" alt="第 2 秒：它自己换了一个颜色 —— 循环在替你重复 🔁" />
 
 <StudioStep n={4} title="让它闪得更快">
   把 `task.wait(1)` 里的 `1` 改成 `0.2`（**只改这个数字**），再 Play。现在它闪得飞快！
