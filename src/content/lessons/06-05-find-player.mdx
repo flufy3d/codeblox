@@ -11,9 +11,9 @@ objectives:
   - 用 GetPlayerFromCharacter 找到碰撞背后的玩家
 tasks:
   - id: t1
-    label: 在一个 Part（当作 Pad）里插入一个 Script
+    label: 做一块得分垫：压扁的 Part，改名 Pad，勾上 Anchored
   - id: t2
-    label: 连接 pad.Touched，拿到 hit
+    label: 在 Pad 里插入一个 Script，连接 pad.Touched 拿到 hit
   - id: t3
     label: 用 game.Players:GetPlayerFromCharacter(hit.Parent) 找玩家并 print
 quiz:
@@ -66,12 +66,25 @@ end)
   这个脚本放在 **Pad 这个 Part 里面**（`script.Parent` 就是 Pad 自己），因为它只管这一块垫子被碰到的事。
 </Callout>
 
-<StudioStep n={1} title="准备一块 Pad">
-  在 **Workspace** 里放一个 **Part**，当作得分垫。**右键这个 Part → 插入 → 插入对象… → 搜 Script**。
+<StudioStep n={1} title="做一块得分垫">
+  **主页 → 部件** 插一个方块，然后用前面学过的三招把它变成一块垫子：
+
+  - 属性里把 `Size` 改成 `6, 1, 6`（压扁摊开，像一块地砖）
+  - **主页 → 颜色** 挑个亮眼的（比如亮黄色），一眼就知道该往哪踩
+  - 右键 → **重命名**，改叫 `Pad`
+  - 属性里勾上 **`Anchored`**（在「部件」分类下）
+
+<Shot id="6.5-s1" capture="视口里一块黄色的扁方块贴在灰色地面上，占画面正中" alt="你的第一块得分垫 —— 又扁又亮，专等人来踩" />
 </StudioStep>
 
+<Callout type="warning">
+  **`Anchored` 千万别忘了勾。** 新插的方块默认是**没钉住**的，一试玩就会被小人撞得到处滚，甚至掉下地图。
+</Callout>
+
 <StudioStep n={2} title="写找玩家的代码">
-  把上面那段代码写进去。`script.Parent` 指的就是这块 Pad。
+  **右键这块 Pad → 插入 → 插入对象… → 搜 Script**，把上面那段代码写进去。`script.Parent` 指的就是这块 Pad。
+
+<Shot id="6.5-s2" capture="脚本编辑器里这 8 行代码（含一个空行），带行号 1-8，红框框住第 4 行 local player = game.Players:GetPlayerFromCharacter(hit.Parent)" alt="红框这一句就是那个小魔法：把「碰上来的零件」换成「人」" />
 </StudioStep>
 
 <StudioStep n={3} title="试运行">
@@ -80,7 +93,15 @@ end)
 
 ## 🕹️ 看看你的成果
 
-踩一下，名字就被打印出来——说明游戏认出了“碰到垫子的那个人”是谁。下一节，我们就把“认出玩家”和“**加 1 分**”连起来！
+踩一下，名字就被打印出来——说明游戏认出了“碰到垫子的那个人”是谁。
+
+<Shot id="6.5-s3" capture="输出面板里一行玩家名字，后面跟着一个 (x6) 重复次数，红框框住这一行" alt="名字后面那个 (x6) 是说这句话重复了 6 遍 —— 你只踩了一脚，Touched 却触发了 6 次" />
+
+<Callout type="info">
+  名字后面跟着 `(x6)` 这样的小数字？那是**同一句话说了好几遍**被合并成了一行。你只踩了一脚，`Touched` 却触发了好几次——因为脚、腿、身子**每个部件各算一次**。你看到的数字每次都不一样，可能是 4，也可能是 9。**记住这件事，第 7 节课就要靠它。**
+</Callout>
+
+下一节，我们就把“认出玩家”和“**加 1 分**”连起来！
 
 <Callout type="warning">
   没反应？确认脚本放在 **Pad 里面**（不是 ServerScriptService），还有 **GetPlayerFromCharacter** 的大小写要对。

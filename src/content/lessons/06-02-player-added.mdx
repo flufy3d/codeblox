@@ -58,6 +58,8 @@ end)
 
 <StudioStep n={2} title="连接 PlayerAdded">
   把上面那段代码整段写进去。`player.Name` 就是玩家的名字。
+
+<Shot id="6.2-s1" capture="脚本编辑器里这 5 行代码（含一个空行），带行号 1-5，红框框住第 3 行 Players.PlayerAdded:Connect(function(player)" alt="红框这一行就是「装门铃」：有人进来，就跑下面那句" />
 </StudioStep>
 
 <StudioStep n={3} title="试运行">
@@ -67,6 +69,8 @@ end)
 ## 🕹️ 看看你的成果
 
 每次有人加入，Output 里就冒出一个名字。门铃通了！下一节，我们就给每个进来的玩家发一张“计分卡”。
+
+<Shot id="6.2-s2" capture="输出面板里正好一行玩家名字，红框框住它" alt="试玩时你自己就是那个「刚加入的玩家」—— 打出来的是你的 Roblox 名字" />
 
 <Callout type="warning">
   没打印出名字？确认 **PlayerAdded** 拼写正确（注意大小写），还有 `function(player)` 和最后的 `end)` 都别漏。

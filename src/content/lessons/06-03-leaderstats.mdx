@@ -71,6 +71,8 @@ end)
 
 <StudioStep n={1} title="打开服务器脚本">
   在 **ServerScriptService** 里的 Script，把上面整段代码写进去。
+
+<Shot id="6.3-s1" capture="脚本编辑器里这 7 行代码（含一个空行），带行号 1-7，红框框住第 5 行 leaderstats.Name = leaderstats 那句" alt="红框这一行的名字是「暗号」，一个字母都不能差" />
 </StudioStep>
 
 <StudioStep n={2} title="看清三步">
@@ -83,7 +85,13 @@ end)
 
 ## 🕹️ 看看你的成果
 
-玩家身上多了一个 `leaderstats` 文件夹。它现在是空的——下一节我们往里放一个**分数**，左上角就会出现计分板！
+玩家身上多了一个 `leaderstats` 文件夹。它现在是空的——下一节我们往里放一个**分数**，屏幕上就会出现计分板！
+
+<Shot id="6.3-s2" capture="试玩中的资源管理器：Players 下面是玩家名字，玩家名字下面挂着 leaderstats 文件夹，红框框住 leaderstats 那一行" alt="计分卡真的发到你身上了 —— 它挂在 Players 里你的名字下面" />
+
+<Callout type="info">
+  这个 `leaderstats` **只在试玩的时候存在**（是脚本临时造出来的）。按 ⏹️ 停止后它就消失了，这是正常的——下次 Play 会重新发一张。
+</Callout>
 
 <Callout type="warning">
   Explorer 里看不到文件夹？多半是名字大小写不对，或者 `Parent = player` 那行漏了。

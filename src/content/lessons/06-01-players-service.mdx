@@ -54,6 +54,8 @@ local Players = game:GetService("Players")
 
 <StudioStep n={1} title="新建一个服务器脚本">
   在 Explorer 里找到 **ServerScriptService**，**右键 → 插入 → 插入对象… → 搜 Script**。
+
+<Shot id="6.1-s1" capture="资源管理器里 ServerScriptService 展开着，下面挂着一个 Script，红框框住这两行" alt="脚本要住在 ServerScriptService 里，不是 Workspace" />
 </StudioStep>
 
 <StudioStep n={2} title="拿到 Players 服务">
@@ -63,15 +65,19 @@ local Players = game:GetService("Players")
   local Players = game:GetService("Players")
   print(Players)
   ```
+
+<Shot id="6.1-s2" capture="脚本编辑器里这 2 行代码，带左边的行号 1-2" alt="两行就够了：先拿到名单，再把它打印出来" />
 </StudioStep>
 
 <StudioStep n={3} title="试运行">
-  按左上角的 **▶️**，打开 **Output（输出）** 窗口，应该能看到打印出 `Players`。
+  先打开**输出**窗口（**脚本**选项卡 → **输出**），再按左上角的 **▶️**。输出窗口里会打印出 `Players`。
 </StudioStep>
 
 ## 🕹️ 看看你的成果
 
 Output 里出现了 `Players`，说明你成功拿到了这份“在场名单”。下一节课，我们就让“有人加入”时触发一些动作！
+
+<Shot id="6.1-s3" capture="输出面板里正好一行 Players，红框框住它" alt="打印出来的就是这份名单的名字 —— 你拿到它了" />
 
 <Callout type="warning">
   没看到输出？检查 **GetService** 的大小写（G 和 S 都是大写），还有 `"Players"` 的引号别漏了。

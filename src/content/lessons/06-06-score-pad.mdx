@@ -15,7 +15,7 @@ tasks:
   - id: t2
     label: 给 player.leaderstats.Points.Value 加 1
   - id: t3
-    label: Play，踩 Pad，看左上角分数往上涨
+    label: Play，踩 Pad，看右上角计分板的分数往上涨
 quiz:
   - q: 给玩家加 1 分的写法是？
     type: single
@@ -29,15 +29,15 @@ quiz:
     explain: 这条路径能走通，正是因为我们之前亲手建好了 leaderstats 文件夹和 Points。
   - q: 这一节我们故意还没加什么？
     type: single
-    options: ["颜色", "防止狂加分的开关（debounce）", "玩家名字"]
+    options: ["颜色", "防止一次加好几分的开关（debounce）", "玩家名字"]
     answer: 1
-    explain: 这节先体验加分，下节再加 debounce 解决“站着不动分数狂涨”的问题。
+    explain: 这节先体验加分，下节再加 debounce 解决“踩一脚就加好几分”的问题。
 challenge: 把 += 1 改成 += 5，踩一下看看是不是一次涨 5 分。
 ---
 
 ## 🎯 今天要做什么
 
-把前面学的全连起来——**踩上得分垫，分数 +1！** 左上角的数字真的会往上跳，这就是一个能玩的得分游戏雏形了。
+把前面学的全连起来——**踩上得分垫，分数 +1！** 右上角计分板上的数字真的会往上跳，这就是一个能玩的得分游戏雏形了。
 
 ## ✨ 新知识：用 += 1 给分数加分
 
@@ -72,16 +72,22 @@ end)
 
 <StudioStep n={2} title="把加分接上">
   把 `print(player.Name)` 换成 `player.leaderstats.Points.Value += 1`，整段如上。
+
+<Shot id="6.6-s1" capture="脚本编辑器里这 8 行代码（含一个空行），带行号 1-8，红框框住第 6 行 player.leaderstats.Points.Value += 1" alt="红框这一句：从玩家出发，一路找到他的分数，再加 1" />
 </StudioStep>
 
 <StudioStep n={3} title="踩上去试试">
-  按 **▶️ Play**，走上 Pad——左上角的 **Points** 开始往上涨啦！
+  按 **▶️ Play**，走上 Pad——右上角计分板上的 **Points** 开始往上涨啦！
 </StudioStep>
 
 ## 🕹️ 看看你的成果
 
-踩一下，分数 +1，再踩再加——你做出了一个真正会计分的得分垫！
+踩上去，分数真的动了——你做出了一个会计分的得分垫！
 
 <Callout type="warning">
-  你可能发现：**站在 Pad 上不动，分数会疯狂往上涨**！因为身体一直在“碰到”它。别急——下一节我们就用一个“冷却开关”来管住它。
+  但你多半会发现：**踩一脚，分数不是 +1，而是一下子跳了好几分**！这正是上一节那个 `(x6)`——一脚踩下去 `Touched` 触发了好几次（脚、腿、身子各算一次），**每一次都加了一分**。
 </Callout>
+
+<Shot id="6.6-s2" capture="试玩画面右上角的计分板，Points 那一列是 6，红框框住这个数字" alt="只踩了一脚，分数就直接跳到 6 —— 这可不太公平 😅" />
+
+别急——下一节我们就用一个“冷却开关”来管住它。
