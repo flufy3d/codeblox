@@ -13,9 +13,9 @@ tasks:
   - id: t1
     label: 想 3 个生活里的“发生 → 反应”例子（如门铃响 → 去开门）
   - id: t2
-    label: 在 Workspace 放一个 Part，给它起名叫 MagicFloor
+    label: 放一个方块、压扁当地板，给它起名叫 MagicFloor
   - id: t3
-    label: 在这个 Part 里插入一个 Script，先留空，下一课用
+    label: 在这块地板里插入一个 Script，先留空，下一课用
 quiz:
   - q: “事件”最好的解释是哪个？
     type: single
@@ -60,13 +60,19 @@ challenge: 再想 2 个游戏里的事件，比如“玩家跳起来”“捡到
   **主页 → 部件**，把它压扁一点当地板。
 </StudioStep>
 
+<Shot id="4.3-s1" capture="视口里一块压扁的方形地板平铺在灰色地面上，占画面正中" alt="一块压扁的方块，就是我们的“魔法地板”" />
+
 <StudioStep n={2} title="起个名字">
-  在 Properties 里把它的 **Name** 改成 `MagicFloor`（魔法地板）。这样我们一眼就知道它是干嘛的。
+  在右边**属性**面板里找到 **Name** 那一行，把值改成 `MagicFloor`（魔法地板）。这样我们一眼就知道它是干嘛的。（也可以在资源管理器里点中它，按 **F2** 或右键 → **重命名**。）
 </StudioStep>
 
+<Shot id="4.3-s2" capture="属性面板「数据」分类里的 Name 一行，值是 MagicFloor，红框框住这行" alt="属性面板里的 Name 改成了 MagicFloor" />
+
 <StudioStep n={3} title="先放好一个脚本">
-  **右键这个 Part → 插入 → 插入对象… → 搜 Script**，先留着空的，下一课我们往里写 Touched。
+  在资源管理器里**右键 MagicFloor → 插入 → 插入对象… → 搜 Script**，先留着空的，下一课我们往里写 Touched。
 </StudioStep>
+
+<Shot id="4.3-s3" capture="资源管理器里 Script 缩在 MagicFloor 下面一格，红框框住这两行" alt="MagicFloor 里装着一个空 Script，就等下一课了" />
 
 ## 🕹️ 看看你的成果
 

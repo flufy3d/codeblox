@@ -18,7 +18,7 @@ tasks:
   - id: t3
     label: 在 onTouch 里让它变色，再加上“消失”那两行
   - id: t4
-    label: 点 ▶️ 试玩，走上去看它变色又消失（人能穿过去）
+    label: 点 ▶️ 试玩，走上去看它变色又消失（人不再被它挡住）
   - id: t5
     label: 截图或叫家人来看你踩魔法地板（炫耀环节！），然后 文件 → 保存到文件… 存好
 quiz:
@@ -67,27 +67,37 @@ part.Touched:Connect(onTouch)
 </StudioStep>
 
 <StudioStep n={2} title="往包裹里加“消失”">
-  在 `onTouch` 里，变色那行**下面**再加两行，让它被踩到后消失、还能被穿过：
+  在 `onTouch` 里，变色那行**下面**再加两行，让它被踩到后消失、还能被穿过。顺手给每行加上**注释**（`--` 后面的字），帮你记住每行在干嘛：
 
 ```lua
-local part = script.Parent
+local part = script.Parent                        -- 找到我住的那块地板
 
-local function onTouch(hit)
-	part.BrickColor = BrickColor.Random()
-	part.Transparency = 1
-	part.CanCollide = false
-end
+local function onTouch(hit)                       -- 碰到时要做的事，全打包进来
+	part.BrickColor = BrickColor.Random()         -- 先随机换一种颜色
+	part.Transparency = 1                         -- 再变透明，看不见了
+	part.CanCollide = false                       -- 也不再挡人，能穿过去
+end                                               -- 包裹到这里装完
 
-part.Touched:Connect(onTouch)
+part.Touched:Connect(onTouch)                     -- 碰到就打开这个包裹
 ```
 
   - `part.Transparency = 1`：变全透明，看不见了。
   - `part.CanCollide = false`：不再挡人，玩家能直接穿过去。
 </StudioStep>
 
+<Shot id="4.7-s1" capture="脚本编辑器里这 9 行成果代码（含空行），每行后面带绿色中文注释，带行号 1-9" alt="本单元的成果脚本 —— 变量、函数、Touched 三样都在里面" />
+
 <StudioStep n={3} title="试玩验收">
-  打开 **Output**，点 ▶️ **Play**，走上地板：它**先变色、再消失**，你的小人就掉/穿过去了——魔法地板成功！
+  打开**输出**窗口，点左上角的 ▶️，走上地板：它**先变色、再消失**，地板挡不住你的小人了——魔法地板成功！
 </StudioStep>
+
+<Shot id="4.7-s2" capture="视口里小人站在一块刚变成亮黄色的压扁地板上" alt="踩下去第一步：先变色 🌈" />
+
+<Shot id="4.7-s3" capture="跟上一张同一个机位，地板已经完全透明看不见了，小人落到了灰色地面上" alt="踩下去第二步：地板消失了 —— 人可以直接穿过去" />
+
+<Callout type="tip">
+  想让“穿过去”更明显？把地板**架高一点**（往上抬几格，当成一座小桥），再试玩踩上去——地板一消失，你的小人就“啪”地掉下来了，比在地面上好玩得多！
+</Callout>
 
 <StudioStep n={4} title="炫耀环节 🎉">
   按截图键拍下变色的瞬间，或者直接叫爸爸妈妈、朋友来，让他们用你的小人去踩一脚，亲眼看地板消失！

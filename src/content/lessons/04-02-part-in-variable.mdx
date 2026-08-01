@@ -11,13 +11,13 @@ objectives:
   - 明白为什么先存进变量能让代码更短、更清楚
 tasks:
   - id: t1
-    label: 在 Workspace 里放一个 Part
+    label: 在世界里放一个方块（主页 → 部件）
   - id: t2
-    label: 右键这个 Part → 插入 → 插入对象… → 搜 Script（把脚本放进方块里）
+    label: 在资源管理器里右键这个 Part → 插入 → 插入对象… → 搜 Script（把脚本放进方块里）
   - id: t3
     label: 写下 local part = script.Parent
   - id: t4
-    label: 加一行 print(part.Name)，试玩在 Output 看到方块的名字
+    label: 加一行 print(part.Name)，试玩在输出窗口看到方块的名字
 quiz:
   - q: script.Parent 指的是什么？
     type: single
@@ -33,7 +33,7 @@ quiz:
     type: single
     options: ["方块（Part）里面", "玩家身上", "天空里"]
     answer: 0
-challenge: 把 print(part.Name) 改成 print(part.Parent.Name)，猜猜 Output 会显示什么，再试玩验证。
+challenge: 把 print(part.Name) 改成 print(part.Parent.Name)，猜猜输出窗口会显示什么，再试玩验证。
 ---
 
 ## 🎯 今天要做什么
@@ -61,8 +61,10 @@ print(part.Name)
 </StudioStep>
 
 <StudioStep n={2} title="把脚本放进方块">
-  在 Explorer 里找到这个 Part，**右键它 → 插入 → 插入对象… → 搜 Script**。注意：Script 要在 Part 的**里面**（缩进在它下方）。
+  在**资源管理器**里找到这个 Part，**右键它 → 插入 → 插入对象… → 搜 Script**。注意：Script 要在 Part 的**里面**（缩进在它下方）。
 </StudioStep>
+
+<Shot id="4.2-s1" capture="资源管理器里 Script 缩在 Part 下面一格（缩进能看出层级），红框框住这两行" alt="Script 缩在 Part 下面一格 —— 这样 script.Parent 才找得到它" />
 
 <StudioStep n={3} title="写上这两行">
   把脚本里原来的字删掉，写：
@@ -73,13 +75,17 @@ print(part.Name)
 ```
 </StudioStep>
 
+<Shot id="4.2-s2" capture="脚本编辑器里这两行代码，带左边的行号 1、2" alt="第一行把方块装进盒子 part，第二行把它的名字打出来" />
+
 <StudioStep n={4} title="试玩看名字">
-  打开 **Output**，点 ▶️ **Play**。Output 里会出现这个方块的名字（默认是 `Part`）——说明 `part` 真的抓到了那个方块！
+  打开**输出**窗口，点左上角的 ▶️。输出窗口里会出现这个方块的名字（默认是 `Part`）——说明 `part` 真的抓到了那个方块！
 </StudioStep>
+
+<Shot id="4.2-s3" capture="输出面板里正好一行 Part，红框框住它" alt="输出窗口里打出了方块的名字 Part" />
 
 ## 🕹️ 看看你的成果
 
-Output 里打印出了方块的名字。从今天起，`part` 就是你脚本里那个方块的“小名”，下一课开始我们就用它来变魔术。✨
+输出窗口里打印出了方块的名字。从今天起，`part` 就是你脚本里那个方块的“小名”，下一课开始我们就用它来变魔术。✨
 
 <Callout type="warning">
   如果报错说找不到东西：八成是 Script 没放在 Part **里面**，而是放在了 Workspace 下。把它拖进 Part 里再试。

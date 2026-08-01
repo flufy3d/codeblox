@@ -11,13 +11,13 @@ objectives:
   - 用 local 存一个数字或一句话，再用 print 把它拿出来
 tasks:
   - id: t1
-    label: 在 Workspace 里插入一个 Script（右键 Workspace → 插入 → 插入对象… → 搜 Script）
+    label: 在资源管理器里右键 Workspace → 插入 → 插入对象… → 搜 Script
   - id: t2
     label: 写下 local score = 0
   - id: t3
-    label: 再写一行 print(score)，点 ▶️ 看 Output 里出现 0
+    label: 再写一行 print(score)，点 ▶️ 看输出窗口里出现 0
   - id: t4
-    label: 把 0 改成你今天的幸运数字，再试玩看 Output
+    label: 把 0 改成 100（或你的幸运数字），再试玩看输出窗口
 quiz:
   - q: 变量最像下面哪个东西？
     type: single
@@ -57,14 +57,14 @@ print(score)
 ```
 
 第一行：做一个叫 `score` 的盒子，里面装 `0`。
-第二行：把盒子里的东西拿出来 `print` 到 Output。
+第二行：把盒子里的东西拿出来 `print` 到输出窗口。
 
 <Callout type="info">
   变量名只能用**英文**字母、数字、下划线（像 `score`、`my_points`），不能用中文。中文我们写在注释或讲解里就好。
 </Callout>
 
 <StudioStep n={1} title="插入一个脚本">
-  在 Explorer 里**右键 Workspace → 插入 → 插入对象… → 搜 Script**。会出现一个写代码的窗口。
+  在左边 **资源管理器（Explorer）** 里**右键 Workspace → 插入 → 插入对象… → 搜 Script**。会出现一个写代码的窗口。
 </StudioStep>
 
 <StudioStep n={2} title="清空，写上这两行">
@@ -76,14 +76,20 @@ print(score)
 ```
 </StudioStep>
 
+<Shot id="4.1-s1" capture="脚本编辑器里就这两行代码：local score = 0 和 print(score)，带左边的行号 1、2" alt="就这两行 —— 第一行做盒子，第二行把里面的东西拿出来" />
+
 <StudioStep n={3} title="试玩看结果">
-  打开输出窗口（**脚本**选项卡 → **输出**），点左上角的 ▶️。Output 里会出现一个 **0**——那就是盒子里的东西被拿出来了！
+  打开输出窗口（**「脚本」选项卡 → 输出**），点左上角的 ▶️。输出窗口里会出现一个 **0**——那就是盒子里的东西被拿出来了！
 </StudioStep>
+
+<Shot id="4.1-s2" capture="输出面板里正好一行 0，红框框住它" alt="输出窗口里出现了 0 —— 盒子里装的就是它" />
 
 ## 🕹️ 看看你的成果
 
-Output 窗口里出现了 `0`，说明你的“盒子”成功装上了数字，还被拿了出来。试试把 `0` 改成 `100`，再玩一次，看看 Output 变成什么。✨
+输出窗口里出现了 `0`，说明你的“盒子”成功装上了数字，还被拿了出来。试试把 `0` 改成 `100`，再玩一次，看看输出窗口变成什么。✨
+
+<Shot id="4.1-s3" capture="输出面板里正好一行 100，红框框住它" alt="把盒子里换成 100，拿出来的就变成了 100" />
 
 <Callout type="warning">
-  如果 Output 里没东西：检查是不是忘了写 `print(score)` 这一行，或者 `score` 拼错了（大小写也要一样）。
+  如果输出窗口里没东西：检查是不是忘了写 `print(score)` 这一行，或者 `score` 拼错了（大小写也要一样）。
 </Callout>
