@@ -1,8 +1,15 @@
 // localStorage 读写、迁移、工厂函数。单一顶层 key，便于整体导出/导入。
-import type { CodeBloxStore, Profile, Progress, ProfileSettings, TtsSettings } from './types';
+import type {
+  CodeBloxStore,
+  Profile,
+  ProfileKind,
+  Progress,
+  ProfileSettings,
+  TtsSettings,
+} from './types';
 
 export const STORAGE_KEY = 'codeblox.v1';
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export function defaultTtsSettings(): TtsSettings {
   return { rate: 0.9, voiceURI: null };
@@ -35,11 +42,12 @@ function shortId(): string {
   return Math.random().toString(36).slice(2, 10);
 }
 
-export function makeProfile(name: string, avatar: string): Profile {
+export function makeProfile(name: string, avatar: string, kind: ProfileKind = 'kid'): Profile {
   return {
     id: 'p_' + shortId(),
     name,
     avatar,
+    kind,
     pin: null,
     createdAt: new Date().toISOString(),
     progress: emptyProgress(),
@@ -51,6 +59,12 @@ export function makeProfile(name: string, avatar: string): Profile {
 export function ensureSettings(p: { settings?: ProfileSettings }): void {
   if (!p.settings) p.settings = defaultSettings();
   else if (!p.settings.tts) p.settings.tts = defaultTtsSettings();
+}
+
+// 给一个档案补齐所有后加的字段（settings + kind），用于迁移老数据 / 导入旧备份。就地修改，幂等。
+export function ensureProfile(p: { settings?: ProfileSettings; kind?: ProfileKind }): void {
+  ensureSettings(p);
+  if (p.kind !== 'parent') p.kind = 'kid'; // 缺失或脏值一律当学习者
 }
 
 export function freshProfileId(): string {
@@ -67,7 +81,8 @@ function migrate(data: unknown): CodeBloxStore {
   const store = data as CodeBloxStore;
   if (typeof store.profiles !== 'object' || store.profiles === null) return emptyStore();
   // v2：给每个档案补齐 settings（朗读语速 / 选音）
-  for (const p of Object.values(store.profiles)) ensureSettings(p);
+  // v3：给每个档案补齐 kind（老档案一律当 'kid'）
+  for (const p of Object.values(store.profiles)) ensureProfile(p);
   store.schemaVersion = SCHEMA_VERSION;
   return store;
 }

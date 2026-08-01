@@ -11,6 +11,12 @@
 
 {#if store.active}
   <div class="flex items-center gap-2">
+    {#if store.isParent}
+      <span
+        class="rounded-full bg-fuchsia-100 px-2 py-1 text-xs font-black text-fuchsia-700"
+        title="家长档案：全部关卡都能直接点开">👨‍👩‍👧 家长</span
+      >
+    {/if}
     <span class="rounded-full bg-indigo-100 px-2 py-1 text-xs font-black text-indigo-700">
       Lv.{info.level}
     </span>

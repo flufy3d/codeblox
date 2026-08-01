@@ -69,6 +69,13 @@
         </span>
         <button type="button" class="text-sm font-bold text-slate-400 hover:text-indigo-500" onclick={() => startRename(p.id)}>改名</button>
       {/if}
+      <!-- 身份只在创建档案时确定，之后不能改 -->
+      <span
+        class={`text-sm font-bold ${p.kind === 'parent' ? 'text-fuchsia-500' : 'text-slate-400'}`}
+        title="身份在创建档案时就定了，不能再改"
+      >
+        {p.kind === 'parent' ? '👨‍👩‍👧 家长档案' : '🧑‍🚀 学习者'}
+      </span>
       {#if p.pin}
         <button type="button" class="text-sm font-bold text-slate-400 hover:text-rose-500" onclick={() => store.setPin(p.id, null)}>🔓 取消密码</button>
       {:else}

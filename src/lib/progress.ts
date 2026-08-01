@@ -56,14 +56,16 @@ export function rollStreak(streak: Streak, now: Date): Streak {
 }
 
 // ───────────────────────── 解锁逻辑（线性序列）─────────────────────────
+// unlockAll：家长档案用，全部关卡直接放行（身份由调用方传入，这一层不读 store）
 export function isUnlocked(
   lessonId: string,
   orderedIds: string[],
   completed: Record<string, unknown>,
+  unlockAll = false,
 ): boolean {
   const idx = orderedIds.indexOf(lessonId);
   if (idx < 0) return false;
-  if (idx === 0) return true; // 第一课默认解锁
+  if (unlockAll || idx === 0) return true; // 家长模式 / 第一课默认解锁
   return orderedIds[idx - 1] in completed; // 前一课完成则解锁
 }
 
@@ -81,9 +83,10 @@ export function lessonState(
   lessonId: string,
   orderedIds: string[],
   completed: Record<string, unknown>,
+  unlockAll = false,
 ): LessonState {
   if (lessonId in completed) return 'completed';
-  if (!isUnlocked(lessonId, orderedIds, completed)) return 'locked';
+  if (!isUnlocked(lessonId, orderedIds, completed, unlockAll)) return 'locked';
   return firstIncompleteId(orderedIds, completed) === lessonId ? 'current' : 'unlocked';
 }
 

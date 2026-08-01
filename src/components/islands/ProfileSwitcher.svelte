@@ -4,6 +4,7 @@
   import { verifyPin } from '../../lib/pin';
   import { AVATARS } from '../../lib/i18n';
   import PinModal from './PinModal.svelte';
+  import type { ProfileKind } from '../../lib/types';
 
   onMount(() => store.hydrate());
 
@@ -11,6 +12,7 @@
   let creating = $state(false);
   let newName = $state('');
   let newAvatar = $state(AVATARS[0]);
+  let newKind = $state<ProfileKind>('kid');
 
   let pinTargetId = $state<string | null>(null);
   let pinError = $state('');
@@ -39,12 +41,13 @@
   }
 
   function createProfile() {
-    const name = newName.trim() || '小创造者';
-    store.addProfile(name, newAvatar);
+    const name = newName.trim() || (newKind === 'parent' ? '家长' : '小创造者');
+    store.addProfile(name, newAvatar, newKind);
     creating = false;
     open = false;
     newName = '';
     newAvatar = AVATARS[0];
+    newKind = 'kid';
   }
 </script>
 
@@ -85,6 +88,7 @@
             >
               <span class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100 text-lg">{p.avatar}</span>
               <span class="flex-1 truncate font-bold text-slate-700">{p.name}</span>
+              {#if p.kind === 'parent'}<span class="text-xs" title="家长档案">👨‍👩‍👧</span>{/if}
               {#if p.pin}<span class="text-xs text-slate-400">🔒</span>{/if}
               {#if store.active?.id === p.id}<span class="text-emerald-500">✓</span>{/if}
             </button>
@@ -100,6 +104,24 @@
             maxlength="12"
             bind:value={newName}
           />
+          <p class="mb-1 text-xs font-bold text-slate-400">谁在用？</p>
+          <div class="mb-2 grid grid-cols-2 gap-1">
+            <button
+              type="button"
+              class={`rounded-xl py-1 text-sm font-bold text-slate-600 hover:bg-white ${newKind === 'kid' ? 'bg-white ring-2 ring-indigo-400' : ''}`}
+              onclick={() => (newKind = 'kid')}>🧑‍🚀 学习者</button
+            >
+            <button
+              type="button"
+              class={`rounded-xl py-1 text-sm font-bold text-slate-600 hover:bg-white ${newKind === 'parent' ? 'bg-white ring-2 ring-fuchsia-400' : ''}`}
+              onclick={() => (newKind = 'parent')}>👨‍👩‍👧 家长</button
+            >
+          </div>
+          {#if newKind === 'parent'}
+            <p class="mb-2 text-xs text-fuchsia-600">
+              家长档案：全部关卡直接点开，不影响孩子的进度（创建后不能改）
+            </p>
+          {/if}
           <div class="mb-2 grid grid-cols-6 gap-1">
             {#each AVATARS as a}
               <button

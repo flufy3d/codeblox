@@ -8,8 +8,16 @@ import {
   freshProfileId,
   defaultTtsSettings,
   ensureSettings,
+  ensureProfile,
 } from './storage';
-import type { CodeBloxStore, Profile, PinData, ProfileExport, TtsSettings } from './types';
+import type {
+  CodeBloxStore,
+  Profile,
+  ProfileKind,
+  PinData,
+  ProfileExport,
+  TtsSettings,
+} from './types';
 import { readCatalog, orderedLessonIds } from './catalog';
 import { rollStreak, levelInfo, firstIncompleteId } from './progress';
 import { newlyEarned } from './badges';
@@ -48,8 +56,13 @@ class ProfileStore {
     return id ? (this.data.profiles[id] ?? null) : null;
   }
 
-  addProfile(name: string, avatar: string): string {
-    const p = makeProfile(name, avatar);
+  /** 当前档案是不是家长档案（家长档案下全部关卡直接可看）。 */
+  get isParent(): boolean {
+    return this.active?.kind === 'parent';
+  }
+
+  addProfile(name: string, avatar: string, kind: ProfileKind = 'kid'): string {
+    const p = makeProfile(name, avatar, kind);
     this.data.profiles[p.id] = p;
     this.data.activeProfileId = p.id;
     this.persist();
@@ -186,7 +199,7 @@ class ProfileStore {
   /** 导入一个档案；asCopy=true 时分配新 id 并加“（副本）”，否则按原 id 覆盖/新增。 */
   importProfile(prof: Profile, asCopy: boolean): string {
     const clone = JSON.parse(JSON.stringify(prof)) as Profile;
-    ensureSettings(clone); // 旧备份可能没有 settings，补齐
+    ensureProfile(clone); // 旧备份可能没有 settings / kind，补齐
     if (asCopy) {
       clone.id = freshProfileId();
       clone.name = clone.name + '（副本）';

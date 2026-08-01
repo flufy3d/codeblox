@@ -28,6 +28,7 @@
   });
 
   const completed = $derived(store.active?.progress.completedLessons ?? {});
+  const unlockAll = $derived(store.isParent); // 家长档案：全部关卡直接可点
   const continueLesson = $derived(
     catalog.lessons.find((l) => l.id === store.active?.progress.currentLessonId) ??
       (store.active ? catalog.lessons.find((l) => !(l.id in completed)) : null),
@@ -85,6 +86,10 @@
   {#if !store.active}
     <div class="my-4 rounded-3xl border-2 border-dashed border-indigo-200 bg-indigo-50 px-5 py-4 text-center text-indigo-700">
       👉 先点右上角 <b>「谁在学习？」</b> 创建一个小档案，开始你的冒险！
+    </div>
+  {:else if store.isParent}
+    <div class="my-4 rounded-3xl border-2 border-dashed border-fuchsia-200 bg-fuchsia-50 px-5 py-4 text-center text-fuchsia-700">
+      🔓 <b>家长模式</b>：所有关卡都能直接点开，孩子的进度不受影响
     </div>
   {:else if continueLesson}
     <a
@@ -164,7 +169,7 @@
         <!-- 这个单元的课程 -->
         <div class="mt-4 space-y-3">
           {#each unitLessons as l (l.id)}
-            {@const st = lessonState(l.id, orderedIds, completed)}
+            {@const st = lessonState(l.id, orderedIds, completed, unlockAll)}
             <button
               type="button"
               class={`flex w-full items-center gap-4 rounded-2xl border-2 px-4 py-3 text-left transition ${rowClass(st)}`}

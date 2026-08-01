@@ -34,10 +34,14 @@ export interface ProfileSettings {
   tts: TtsSettings;
 }
 
+// 档案身份：孩子按关卡顺序解锁；家长档案全部关卡直接可看（预览/备课用）
+export type ProfileKind = 'kid' | 'parent';
+
 export interface Profile {
   id: string;
   name: string;
   avatar: string; // emoji 头像
+  kind: ProfileKind;
   pin: PinData | null;
   createdAt: string;
   progress: Progress;

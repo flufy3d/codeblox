@@ -69,6 +69,18 @@ describe('解锁逻辑', () => {
     expect(lessonState('1.2', ids, c)).toBe('current');
     expect(lessonState('1.3', ids, c)).toBe('locked');
   });
+  it('家长模式全部解锁', () => {
+    expect(isUnlocked('2.1', ids, {}, true)).toBe(true);
+  });
+  it('家长模式也不放行目录外的 id', () => {
+    expect(isUnlocked('9.9', ids, {}, true)).toBe(false);
+  });
+  it('家长模式下 lessonState：锁变可点，“现在学”指针不变', () => {
+    const c = { '1.1': 1 };
+    expect(lessonState('1.3', ids, c, true)).toBe('unlocked');
+    expect(lessonState('1.2', ids, c, true)).toBe('current');
+    expect(lessonState('1.1', ids, c, true)).toBe('completed');
+  });
 });
 
 describe('测验评分', () => {
